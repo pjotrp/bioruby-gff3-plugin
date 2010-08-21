@@ -19,6 +19,7 @@ ARGV.each do | fn |
 end
 
 gffdb.each_mRNA do | id, seq |
+  puts "---"
   p [id, seq]
 end
 
