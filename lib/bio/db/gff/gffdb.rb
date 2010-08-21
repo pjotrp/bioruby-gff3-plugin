@@ -5,13 +5,17 @@
 #              Pjotr Prins <pjotr.prins@thebird.nl>
 # License::    The Ruby License
 
-# Fetch information from a GFF file
+# Create db from a GFF file
 
 require 'bio'
+require 'bio/db/gff/gffassemble'
 
 module Bio
   class GFF
     class GFFdb
+      include MRNA
+      # include CDS
+
       def initialize
         @gffs = []
       end
@@ -20,6 +24,7 @@ module Bio
       def add gfftree
         @gffs.push gfftree
       end
+
     end # GFFdb
   end # GFF
 end # Bio
