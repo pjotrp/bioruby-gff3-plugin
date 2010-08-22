@@ -11,7 +11,7 @@ require 'bio'
 require 'bio/db/gff/gffassemble'
 
 module Bio
-  class GFF
+  module GFFbrowser
     class GFFdb
       include MRNA
       # include CDS
@@ -26,6 +26,6 @@ module Bio
       end
 
     end # GFFdb
-  end # GFF
+  end # GFFbrowser
 end # Bio
 

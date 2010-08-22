@@ -8,26 +8,31 @@
 # Fetch information from a GFF file
 
 module Bio
-  class GFF
-
-    class Counter < Hash
-      def add id
-        self[id] = 0 if self[id] == nil
-        self[id] += 1
+  module GFFbrowser
+ 
+    module Helpers
+ 
+      # Helper class for counting IDs
+      class Counter < Hash
+        def add id
+          self[id] = 0 if self[id] == nil
+          self[id] += 1
+        end
       end
-    end
-   
-    # Helper class for storing linked records based on a shared ID
-    class LinkedRecs < Hash
-      def add id, rec
-        puts "Adding <#{id}>"
-        self[id] = [] if self[id] == nil
-        self[id] << rec
+     
+      # Helper class for storing linked records based on a shared ID
+      class LinkedRecs < Hash
+        def add id, rec
+          puts "Adding <#{id}>"
+          self[id] = [] if self[id] == nil
+          self[id] << rec
+        end
       end
-    end
-   
+    end # Helpers
+     
     # mRNA mixin for fetching GFF info
     module MRNA
+      include Helpers
       # Digest mRNA from the GFFdb and store in Hash
       # Next yield(id, seq) from Hash
       def each_mRNA

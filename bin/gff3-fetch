@@ -11,7 +11,7 @@ require 'bio/db/gff/gffdb'
 
 gfftype = ARGV.shift
 raise "Unknown GFF type '#{gfftype}'" if gfftype !~ /mrna|cds/i
-gffdb = Bio::GFF::GFFdb.new
+gffdb = Bio::GFFbrowser::GFFdb.new
 
 ARGV.each do | fn |
   gff3 = Bio::GFF::GFF3.new(File.read(fn))
