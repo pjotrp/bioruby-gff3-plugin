@@ -12,6 +12,12 @@ module Bio
  
     module Helpers
  
+      module Error
+        def warn str,id=''
+          $stderr.print "Warning: "+str+" <#{id}>\n"
+        end
+      end
+
       # Helper class for counting IDs
       class Counter < Hash
         def add id
@@ -22,17 +28,60 @@ module Bio
      
       # Helper class for storing linked records based on a shared ID
       class LinkedRecs < Hash
-        def add id, rec
-          puts "Adding <#{id}>"
-          self[id] = [] if self[id] == nil
-          self[id] << rec
+        include Error 
+        def add rec
+          parent = rec.get_attribute('Parent')
+          if parent
+            id = rec.id
+            puts "Adding <#{id}>"
+            self[id] = [] if self[id] == nil
+            self[id] << rec
+          else
+            warn "record has no parent",id
+          end
+        end
+
+        def validate
+          each do | id, rec |
+            sections = []
+            rec.each do | section |
+              sections.push Section.new(section)
+            end
+            sections.sort.each_with_index do | check, i |
+              neighbour = sections[i+1]
+              if neighbour and check.intersection(neighbour)
+                warn "Overlapping sections for ",id
+              end
+            end
+          end
         end
       end
+
+      class Section < Range
+        def initialize rec
+          super(rec.start,rec.end)
+        end
+        def intersection(other)
+          raise ArgumentError, 'value must be a Range' unless other.kind_of?(Range)  
+          min, max = first, exclude_end? ? max : last  
+          other_min, other_max = other.first, other.exclude_end? ? other.max : other.last  
+          new_min = self === other_min ? other_min : other === min ? min : nil  
+          new_max = self === other_max ? other_max : other === max ? max : nil  
+          new_min && new_max ? new_min..new_max : nil  
+        end  
+        alias_method :&, :intersection  
+        def <=> other
+          first <=> other.first
+        end
+      end  
     end # Helpers
      
-    # mRNA mixin for fetching GFF info
     module MRNA
       include Helpers
+      include Helpers::Error
+
+      IGNORE_FEATURES = %w{TF_binding_site intronSO:0000188 polyA_sequence SO:0000610 polyA_site SO:0000553 five_prime_UTR SO:0000204 three_prime_UTR SO:0000205}
+
       # Digest mRNA from the GFFdb and store in Hash
       # Next yield(id, seq) from Hash
       def each_mRNA
@@ -48,25 +97,31 @@ module Bio
             seqnames.add(rec.seqname)
             id = rec.id
             ids.add(id)
-            parent = rec.get_attribute('Parent')
             case rec.feature_type
               when 'gene' || 'SO:0000704' : genes << id 
-              when 'mRNA' || 'SO:0000234' : mrnas.add(parent,rec) if parent
-              when 'CDS'  || 'SO:0000316' : cdss.add(parent,rec) if parent
-              else ignored_features[rec.feature_type] = true
+              when 'mRNA' || 'SO:0000234' : mrnas.add(rec) 
+              when 'CDS'  || 'SO:0000316' : cdss.add(rec)
+              when 'exon' || 'SO:0000147' : false
+              else
+                if !IGNORE_FEATURES.include?(rec.feature_type)
+                  ignored_features[rec.feature_type] = true
+                end
             end
           end
         end
+        # validate CDS sections do not overlap
+        cdss.validate
         puts "---- Yield each mRNA"
-        genes.each do | id |
-          # result = mrnas[id]
-          yield id,mrnas[id]
+        mrnas.each do | k, v |
+          yield k,v
         end
         cdss.each do | k, v |
           yield k,v
         end
-        puts "---- Display features that have no match"
-        p ignored_features.keys
+ 
+        ignored_features.keys.each do | k |
+          warn "Feature has no match",k
+        end
       end
     end
   end
