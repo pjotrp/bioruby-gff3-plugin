@@ -110,11 +110,12 @@ module Bio
             return @componentlist[parent]
           end
           search = rec.seqname
+          return @componentlist[search] if @componentlist[search]
           @componentlist.each do | componentid, component |
             # dissemble id
             (id, start, stop) = componentid.split(/ /)
             if id==search and rec.start >= start.to_i and rec.end <= stop.to_i
-              return componentid
+              return @componentlist[componentid]
             end
           end
           warn "Could not find container/component for",Record::formatID(rec)
@@ -160,8 +161,9 @@ module Bio
 
           if COMPONENT_TYPES.include?(rec.feature_type)
             # check for container ID
-            warn("Container <#{rec.feature_type}> has no ID, so taking sequence name",id) if rec.id == nil
+            warn("Container <#{rec.feature_type}> has no ID, so using sequence name instead",id) if rec.id == nil
             components[id] = rec
+            puts "Added #{rec.feature_type} with component ID #{id}"
           else
             case rec.feature_type
               when 'mRNA' || 'SO:0000234' : mrnas.add(id,rec)
@@ -197,7 +199,7 @@ module Bio
       # Yield the id, recs, component and sequence of mRNAs
       def each_mRNA
         parse(@gff) if !@mrnalist
-        p @componentlist
+        p @componentlist.keys
         @mrnalist.each do | id, recs |
           seqid = recs[0].seqname
           p recs
