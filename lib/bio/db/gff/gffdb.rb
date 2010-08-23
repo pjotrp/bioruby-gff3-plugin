@@ -16,13 +16,8 @@ module Bio
       include MRNA
       # include CDS
 
-      def initialize
-        @gffs = {}
-      end
-
-      # Add a GFF tree
-      def add fn, gfftree
-        @gffs[fn] = gfftree
+      def initialize gff
+        @gff = gff
       end
 
     end # GFFdb

@@ -76,13 +76,13 @@ module Bio
     module MRNA
       include Helpers
       include Helpers::Error
-      attr_reader :genes, :contigs
+      attr_reader :genelist, :contiglist, :cdslist, :mrnalist, :sequencelist
 
-      CONTAINER_TYPES = %w{
+      COMPONENT_TYPES = %w{
         gene SO:0000704 contig transcript Component region
       }
       # Ignore the following features (case sensitive?)
-      IGNORE_FEATURES = CONTAINER_TYPES + %w{
+      IGNORE_FEATURES = COMPONENT_TYPES + %w{
         transposon Match similarity UTR
         TF_binding_site intronSO:0000188 polyA_sequence SO:0000610
         polyA_site SO:0000553
@@ -92,49 +92,70 @@ module Bio
 
       # Digest mRNA from the GFFdb and store in Hash
       # Next yield(id, seq) from Hash
-      def each_mRNA
+      def parse gff
         puts "---- Digest DB and store data in mRNA Hash"
         count_ids       = Counter.new   # Count ids
         count_seqnames  = Counter.new   # Count seqnames
-        containers            = {} # Store containers, like genes, contigs
-        mrnas                 = LinkedRecs.new   # Store linked mRNA records
-        cdss                  = LinkedRecs.new
+        components      = {} # Store containers, like genes, contigs
+        mrnas           = LinkedRecs.new   # Store linked mRNA records
+        cdss            = LinkedRecs.new
+        sequences       = {}
         unrecognized_features = {}
-        @gffs.each do | gffname, gff |
-          gff.records.each do | rec |
-            next if rec.comment # skip GFF comments
-            # Always create a unique ID, made of filename + id|seqname
-            if rec.id
-              id = gffname+' '+rec.id
-            else
-              id = gffname+' '+rec.seqname
-            end
-            count_ids.add(id)
-            count_seqnames.add(rec.seqname)
+        gff.records.each do | rec |
+          next if rec.comment # skip GFF comments
+          # Always create a unique ID, made of filename + id|seqname
+          if rec.id
+            id = rec.id
+          else
+            id = rec.seqname
+          end
+          if !id 
+            id = 'unknown'
+            warn "Record with unknown ID",rec.to_s
+          end
+          count_ids.add(id)
+          count_seqnames.add(rec.seqname)
 
-            if CONTAINER_TYPES.include?(rec.feature_type)
-              # check for container ID
-              warn("Container #{rec.feature_type} has no ID",rec.seqname) if rec.id == nil
-              containers[id] = rec
-            else
-              case rec.feature_type
-                when 'mRNA' || 'SO:0000234' : mrnas.add(id,rec)
-                when 'CDS'  || 'SO:0000316' : cdss.add(id,rec)
-                when 'exon' || 'SO:0000147' : # ignore, for now
-                else
-                  if !IGNORE_FEATURES.include?(rec.feature_type)
-                    unrecognized_features[rec.feature_type] = true
-                  end
-              end
+          if COMPONENT_TYPES.include?(rec.feature_type)
+            # check for container ID
+            warn("Container <#{rec.feature_type}> has no ID, so taking sequence name",id) if rec.id == nil
+            components[id] = rec
+          else
+            case rec.feature_type
+              when 'mRNA' || 'SO:0000234' : mrnas.add(id,rec)
+              when 'CDS'  || 'SO:0000316' : cdss.add(id,rec)
+              when 'exon' || 'SO:0000147' : # ignore, for now
+              else
+                if !IGNORE_FEATURES.include?(rec.feature_type)
+                  unrecognized_features[rec.feature_type] = true
+                end
             end
           end
+        end
+        gff.sequences.each do | seq |
+          id = seq.entry_id
+          sequences[id] = seq
         end
         # validate CDS sections do not overlap
         cdss.validate
         unrecognized_features.keys.each do | k |
           warn "Feature has no match",k if k
         end
-        return genes, contigs, mrnas, cdss
+        # Finally we are going to index the sequences
+        @genelist      = count_ids.keys 
+        @componentlist = components
+        @mrnalist      = mrnas
+        @cdslist       = cdss
+        @sequencelist  = sequences
+      end
+
+      # Yield the id, rec and sequence of mRNAs
+      def each_mRNA
+        parse(@gff) if !@mrnalist
+        @mrnalist.each do | id, rec |
+          p rec
+          yield id, rec, @sequencelist[id] 
+        end
       end
     end
   end
