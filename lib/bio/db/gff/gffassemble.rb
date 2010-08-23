@@ -34,8 +34,6 @@ module Bio
       class LinkedRecs < Hash
         include Error
         def add id, rec
-          # id = rec.id
-          # warn "record has no parent",id if !parent
           info "Adding #{rec.feature_type} <#{id}>"
           self[id] = [] if self[id] == nil
           self[id] << rec
@@ -51,7 +49,8 @@ module Bio
           end
         end
      
-        # Validate all lists share the same parent (if available)
+        # Validate all lists share the same parent (if available). First checks
+        # for Parent attribute, next for mRNA attribute
         def validate_shared_parent
           each do | id, rec |
             parent = rec.first.get_attribute('Parent')
