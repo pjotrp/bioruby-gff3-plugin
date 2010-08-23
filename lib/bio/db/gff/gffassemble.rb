@@ -42,11 +42,31 @@ module Bio
         end
 
         # Validate all lists belong to the same container/component
-        def validate
+        def validate_seqname
           each do | id, rec |
             seqname = rec.first.seqname
             rec.each do | section |
               raise "Non-matching seqname #{section.seqname} in #{seqname}" if section.seqname != seqname
+            end
+          end
+        end
+     
+        # Validate all lists share the same parent (if available)
+        def validate_shared_parent
+          each do | id, rec |
+            parent = rec.first.get_attribute('Parent')
+            if parent
+              rec.each do | section |
+                _parent = section.get_attribute('Parent')
+                raise "Non-matching parent #{_parent} and #{parent} in #{id}" if _parent != parent
+              end
+            end
+            parent = rec.first.get_attribute('mRNA')
+            if parent
+              rec.each do | section |
+                _parent = section.get_attribute('mRNA')
+                raise "Non-matching parent #{_parent} and #{parent} in #{id}" if _parent != parent
+              end
             end
           end
         end
@@ -212,11 +232,15 @@ module Bio
           id = seq.entry_id
           sequences[id] = seq
         end
-        # validate gene/container/component names
-        mrnas.validate
-        cdss.validate
+        # validate gene/container/component seqname is shared
+        mrnas.validate_seqname
+        cdss.validate_seqname
         # validate CDS sections do not overlap
         cdss.validate_nonoverlapping
+        # validate sections share the parent
+        mrnas.validate_shared_parent
+        cdss.validate_shared_parent
+        # display unhandled features
         unrecognized_features.keys.each do | k |
           warn "Feature has no match",k if k
         end
@@ -249,6 +273,26 @@ module Bio
               warn "No sequence information for",id
             end
           end
+        end
+      end
+
+      # Yield the id, recs, component and sequence of CDSs
+      def each_CDS
+        parse(@gff) if !@cdslist
+        # p @componentlist.keys
+        @cdslist.each do | id, recs |
+          recs.each do | rec |
+            print rec.id,","
+          end
+          puts ""
+          # seqid = recs[0].seqname
+          # component = find_component(recs[0])
+          # yield id, recs, component, @sequencelist[seqid] 
+        end
+      end
+
+      def each_CDS_sequence
+        each_CDS do | id, reclist, component, seq |
         end
       end
     end

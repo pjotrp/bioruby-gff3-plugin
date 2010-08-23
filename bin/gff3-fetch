@@ -4,10 +4,20 @@
 # Copyright:: August 2010
 # License:: Ruby License
 
+USAGE = <<EOM
+  Fetch mRNA or CDS and print as FASTA format
+
+  gff3-fetch mRNA|CDS filename.gff
+EOM
+
 rootpath = File.dirname(File.dirname(__FILE__))
 $: << rootpath+'/lib'
 
 require 'bio/db/gff/gffdb'
+
+if ARGV.size == 0
+  print USAGE
+end
 
 gfftype = ARGV.shift
 raise "Unknown GFF type '#{gfftype}'" if gfftype !~ /mrna|cds/i
@@ -15,9 +25,19 @@ raise "Unknown GFF type '#{gfftype}'" if gfftype !~ /mrna|cds/i
 ARGV.each do | fn |
   gff3 = Bio::GFF::GFF3.new(File.read(fn))
   gffdb = Bio::GFFbrowser::GFFdb.new(gff3)
-  gffdb.each_mRNA_sequence do | id, sequence |
-    puts ">"+id
-    puts sequence
+  case gfftype
+    when 'mrna'||'mRNA' :
+          gffdb.each_mRNA_sequence do | id, sequence |
+            puts ">"+id
+            puts sequence
+          end
+    when 'CDS':
+          gffdb.each_CDS_sequence do | id, sequence |
+            puts ">"+id
+            puts sequence
+          end
+    else
+      raise "Unknown action <#{gfftype}>"
   end
 end
 
