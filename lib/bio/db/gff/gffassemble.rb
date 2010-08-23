@@ -74,11 +74,8 @@ module Bio
         # validate they do not overlap
         def validate_nonoverlapping
           each do | id, rec |
-            sections = []
-            rec.each do | section |
-              sections.push Section.new(section)
-            end
-            sections.sort.each_with_index do | check, i |
+            sections = Sections::sort(rec)
+            sections.each_with_index do | check, i |
               neighbour = sections[i+1]
               if neighbour and check.intersection(neighbour)
                 warn "Overlapping sections for ",id
@@ -105,6 +102,17 @@ module Bio
         alias_method :&, :intersection
         def <=> other
           first <=> other.first
+        end
+      end
+
+      module Sections
+        # Return list of sorted Sections
+        def Sections::sort rec
+          sections = []
+          rec.each do | section |
+            sections.push Section.new(section)
+          end
+          sections.sort
         end
       end
 
@@ -161,18 +169,19 @@ module Bio
         # of records
         def assemble sequence, startpos, rec
           retval = ""
-          sections = []
-          rec.each do | section |
-            sections.push Section.new(section)
-          end
-          sections.sort.each do | section |
+          Sections::sort(rec).each do | section |
             retval += sequence[section.rec.start..section.rec.end]
           end
           retval
         end
+
+        # Create a description for output
         def description id, component, rec
-          id
+          sections = Sections::sort(rec)
+          id+' Sequence:'+component.seqname+"_#{component.start}:#{component.end} ("+
+           sections.map { |s| "#{s.first}:#{s.last}" }.join(', ')  +")"
         end
+
       end
     end # Helpers
 
@@ -294,7 +303,12 @@ module Bio
           if component
             sequence = @sequencelist[component.seqname]
             if sequence
-              yield description(id,component,reclist), assemble(sequence,component.start,reclist)
+              seq = assemble(sequence,component.start,reclist)
+              if seq.size % 3 != 0
+                p reclist
+                raise "CDS size #{seq.size} is not a multiple of 3! <#{seq}>"
+              end
+              yield description(id,component,reclist), seq
             else 
               warn "No sequence information for",id
             end
