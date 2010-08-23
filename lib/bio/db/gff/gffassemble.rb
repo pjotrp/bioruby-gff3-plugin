@@ -115,9 +115,19 @@ module Bio
             # dissemble id
             (id, start, stop) = componentid.split(/ /)
             if id==search and rec.start >= start.to_i and rec.end <= stop.to_i
-              return @componentlist[componentid]
+              return component
             end
           end
+          # Ah, painful. At this point the record has no matching container, probably
+          # because it has no parent ID and the component has an ID. We have to go by
+          # ID for every component individually
+          @componentlist.each do | componentid, component |
+            if component.seqname==search and rec.start >= component.start and rec.end <= component.end
+              return component
+            end
+          end
+          p @componentlist['Clone:AL12345.2']
+          p rec
           warn "Could not find container/component for",Record::formatID(rec)
         end
       end
@@ -199,18 +209,20 @@ module Bio
       # Yield the id, recs, component and sequence of mRNAs
       def each_mRNA
         parse(@gff) if !@mrnalist
-        p @componentlist.keys
+        # p @componentlist.keys
         @mrnalist.each do | id, recs |
           seqid = recs[0].seqname
-          p recs
           component = find_component(recs[0])
           yield id, recs, component, @sequencelist[seqid] 
         end
       end
 
       def each_mRNA_sequence
-        each_mRNA do | id, rec, seq |
-          yield id
+        each_mRNA do | id, rec, component, seq |
+          if component
+            sequence = @sequencelist[component.seqname]
+            yield id, sequence if sequence
+          end
         end
       end
     end
