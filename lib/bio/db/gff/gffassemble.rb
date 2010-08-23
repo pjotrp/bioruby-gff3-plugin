@@ -30,7 +30,6 @@ module Bio
       class LinkedRecs < Hash
         include Error
         def add id, rec
-          # parent = rec.get_attribute('Parent')
           # id = rec.id
           # warn "record has no parent",id if !parent
           puts "Adding #{rec.feature_type} <#{id}>"
@@ -91,7 +90,7 @@ module Bio
           id = rec.id if rec.id
           if !id
             if rec.seqname
-              id = rec.seqname+"_#{rec.start}_#{rec.end}"
+              id = rec.seqname+" #{rec.start} #{rec.end}"
             else
               id = 'unknown'
               warn "Record with unknown ID",rec.to_s
@@ -101,7 +100,24 @@ module Bio
         end
       end
       module Component
-        def find_container
+        # Walk the component list to find a matching component/container for a
+        # record. First use the parent ID. If that is missing go by sequence
+        # name.
+        def find_component rec
+          parent = rec.get_attribute('Parent')
+          if @componentlist[parent] 
+            # nice, there is a match
+            return @componentlist[parent]
+          end
+          search = rec.seqname
+          @componentlist.each do | componentid, component |
+            # dissemble id
+            (id, start, stop) = componentid.split(/ /)
+            if id==search and rec.start >= start.to_i and rec.end <= stop.to_i
+              return componentid
+            end
+          end
+          warn "Could not find container/component for",Record::formatID(rec)
         end
       end
     end # Helpers
@@ -111,7 +127,7 @@ module Bio
       include Helpers::Error
       include Component
 
-      attr_reader :genelist, :contiglist, :cdslist, :mrnalist, :sequencelist
+      attr_reader :genelist, :componentlist, :contiglist, :cdslist, :mrnalist, :sequencelist
 
       COMPONENT_TYPES = %w{
         gene SO:0000704 contig transcript Component region
@@ -178,14 +194,15 @@ module Bio
         @sequencelist  = sequences
       end
 
-      # Yield the id, recs, container and sequence of mRNAs
+      # Yield the id, recs, component and sequence of mRNAs
       def each_mRNA
         parse(@gff) if !@mrnalist
+        p @componentlist
         @mrnalist.each do | id, recs |
           seqid = recs[0].seqname
           p recs
-          container = find_container()
-          yield id, recs, container, @sequencelist[seqid] 
+          component = find_component(recs[0])
+          yield id, recs, component, @sequencelist[seqid] 
         end
       end
 
