@@ -13,6 +13,10 @@ module Bio
     module Helpers
 
       module Error
+        def info str
+          $stderr.print "Info: "+str+"\n"
+        end
+
         def warn str,id=''
           $stderr.print "Warning: "+str+" <#{id}>\n"
         end
@@ -32,7 +36,7 @@ module Bio
         def add id, rec
           # id = rec.id
           # warn "record has no parent",id if !parent
-          puts "Adding #{rec.feature_type} <#{id}>"
+          info "Adding #{rec.feature_type} <#{id}>"
           self[id] = [] if self[id] == nil
           self[id] << rec
         end
@@ -129,8 +133,6 @@ module Bio
               return component
             end
           end
-          p @componentlist['Clone:AL12345.2']
-          p rec
           warn "Could not find container/component for",Record::formatID(rec)
         end
       end
@@ -145,7 +147,6 @@ module Bio
             sections.push Section.new(section)
           end
           sections.sort.each do | section |
-            p section.rec
             retval += sequence[section.rec.start..section.rec.end]
           end
           retval
@@ -176,7 +177,7 @@ module Bio
       # Digest mRNA from the GFFdb and store in Hash
       # Next yield(id, seq) from Hash
       def parse gff
-        puts "---- Digest DB and store data in mRNA Hash"
+        info "---- Digest DB and store data in mRNA Hash"
         count_ids       = Counter.new   # Count ids
         count_seqnames  = Counter.new   # Count seqnames
         components      = {} # Store containers, like genes, contigs
@@ -194,7 +195,7 @@ module Bio
             # check for container ID
             warn("Container <#{rec.feature_type}> has no ID, so using sequence name instead",id) if rec.id == nil
             components[id] = rec
-            puts "Added #{rec.feature_type} with component ID #{id}"
+            info "Added #{rec.feature_type} with component ID #{id}"
           else
             case rec.feature_type
               when 'mRNA' || 'SO:0000234' : mrnas.add(id,rec)
