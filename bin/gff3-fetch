@@ -15,7 +15,7 @@ gffdb = Bio::GFFbrowser::GFFdb.new
 
 ARGV.each do | fn |
   gff3 = Bio::GFF::GFF3.new(File.read(fn))
-  gffdb.add(gff3)
+  gffdb.add(fn,gff3)
 end
 
 gffdb.each_mRNA do | id, seq |

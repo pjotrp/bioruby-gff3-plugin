@@ -29,10 +29,10 @@ module Bio
       # Helper class for storing linked records based on a shared ID
       class LinkedRecs < Hash
         include Error
-        def add rec
-          parent = rec.get_attribute('Parent')
-          id = rec.id
-          warn "record has no parent",id if !parent
+        def add id, rec
+          # parent = rec.get_attribute('Parent')
+          # id = rec.id
+          # warn "record has no parent",id if !parent
           puts "Adding #{rec.feature_type} <#{id}>"
           self[id] = [] if self[id] == nil
           self[id] << rec
@@ -87,6 +87,7 @@ module Bio
         TF_binding_site intronSO:0000188 polyA_sequence SO:0000610
         polyA_site SO:0000553
         five_prime_UTR SO:0000204 three_prime_UTR SO:0000205
+        exon SO:0000147
       }
 
       # Digest mRNA from the GFFdb and store in Hash
@@ -99,19 +100,27 @@ module Bio
         mrnas                 = LinkedRecs.new   # Store linked mRNA records
         cdss                  = LinkedRecs.new
         unrecognized_features = {}
-        @gffs.each do | gff |
+        @gffs.each do | gffname, gff |
           gff.records.each do | rec |
-            id = rec.id
+            next if rec.comment # skip GFF comments
+            # Always create a unique ID, made of filename + id|seqname
+            if rec.id
+              id = gffname+' '+rec.id
+            else
+              id = gffname+' '+rec.seqname
+            end
             count_ids.add(id)
             count_seqnames.add(rec.seqname)
 
             if CONTAINER_TYPES.include?(rec.feature_type)
+              # check for container ID
+              warn("Container #{rec.feature_type} has no ID",rec.seqname) if rec.id == nil
               containers[id] = rec
             else
               case rec.feature_type
-                when 'mRNA' || 'SO:0000234' : mrnas.add(rec)
-                when 'CDS'  || 'SO:0000316' : cdss.add(rec)
-                when 'exon' || 'SO:0000147' : false
+                when 'mRNA' || 'SO:0000234' : mrnas.add(id,rec)
+                when 'CDS'  || 'SO:0000316' : cdss.add(id,rec)
+                when 'exon' || 'SO:0000147' : # ignore, for now
                 else
                   if !IGNORE_FEATURES.include?(rec.feature_type)
                     unrecognized_features[rec.feature_type] = true
@@ -122,13 +131,6 @@ module Bio
         end
         # validate CDS sections do not overlap
         cdss.validate
-        puts "---- Yield each mRNA"
-        mrnas.each do | k, v |
-          yield k,v
-        end
-        cdss.each do | k, v |
-          yield k,v
-        end
         unrecognized_features.keys.each do | k |
           warn "Feature has no match",k if k
         end

@@ -17,12 +17,12 @@ module Bio
       # include CDS
 
       def initialize
-        @gffs = []
+        @gffs = {}
       end
 
       # Add a GFF tree
-      def add gfftree
-        @gffs.push gfftree
+      def add fn, gfftree
+        @gffs[fn] = gfftree
       end
 
     end # GFFdb
