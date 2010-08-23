@@ -170,6 +170,9 @@ module Bio
           end
           retval
         end
+        def description id, component, rec
+          id
+        end
       end
     end # Helpers
 
@@ -280,18 +283,22 @@ module Bio
         parse(@gff) if !@cdslist
         # p @componentlist.keys
         @cdslist.each do | id, recs |
-          recs.each do | rec |
-            print rec.id,","
-          end
-          puts ""
-          # seqid = recs[0].seqname
-          # component = find_component(recs[0])
-          # yield id, recs, component, @sequencelist[seqid] 
+          seqid = recs[0].seqname
+          component = find_component(recs[0])
+          yield id, recs, component
         end
       end
 
       def each_CDS_sequence
-        each_CDS do | id, reclist, component, seq |
+        each_CDS do | id, reclist, component |
+          if component
+            sequence = @sequencelist[component.seqname]
+            if sequence
+              yield description(id,component,reclist), assemble(sequence,component.start,reclist)
+            else 
+              warn "No sequence information for",id
+            end
+          end
         end
       end
     end
