@@ -83,11 +83,34 @@ module Bio
           first <=> other.first
         end
       end
+
+      module Record
+        # Format a record ID by, first, getting the ID attribute. If that fails
+        # the seqname is used with the start/stop positions.
+        def Record::formatID rec
+          id = rec.id if rec.id
+          if !id
+            if rec.seqname
+              id = rec.seqname+"_#{rec.start}_#{rec.end}"
+            else
+              id = 'unknown'
+              warn "Record with unknown ID",rec.to_s
+            end
+          end
+          id
+        end
+      end
+      module Component
+        def find_container
+        end
+      end
     end # Helpers
 
     module MRNA
       include Helpers
       include Helpers::Error
+      include Component
+
       attr_reader :genelist, :contiglist, :cdslist, :mrnalist, :sequencelist
 
       COMPONENT_TYPES = %w{
@@ -115,16 +138,7 @@ module Bio
         unrecognized_features = {}
         gff.records.each do | rec |
           next if rec.comment # skip GFF comments
-          # Always create a unique ID, made of filename + id|seqname
-          if rec.id
-            id = rec.id
-          else
-            id = rec.seqname
-          end
-          if !id 
-            id = 'unknown'
-            warn "Record with unknown ID",rec.to_s
-          end
+          id = Record::formatID(rec)
           count_ids.add(id)
           count_seqnames.add(rec.seqname)
 
@@ -164,14 +178,20 @@ module Bio
         @sequencelist  = sequences
       end
 
-      # Yield the id, rec and sequence of mRNAs
+      # Yield the id, recs, container and sequence of mRNAs
       def each_mRNA
         parse(@gff) if !@mrnalist
-        @mrnalist.each do | id, rec |
-          seqid = rec[0].seqname
-          p rec
-          p @sequencelist[seqid]
-          # yield id, rec, @sequencelist[seqid] 
+        @mrnalist.each do | id, recs |
+          seqid = recs[0].seqname
+          p recs
+          container = find_container()
+          yield id, recs, container, @sequencelist[seqid] 
+        end
+      end
+
+      def each_mRNA_sequence
+        each_mRNA do | id, rec, seq |
+          yield id
         end
       end
     end

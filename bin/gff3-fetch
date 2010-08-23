@@ -15,7 +15,7 @@ raise "Unknown GFF type '#{gfftype}'" if gfftype !~ /mrna|cds/i
 ARGV.each do | fn |
   gff3 = Bio::GFF::GFF3.new(File.read(fn))
   gffdb = Bio::GFFbrowser::GFFdb.new(gff3)
-  gffdb.each_mRNA do | id, rec, sequence |
+  gffdb.each_mRNA_sequence do | id, sequence |
     puts ">"+id
     puts sequence
   end
