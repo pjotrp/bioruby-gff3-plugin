@@ -38,7 +38,19 @@ module Bio
           self[id] << rec
         end
 
+        # Validate all lists belong to the same container/component
         def validate
+          each do | id, rec |
+            seqname = rec.first.seqname
+            rec.each do | section |
+              raise "Non-matching seqname #{section.seqname} in #{seqname}" if section.seqname != seqname
+            end
+          end
+        end
+     
+        # walk all (CDS) lists for every container/component and 
+        # validate they do not overlap
+        def validate_nonoverlapping
           each do | id, rec |
             sections = []
             rec.each do | section |
@@ -136,8 +148,11 @@ module Bio
           id = seq.entry_id
           sequences[id] = seq
         end
-        # validate CDS sections do not overlap
+        # validate gene/container/component names
+        mrnas.validate
         cdss.validate
+        # validate CDS sections do not overlap
+        cdss.validate_nonoverlapping
         unrecognized_features.keys.each do | k |
           warn "Feature has no match",k if k
         end
@@ -153,8 +168,10 @@ module Bio
       def each_mRNA
         parse(@gff) if !@mrnalist
         @mrnalist.each do | id, rec |
+          seqid = rec[0].seqname
           p rec
-          yield id, rec, @sequencelist[id] 
+          p @sequencelist[seqid]
+          # yield id, rec, @sequencelist[seqid] 
         end
       end
     end
