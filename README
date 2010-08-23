@@ -4,8 +4,11 @@ Fetch mRNA and CDS information from GFF3 files. For example:
   ./bin/gff3-fetch cds test/data/gff/test.gff3
 
 This implementation depends on BioRuby's GFF3 parser, with the possible
-advantage that it does not consume all memory. 
+advantage that it does not consume all memory. You can use it as a BioRuby
+plugin by adding the 'lib' dir to the search path and
 
-For a writeup see ...
+  require 'bio/db/gff/gffdb'
+
+For a writeup see http://thebird.nl/bioruby/BioRuby_GFF3.html 
 
 Pjotr Prins

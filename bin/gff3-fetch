@@ -5,9 +5,9 @@
 # License:: Ruby License
 
 USAGE = <<EOM
-  Fetch mRNA or CDS and print as FASTA format
+  Fetch mRNAs, exons, or CDS and print as FASTA format
 
-  gff3-fetch mRNA|CDS filename.gff
+  gff3-fetch mRNA|CDS|exon filename.gff
 EOM
 
 rootpath = File.dirname(File.dirname(__FILE__))
