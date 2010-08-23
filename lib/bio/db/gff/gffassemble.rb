@@ -66,8 +66,10 @@ module Bio
       end
 
       class Section < Range
+        attr_reader :rec
         def initialize rec
           super(rec.start,rec.end)
+          @rec = rec
         end
         def intersection(other)
           raise ArgumentError, 'value must be a Range' unless other.kind_of?(Range)
@@ -99,6 +101,7 @@ module Bio
           id
         end
       end
+
       module Component
         # Walk the component list to find a matching component/container for a
         # record. First use the parent ID. If that is missing go by sequence
@@ -131,12 +134,30 @@ module Bio
           warn "Could not find container/component for",Record::formatID(rec)
         end
       end
+
+      module Gff3Sequence
+        # Patch a sequence together from a Sequence string and an array
+        # of records
+        def assemble sequence, startpos, rec
+          retval = ""
+          sections = []
+          rec.each do | section |
+            sections.push Section.new(section)
+          end
+          sections.sort.each do | section |
+            p section.rec
+            retval += sequence[section.rec.start..section.rec.end]
+          end
+          retval
+        end
+      end
     end # Helpers
 
     module MRNA
       include Helpers
       include Helpers::Error
       include Component
+      include Gff3Sequence
 
       attr_reader :genelist, :componentlist, :contiglist, :cdslist, :mrnalist, :sequencelist
 
@@ -218,10 +239,14 @@ module Bio
       end
 
       def each_mRNA_sequence
-        each_mRNA do | id, rec, component, seq |
+        each_mRNA do | id, reclist, component, seq |
           if component
             sequence = @sequencelist[component.seqname]
-            yield id, sequence if sequence
+            if sequence
+              yield id, assemble(sequence,component.start,reclist)
+            else 
+              warn "No sequence information for",id
+            end
           end
         end
       end
