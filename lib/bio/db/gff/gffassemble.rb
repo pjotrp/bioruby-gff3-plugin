@@ -170,7 +170,7 @@ module Bio
         def assemble sequence, startpos, rec
           retval = ""
           Sections::sort(rec).each do | section |
-            retval += sequence[section.rec.start..section.rec.end]
+            retval += sequence[(section.rec.start-startpos)..(section.rec.end-startpos)]
           end
           retval
         end
