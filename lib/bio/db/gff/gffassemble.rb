@@ -214,6 +214,7 @@ module Bio
         components      = {} # Store containers, like genes, contigs
         mrnas           = LinkedRecs.new   # Store linked mRNA records
         cdss            = LinkedRecs.new
+        exons           = LinkedRecs.new
         sequences       = {}
         unrecognized_features = {}
         gff.records.each do | rec |
@@ -231,7 +232,7 @@ module Bio
             case rec.feature_type
               when 'mRNA' || 'SO:0000234' : mrnas.add(id,rec)
               when 'CDS'  || 'SO:0000316' : cdss.add(id,rec)
-              when 'exon' || 'SO:0000147' : # ignore, for now
+              when 'exon' || 'SO:0000147' : exons.add(id,rec)
               else
                 if !IGNORE_FEATURES.include?(rec.feature_type)
                   unrecognized_features[rec.feature_type] = true
@@ -260,41 +261,46 @@ module Bio
         @componentlist = components
         @mrnalist      = mrnas
         @cdslist       = cdss
+        @exonlist      = exons
         @sequencelist  = sequences
       end
 
+      def each_item list
+        list.each do | id, recs |
+          seqid = recs[0].seqname
+          component = find_component(recs[0])
+          yield id, recs, component
+        end
+      end
+      
       # Yield the id, recs, component and sequence of mRNAs
       def each_mRNA
         parse(@gff) if !@mrnalist
-        # p @componentlist.keys
-        @mrnalist.each do | id, recs |
-          seqid = recs[0].seqname
-          component = find_component(recs[0])
-          yield id, recs, component, @sequencelist[seqid] 
-        end
+        each_item(@mrnalist) { |id, recs, component | yield id, recs, component }
+      end
+
+      # Yield the id, recs, and component
+      def each_CDS
+        parse(@gff) if !@cdslist
+        each_item(@cdslist) { |id, recs, component | yield id, recs, component }
+      end
+
+      # Yield the id, recs, and component
+      def each_exon
+        parse(@gff) if !@exonlist
+        each_item(@exonlist) { |id, recs, component | yield id, recs, component }
       end
 
       def each_mRNA_sequence
-        each_mRNA do | id, reclist, component, seq |
+        each_mRNA do | id, reclist, component |
           if component
             sequence = @sequencelist[component.seqname]
             if sequence
-              yield id, assemble(sequence,component.start,reclist)
+              yield description(id,component,reclist), assemble(sequence,component.start,reclist)
             else 
               warn "No sequence information for",id
             end
           end
-        end
-      end
-
-      # Yield the id, recs, component and sequence of CDSs
-      def each_CDS
-        parse(@gff) if !@cdslist
-        # p @componentlist.keys
-        @cdslist.each do | id, recs |
-          seqid = recs[0].seqname
-          component = find_component(recs[0])
-          yield id, recs, component
         end
       end
 
@@ -308,6 +314,20 @@ module Bio
                 p reclist
                 raise "CDS size #{seq.size} is not a multiple of 3! <#{seq}>"
               end
+              yield description(id,component,reclist), seq
+            else 
+              warn "No sequence information for",id
+            end
+          end
+        end
+      end
+
+      def each_exon_sequence
+        each_exon do | id, reclist, component |
+          if component
+            sequence = @sequencelist[component.seqname]
+            if sequence
+              seq = assemble(sequence,component.start,reclist)
               yield description(id,component,reclist), seq
             else 
               warn "No sequence information for",id

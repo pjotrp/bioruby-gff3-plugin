@@ -20,7 +20,7 @@ if ARGV.size == 0
 end
 
 gfftype = ARGV.shift
-raise "Unknown GFF type '#{gfftype}'" if gfftype !~ /mrna|cds/i
+raise "Unknown GFF type '#{gfftype}'" if gfftype !~ /mrna|cds|exon/i
 
 ARGV.each do | fn |
   gff3 = Bio::GFF::GFF3.new(File.read(fn))
@@ -28,6 +28,11 @@ ARGV.each do | fn |
   case gfftype
     when 'mrna'||'mRNA' :
           gffdb.each_mRNA_sequence do | id, sequence |
+            puts ">"+id
+            puts sequence
+          end
+    when 'exon':
+          gffdb.each_exon_sequence do | id, sequence |
             puts ">"+id
             puts sequence
           end
