@@ -50,6 +50,7 @@ test01	.	mRNA	101	280	.	+	.	ID=mrna01a;Name=testmRNAalterative;Note=test of alte
 test01	.	exon	101	160	.	+	.	ID=exon01;Name=exon01;Alias=exon 1;Parent=mrna01,mrna01a
 test01	.	exon	201	230	.	+	.	ID=exon02;Name=exon02;Alias=exon 2;Parent=mrna01
 test01	.	exon	251	280	.	+	.	ID=exon02a;Name=exon02a;Alias=exon 2a;Parent=mrna01a
+test01	.	CDS	3	14	.	+	.	ID=cds_short;Name=testmRNA;Parent=mrna01short;Note=this is test mRNA
 test01	.	CDS	192	200	.	+	.	ID=cds1;Parent=mrna01a
 test01	.	CDS	164	190	.	+	.	ID=cds1;Parent=mrna01a
 test01	.	CDS	192	200	.	+	.	ID=cds2;Parent=mrna01a

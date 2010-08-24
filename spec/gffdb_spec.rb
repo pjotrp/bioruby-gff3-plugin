@@ -32,18 +32,15 @@ describe GFFdb, "GFF3 API with :cache_none" do
     it "should implement each_exon_seq" 
     it "should implement each_CDS" 
   end
-  it "should implement each_mRNA_seq" 
-  # do
-  #   seq.should == "GAAGATTTGTAT"
-  # end
-
+  it "should implement each_mRNA_seq" do
+    h = {} ; @gffdb.each_mRNA_seq { | id, seq | h[id] = seq }
+    h["mrna01short Sequence:test01_1:400 (3:14)"].should == "GAAGATTTGTAT"
+  end
 
   it "should implement each_CDS_seq" do
-    res = []
-    @gffdb.each_CDS_seq do | id, seq |
-      res << id
-    end
-    res[0].should == "cds2 Sequence:test01_1:400 (192:200)"
+    h = {} ; @gffdb.each_CDS_seq { | id, seq | h[id] = seq }
+    h.keys.sort[0].should == "cds1 Sequence:test01_1:400 (164:190, 192:200)"
+    h["cds_short Sequence:test01_1:400 (3:14)"].should == "GAAGATTTGTAT"
   end
 end
 
