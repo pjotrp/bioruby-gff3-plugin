@@ -291,7 +291,7 @@ module Bio
         each_item(@exonlist) { |id, recs, component | yield id, recs, component }
       end
 
-      def each_mRNA_sequence
+      def each_mRNA_seq
         each_mRNA do | id, reclist, component |
           if component
             sequence = @sequencelist[component.seqname]
@@ -304,7 +304,7 @@ module Bio
         end
       end
 
-      def each_CDS_sequence
+      def each_CDS_seq
         each_CDS do | id, reclist, component |
           if component
             sequence = @sequencelist[component.seqname]
@@ -322,7 +322,7 @@ module Bio
         end
       end
 
-      def each_exon_sequence
+      def each_exon_seq
         each_exon do | id, reclist, component |
           if component
             sequence = @sequencelist[component.seqname]

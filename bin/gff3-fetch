@@ -27,19 +27,19 @@ ARGV.each do | fn |
   gffdb = Bio::GFFbrowser::GFFdb.new(gff3)
   case gfftype
     when 'mrna'||'mRNA' :
-          gffdb.each_mRNA_sequence do | id, sequence |
+          gffdb.each_mRNA_seq do | id, seq |
             puts ">"+id
-            puts sequence
+            puts seq
           end
     when 'exon':
-          gffdb.each_exon_sequence do | id, sequence |
+          gffdb.each_exon_seq do | id, seq |
             puts ">"+id
-            puts sequence
+            puts seq
           end
     when 'CDS':
-          gffdb.each_CDS_sequence do | id, sequence |
+          gffdb.each_CDS_seq do | id, seq |
             puts ">"+id
-            puts sequence
+            puts seq
           end
     else
       raise "Unknown action <#{gfftype}>"
