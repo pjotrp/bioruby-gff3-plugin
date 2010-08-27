@@ -36,7 +36,7 @@ def iterators_should_be_implemented
   end
 end
 
-describe GFFdb, "GFF3 API with :cache_none" do
+describe GFFdb, "GFF3 API with everything in memory" do
 
   before :all do 
     # initialize
@@ -47,11 +47,19 @@ describe GFFdb, "GFF3 API with :cache_none" do
   iterators_should_be_implemented
 end
 
-describe GFFdb, "GFF3 API with :cache_all" do
+describe GFFdb, "GFF3 API with :cache_components => 1000, :cache_records => :cache_none" do
   # iterators_should_be_implemented
 end
 
-describe GFFdb, "GFF3 API with :cache_component" do
+describe GFFdb, "GFF3 API with :cache_components => 1000, :cache_records => 1000" do
+  # iterators_should_be_implemented
+end
+
+describe GFFdb, "GFF3 API with :cache_records => :cache_none" do
+  # iterators_should_be_implemented
+end
+
+describe GFFdb, "GFF3 API with :cache_components => :cache_none, :cache_records => :cache_none" do
   # iterators_should_be_implemented
 end
 
