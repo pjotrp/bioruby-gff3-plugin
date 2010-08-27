@@ -1,5 +1,9 @@
-
-# LRU based Hash
+# LRU based Hash by Robert Klemme
+#
+# Copied from http://github.com/rklemme/muppet-laboratories
+#
+# License: unclear, not in repository, need to ask Permission
+# Added by Pjotr Prins (pjotr.prins@thebird.nl)
 
 require 'enumerator'
 
