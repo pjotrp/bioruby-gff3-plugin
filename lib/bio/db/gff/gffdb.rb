@@ -8,6 +8,7 @@
 # Create db from a GFF file
 
 require 'bio'
+require 'bio/db/gff/gfffileiterator'
 require 'bio/db/gff/gffassemble'
 require 'bio/db/gff/gffinmemory'
 require 'bio/db/gff/gffnocache'

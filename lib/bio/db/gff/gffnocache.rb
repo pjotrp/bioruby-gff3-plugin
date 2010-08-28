@@ -24,7 +24,8 @@ module Bio
           @filename = filename
         end
 
-        # parse the whole file once and store all seek locations
+        # parse the whole file once and store all seek locations, 
+        # rather than the records themselves
         def parse
           info "---- Digest DB and store data in mRNA Hash (NoCache)"
           count_ids       = Counter.new   # Count ids
@@ -35,6 +36,10 @@ module Bio
           exons           = LinkedRecs.new
           sequences       = {}
           unrecognized_features = {}
+
+          fh = File.open(@filename)
+          gff = nil
+
           gff.records.each do | rec |
             next if rec.comment # skip GFF comments
             id = Record::formatID(rec)
