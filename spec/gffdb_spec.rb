@@ -60,7 +60,13 @@ describe GFFdb, "GFF3 API with :cache_records => :cache_none" do
 end
 
 describe GFFdb, "GFF3 API with :cache_components => :cache_none, :cache_records => :cache_none" do
-  # iterators_should_be_implemented
+  before :all do 
+    # initialize
+    gffdb = Bio::GFFbrowser::GFFdb.new(TEST1, :cache_components => :cache_none, :cache_records => :cache_none)
+    @gff = gffdb.assembler
+  end
+
+  iterators_should_be_implemented
 end
 
 describe GFFdb, "GFF3 API with external FASTA" do

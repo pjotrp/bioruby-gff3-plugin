@@ -18,8 +18,15 @@ module Bio
       include Digest
 
       # Initialize a GFF parser
-      def initialize filename
-        @assembler = InMemory.new(filename)
+      def initialize filename, options = {}
+        cache_recs    = options[:cache_records]
+        @assembler = 
+          case cache_recs
+            when :cache_none :
+              NoCache.new(filename)
+            else
+              InMemory.new(filename)  # default 
+          end
       end
 
     end # GFFdb
