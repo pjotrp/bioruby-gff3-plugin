@@ -13,12 +13,13 @@ require 'bio/db/gff/gffassemble'
 module Bio
   module GFFbrowser
     class GFFdb
+      attr_reader :assembler
+
       include Digest
-      # include CDS
 
       # Initialize a GFF parser
       def initialize filename
-        @gff = Bio::GFF::GFF3.new(File.read(filename))
+        @assembler = InMemory.new(filename)
       end
 
     end # GFFdb
