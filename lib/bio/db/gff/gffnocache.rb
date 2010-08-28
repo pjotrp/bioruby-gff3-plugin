@@ -21,13 +21,12 @@ module Bio
         include Gff3Sequence
 
         def initialize filename
-          @gff = Bio::GFF::GFF3.new(File.read(filename))
+          @filename = filename
         end
 
-        # Digest mRNA from the GFFdb and store in Hash
-        # Next yield(id, seq) from Hash
-        def parse gff
-          info "---- Digest DB and store data in mRNA Hash"
+        # parse the whole file once and store all seek locations
+        def parse
+          info "---- Digest DB and store data in mRNA Hash (NoCache)"
           count_ids       = Counter.new   # Count ids
           count_seqnames  = Counter.new   # Count seqnames
           components      = {} # Store containers, like genes, contigs
@@ -94,19 +93,19 @@ module Bio
         
         # Yield the id, recs, component and sequence of mRNAs
         def each_mRNA
-          parse(@gff) if !@mrnalist
+          parse if !@mrnalist
           each_item(@mrnalist) { |id, recs, component | yield id, recs, component }
         end
 
         # Yield the id, recs, and component
         def each_CDS
-          parse(@gff) if !@cdslist
+          parse if !@cdslist
           each_item(@cdslist) { |id, recs, component | yield id, recs, component }
         end
 
         # Yield the id, recs, and component
         def each_exon
-          parse(@gff) if !@exonlist
+          parse if !@exonlist
           each_item(@exonlist) { |id, recs, component | yield id, recs, component }
         end
 

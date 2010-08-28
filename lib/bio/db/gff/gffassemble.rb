@@ -181,7 +181,6 @@ module Bio
         }
       end
 
-
       module Gff3Sequence
         # Patch a sequence together from a Sequence string and an array
         # of records
