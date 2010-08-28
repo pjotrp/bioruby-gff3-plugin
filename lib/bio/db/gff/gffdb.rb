@@ -13,11 +13,12 @@ require 'bio/db/gff/gffassemble'
 module Bio
   module GFFbrowser
     class GFFdb
-      include MRNA
+      include Digest
       # include CDS
 
-      def initialize gff
-        @gff = gff
+      # Initialize a GFF parser
+      def initialize filename
+        @gff = Bio::GFF::GFF3.new(File.read(filename))
       end
 
     end # GFFdb

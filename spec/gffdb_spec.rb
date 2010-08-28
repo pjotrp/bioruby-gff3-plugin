@@ -40,8 +40,7 @@ describe GFFdb, "GFF3 API with everything in memory" do
 
   before :all do 
     # initialize
-    gff3 = Bio::GFF::GFF3.new(File.read(TEST1))
-    @gffdb = Bio::GFFbrowser::GFFdb.new(gff3)
+    @gffdb = Bio::GFFbrowser::GFFdb.new(TEST1)
   end
 
   iterators_should_be_implemented

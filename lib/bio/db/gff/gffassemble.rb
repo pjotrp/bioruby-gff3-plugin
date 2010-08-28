@@ -185,7 +185,7 @@ module Bio
       end
     end # Helpers
 
-    module MRNA
+    module Digest
       include Helpers
       include Helpers::Error
       include Component
