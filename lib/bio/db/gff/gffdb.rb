@@ -9,6 +9,7 @@
 
 require 'bio'
 require 'bio/db/gff/gffassemble'
+require 'bio/db/gff/gffinmemory'
 
 module Bio
   module GFFbrowser
