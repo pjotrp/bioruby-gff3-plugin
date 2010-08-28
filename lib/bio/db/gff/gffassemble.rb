@@ -133,7 +133,12 @@ module Bio
         end
       end
 
-      module Component
+      module Gff3Component
+
+        COMPONENT_TYPES = %w{
+          gene SO:0000704 contig transcript Component region
+        }
+ 
         # Walk the component list to find a matching component/container for a
         # record. First use the parent ID. If that is missing go by sequence
         # name.
@@ -163,6 +168,19 @@ module Bio
           warn "Could not find container/component for",Record::formatID(rec)
         end
       end
+
+      module Gff3Features
+
+        # Ignore the following features (case sensitive?)
+        IGNORE_FEATURES = Gff3Component::COMPONENT_TYPES + %w{
+          transposon Match similarity UTR
+          TF_binding_site intronSO:0000188 polyA_sequence SO:0000610
+          polyA_site SO:0000553
+          five_prime_UTR SO:0000204 three_prime_UTR SO:0000205
+          exon SO:0000147
+        }
+      end
+
 
       module Gff3Sequence
         # Patch a sequence together from a Sequence string and an array

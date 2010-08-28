@@ -16,20 +16,9 @@ module Bio
       class NoCache
         include Helpers
         include Helpers::Error
-        include Component
+        include Gff3Component
+        include Gff3Features
         include Gff3Sequence
-
-        COMPONENT_TYPES = %w{
-          gene SO:0000704 contig transcript Component region
-        }
-        # Ignore the following features (case sensitive?)
-        IGNORE_FEATURES = COMPONENT_TYPES + %w{
-          transposon Match similarity UTR
-          TF_binding_site intronSO:0000188 polyA_sequence SO:0000610
-          polyA_site SO:0000553
-          five_prime_UTR SO:0000204 three_prime_UTR SO:0000205
-          exon SO:0000147
-        }
 
         def initialize filename
           @gff = Bio::GFF::GFF3.new(File.read(filename))
