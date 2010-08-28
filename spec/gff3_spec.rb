@@ -14,10 +14,15 @@ describe Bio::GFF::GFF3::FileIterator, "iterates a file" do
 
   before :all do 
     # initialize
-    iter = Bio::GFF::GFF3::FileIterator.new(TEST1)
+    @iter = Bio::GFF::GFF3::FileIterator.new(TEST1)
   end
 
-  it "should parse a file and yield records"
+  it "should parse a file and yield records" do 
+    @iter.each_rec do | id, rec |
+      p [id, rec]
+    end
+
+  end
 end
 
 
