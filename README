@@ -1,14 +1,24 @@
-Fetch mRNA and CDS information from GFF3 files. For example:
+= GFF3 plugin for BioRuby, aimed at parsing big data =
+
+You can use this in two ways. First as a standalone program, next as a plugin
+to BioRuby.
+
+For example, fetch mRNA and CDS information from GFF3 files and output to FASTA:
 
   ./bin/gff3-fetch mrna test/data/gff/test.gff3
   ./bin/gff3-fetch cds test/data/gff/test.gff3
 
-This implementation depends on BioRuby's GFF3 parser, with the possible
-advantage that it does not consume all memory. You can use it as a BioRuby
-plugin by adding the 'lib' dir to the search path and
+Or clone this repository and add the 'lib' dir to the Ruby search path and 
 
   require 'bio/db/gff/gffdb'
 
-For a writeup see http://thebird.nl/bioruby/BioRuby_GFF3.html 
+You can also run RSpec with something like
 
-Pjotr Prins
+   ruby -I ../bioruby/lib/ ~/.gems/bin/spec spec/gffdb_spec.rb
+
+This implementation depends on BioRuby's GFF3 parser, with the possible
+advantage that it does not consume all memory. 
+
+For a write-up see http://thebird.nl/bioruby/BioRuby_GFF3.html 
+
+Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl> 
