@@ -26,11 +26,11 @@ def iterators_should_be_implemented
     it "should implement each_CDS" 
   end
   it "should implement each_mRNA_seq" do
-    h = {} ; @assembler.each_mRNA_seq { | id, seq | h[id] = seq }
+    h = {} ; @gff.each_mRNA_seq { | id, seq | h[id] = seq }
     h["mrna01short Sequence:test01_1:400 (3:14)"].should == "GAAGATTTGTAT"
   end
   it "should implement each_CDS_seq" do
-    h = {} ; @assembler.each_CDS_seq { | id, seq | h[id] = seq }
+    h = {} ; @gff.each_CDS_seq { | id, seq | h[id] = seq }
     h.keys.sort[0].should == "cds1 Sequence:test01_1:400 (164:190, 192:200)"
     h["cds_short Sequence:test01_1:400 (3:14)"].should == "GAAGATTTGTAT"
   end
@@ -41,7 +41,7 @@ describe GFFdb, "GFF3 API with everything in memory" do
   before :all do 
     # initialize
     gffdb = Bio::GFFbrowser::GFFdb.new(TEST1)
-    @assembler = gffdb.assembler
+    @gff = gffdb.assembler
   end
 
   iterators_should_be_implemented
