@@ -31,8 +31,9 @@ module Bio
             @h = {}
           end
 
-          def []= id, fpos
+          def []= id, rec
             raise "id #{id} occurs twice!" if @h[id]
+            fpos = rec.io_seek
             @h[id] = fpos
           end
 
@@ -82,51 +83,25 @@ module Bio
         # rather than the records themselves
         def parse
           info "---- Digest DB and store data in mRNA Hash (NoCache)"
-          count_ids       = Counter.new   # Count ids
-          count_seqnames  = Counter.new   # Count seqnames
-          components      = SeekRecList.new(@iter.fh) # Store containers, like genes, contigs
-          mrnas           = SeekLinkedRecs.new   # Store linked mRNA records
-          cdss            = SeekLinkedRecs.new
-          exons           = SeekLinkedRecs.new
-          sequences       = {}
+          @count_ids          = Counter.new   # Count ids
+          @count_seqnames     = Counter.new   # Count seqnames
+          @componentlist      = SeekRecList.new(@iter.fh) # Store containers, like genes, contigs
+          @mrnalist           = SeekLinkedRecs.new   # Store linked mRNA records
+          @cdslist            = SeekLinkedRecs.new
+          @exonlist           = SeekLinkedRecs.new
+          @sequencelist       = {}
           unrecognized_features = {}
-
           @iter.each_rec do | id, rec |
-            next if rec.comment # skip GFF comments
-            id = Record::formatID(rec)
-            count_ids.add(id)
-            count_seqnames.add(rec.seqname)
-
-            if COMPONENT_TYPES.include?(rec.feature_type)
-              # check for container ID
-              warn("Container <#{rec.feature_type}> has no ID, so using sequence name instead",id) if rec.id == nil
-              components[id] = rec.io_seek
-              info "Added #{rec.feature_type} with component ID #{id}"
-            else
-              case rec.feature_type
-                when 'mRNA' || 'SO:0000234' : mrnas.add(id,rec)
-                when 'CDS'  || 'SO:0000316' : cdss.add(id,rec)
-                when 'exon' || 'SO:0000147' : exons.add(id,rec)
-                else
-                  if !IGNORE_FEATURES.include?(rec.feature_type)
-                    unrecognized_features[rec.feature_type] = true
-                  end
-              end
-            end
+            store_record(rec)
           end
           @iter.each_sequence do | id, seq |
             id = seq.entry_id
-            sequences[id] = seq
+            @sequencelist[id] = seq
           end
-          # validate_mrnas mrnas
-          # validate_cdss cdss
+          validate_mrnas 
+          validate_cdss
           show_unrecognized_features unrecognized_features
-          @genelist      = count_ids.keys 
-          @componentlist = components
-          @mrnalist      = mrnas
-          @cdslist       = cdss
-          @exonlist      = exons
-          @sequencelist  = sequences
+          @genelist      = @count_ids.keys 
         end
 
         def each_item list

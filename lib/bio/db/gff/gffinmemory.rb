@@ -27,7 +27,6 @@ module Bio
         # Digest mRNA from the GFFdb and store in Hash
         # Next yield(id, seq) from Hash
         def parse 
-          gff = @gff
           info "---- Digest DB and store data in mRNA Hash"
           @count_ids          = Counter.new   # Count ids
           @count_seqnames     = Counter.new   # Count seqnames
@@ -37,10 +36,10 @@ module Bio
           @exonlist           = LinkedRecs.new
           @sequencelist       = {}
           unrecognized_features = {}
-          gff.records.each do | rec |
+          @gff.records.each do | rec |
             store_record(rec)
           end
-          gff.sequences.each do | seq |
+          @gff.sequences.each do | seq |
             id = seq.entry_id
             @sequencelist[id] = seq
           end
