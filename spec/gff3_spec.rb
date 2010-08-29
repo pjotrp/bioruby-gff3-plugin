@@ -30,10 +30,10 @@ describe Bio::GFF::GFF3::FileIterator, "iterates a file" do
     @iter = Bio::GFF::GFF3::FileIterator.new(TEST1)
     last = nil
     @iter.each_rec do | id, rec |
-      p [id, rec]
+      # p [id, rec]
       last = rec
     end
-    last.source[0..5].should == "test01"
+    last.io_seek == 3256
     firstid = 'unknown'
     @iter.each_sequence do | id, seq |
       firstid = id

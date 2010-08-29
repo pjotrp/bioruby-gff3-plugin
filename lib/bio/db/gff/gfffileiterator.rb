@@ -15,7 +15,7 @@ module Bio
         attr_accessor :io_seek
         def initialize io_seek, buf
           @io_seek = io_seek
-          super
+          super(buf)
         end
       end
 
