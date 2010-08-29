@@ -13,8 +13,9 @@ module Bio
     module Digest
 
       class InMemory
-        include Helpers
-        include Helpers::Error
+        include Parser
+        # include Helpers
+        # include Helpers::Error
         include Gff3Component
         include Gff3Features
         include Gff3Sequence
@@ -25,7 +26,8 @@ module Bio
 
         # Digest mRNA from the GFFdb and store in Hash
         # Next yield(id, seq) from Hash
-        def parse gff
+        def parse 
+          gff = @gff
           info "---- Digest DB and store data in mRNA Hash"
           count_ids       = Counter.new   # Count ids
           count_seqnames  = Counter.new   # Count seqnames
@@ -91,68 +93,6 @@ module Bio
           end
         end
         
-        # Yield the id, recs, component and sequence of mRNAs
-        def each_mRNA
-          parse(@gff) if !@mrnalist
-          each_item(@mrnalist) { |id, recs, component | yield id, recs, component }
-        end
-
-        # Yield the id, recs, and component
-        def each_CDS
-          parse(@gff) if !@cdslist
-          each_item(@cdslist) { |id, recs, component | yield id, recs, component }
-        end
-
-        # Yield the id, recs, and component
-        def each_exon
-          parse(@gff) if !@exonlist
-          each_item(@exonlist) { |id, recs, component | yield id, recs, component }
-        end
-
-        def each_mRNA_seq
-          each_mRNA do | id, reclist, component |
-            if component
-              sequence = @sequencelist[component.seqname]
-              if sequence
-                yield description(id,component,reclist), assemble(sequence,component.start,reclist)
-              else 
-                warn "No sequence information for",id
-              end
-            end
-          end
-        end
-
-        def each_CDS_seq
-          each_CDS do | id, reclist, component |
-            if component
-              sequence = @sequencelist[component.seqname]
-              if sequence
-                seq = assemble(sequence,component.start,reclist)
-                if seq.size % 3 != 0
-                  p reclist
-                  raise "CDS size #{seq.size} is not a multiple of 3! <#{seq}>"
-                end
-                yield description(id,component,reclist), seq
-              else 
-                warn "No sequence information for",id
-              end
-            end
-          end
-        end
-
-        def each_exon_seq
-          each_exon do | id, reclist, component |
-            if component
-              sequence = @sequencelist[component.seqname]
-              if sequence
-                seq = assemble(sequence,component.start,reclist)
-                yield description(id,component,reclist), seq
-              else 
-                warn "No sequence information for",id
-              end
-            end
-          end
-        end
       end
     end
   end
