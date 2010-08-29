@@ -29,7 +29,8 @@ describe Bio::GFF::GFF3::FileIterator, "iterates a file" do
   it "should handle embedded FASTA records" do
     @iter = Bio::GFF::GFF3::FileIterator.new(TEST1)
     last = nil
-    @iter.each_rec do | id, rec |
+    @iter.each_rec(Proc.new { | rec | Bio::GFFbrowser::Helpers::Record::formatID(rec) }) do | id, rec |
+      p [id, rec]
       last = rec
     end
     last.source[0..5].should == "test01"

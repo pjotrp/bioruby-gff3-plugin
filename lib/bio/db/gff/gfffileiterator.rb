@@ -31,7 +31,7 @@ module Bio
 
         # Iterate over every record in the file, yielding the record ID and
         # (File)Record, which includes the io_seek position in the file
-        def each_rec
+        def each_rec(formatid=nil)
           fpos = 0
           @fh.each_line do | line |
             line = line.strip
@@ -42,7 +42,9 @@ module Bio
             if line.size != 0 and line !~ /^#/
               rec = FileRecord.new(fpos, line)
               lastpos = @fh.tell
-              yield rec.id, rec
+              id = rec.id
+              id = formatid.call(rec) if formatid
+              yield id, rec
               @fh.seek(lastpos) # reset filepos, just in case it changed
             end
             fpos = @fh.tell

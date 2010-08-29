@@ -119,11 +119,11 @@ module Bio
       module Record
         # Format a record ID by, first, getting the ID attribute. If that fails
         # the seqname is used with the start/stop positions.
-        def Record::formatID rec
+        def Record::formatID rec  
           id = rec.id if rec.id
           if !id
             if rec.seqname
-              id = rec.seqname+" #{rec.start} #{rec.end}"
+              id = "#{rec.seqname} #{rec.start} #{rec.end}".strip
             else
               id = 'unknown'
               warn "Record with unknown ID",rec.to_s

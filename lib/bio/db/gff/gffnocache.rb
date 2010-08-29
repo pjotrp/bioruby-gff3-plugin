@@ -37,10 +37,9 @@ module Bio
           sequences       = {}
           unrecognized_features = {}
 
-          fh = File.open(@filename)
-          gff = nil
+          iter = Bio::GFF::GFF3::FileIterator.new(@filename)
 
-          gff.records.each do | rec |
+          @iter.each_rec do | id, rec |
             next if rec.comment # skip GFF comments
             id = Record::formatID(rec)
             count_ids.add(id)
