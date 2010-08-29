@@ -118,8 +118,8 @@ module Bio
             id = seq.entry_id
             sequences[id] = seq
           end
-          validate_mrnas mrnas
-          validate_cdss cdss
+          # validate_mrnas mrnas
+          # validate_cdss cdss
           show_unrecognized_features unrecognized_features
           @genelist      = count_ids.keys 
           @componentlist = components

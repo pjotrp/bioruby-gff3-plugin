@@ -15,22 +15,46 @@ module Bio
         include Bio::GFFbrowser::Helpers
         include Bio::GFFbrowser::Helpers::Error
         # include NoCacheHelpers
-        # include Gff3Component
-        # include Gff3Features
+        include Gff3Component
+        include Gff3Features
         # include Gff3Sequence
 
-        def validate_mrnas mrnas
-          # validate gene/container/component seqname is shared
-          mrnas.validate_seqname
-          mrnas.validate_shared_parent
+        def store_record rec
+            return if rec.comment # skip GFF comments
+            id = Record::formatID(rec)
+            @count_ids.add(id)
+            @count_seqnames.add(rec.seqname)
+
+            if COMPONENT_TYPES.include?(rec.feature_type)
+              # check for container ID
+              warn("Container <#{rec.feature_type}> has no ID, so using sequence name instead",id) if rec.id == nil
+              @componentlist[id] = rec
+              info "Added #{rec.feature_type} with component ID #{id}"
+            else
+              case rec.feature_type
+                when 'mRNA' || 'SO:0000234' : @mrnalist.add(id,rec)
+                when 'CDS'  || 'SO:0000316' : @cdslist.add(id,rec)
+                when 'exon' || 'SO:0000147' : @exonlist.add(id,rec)
+                else
+                  if !IGNORE_FEATURES.include?(rec.feature_type)
+                    unrecognized_features[rec.feature_type] = true
+                  end
+              end
+            end
         end
 
-        def validate_cdss cdss
-          cdss.validate_seqname
+        def validate_mrnas 
+          # validate gene/container/component seqname is shared
+          @mrnalist.validate_seqname
+          @mrnalist.validate_shared_parent
+        end
+
+        def validate_cdss 
+          @cdslist.validate_seqname
           # validate CDS sections do not overlap
-          cdss.validate_nonoverlapping
+          @cdslist.validate_nonoverlapping
           # validate sections share the parent
-          cdss.validate_shared_parent
+          @cdslist.validate_shared_parent
           # display unhandled features
         end
 

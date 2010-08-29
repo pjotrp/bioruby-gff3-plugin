@@ -16,8 +16,8 @@ module Bio
         include Parser
         # include Helpers
         # include Helpers::Error
-        include Gff3Component
-        include Gff3Features
+        # include Gff3Component
+        # include Gff3Features
         include Gff3Sequence
 
         def initialize filename
@@ -29,50 +29,25 @@ module Bio
         def parse 
           gff = @gff
           info "---- Digest DB and store data in mRNA Hash"
-          count_ids       = Counter.new   # Count ids
-          count_seqnames  = Counter.new   # Count seqnames
-          components      = {} # Store containers, like genes, contigs
-          mrnas           = LinkedRecs.new   # Store linked mRNA records
-          cdss            = LinkedRecs.new
-          exons           = LinkedRecs.new
-          sequences       = {}
+          @count_ids          = Counter.new   # Count ids
+          @count_seqnames     = Counter.new   # Count seqnames
+          @componentlist      = {} # Store containers, like genes, contigs
+          @mrnalist           = LinkedRecs.new   # Store linked mRNA records
+          @cdslist            = LinkedRecs.new
+          @exonlist           = LinkedRecs.new
+          @sequencelist       = {}
           unrecognized_features = {}
           gff.records.each do | rec |
-            next if rec.comment # skip GFF comments
-            id = Record::formatID(rec)
-            count_ids.add(id)
-            count_seqnames.add(rec.seqname)
-
-            if COMPONENT_TYPES.include?(rec.feature_type)
-              # check for container ID
-              warn("Container <#{rec.feature_type}> has no ID, so using sequence name instead",id) if rec.id == nil
-              components[id] = rec
-              info "Added #{rec.feature_type} with component ID #{id}"
-            else
-              case rec.feature_type
-                when 'mRNA' || 'SO:0000234' : mrnas.add(id,rec)
-                when 'CDS'  || 'SO:0000316' : cdss.add(id,rec)
-                when 'exon' || 'SO:0000147' : exons.add(id,rec)
-                else
-                  if !IGNORE_FEATURES.include?(rec.feature_type)
-                    unrecognized_features[rec.feature_type] = true
-                  end
-              end
-            end
+            store_record(rec)
           end
           gff.sequences.each do | seq |
             id = seq.entry_id
-            sequences[id] = seq
+            @sequencelist[id] = seq
           end
-          validate_mrnas mrnas
-          validate_cdss cdss
+          validate_mrnas
+          validate_cdss 
           show_unrecognized_features unrecognized_features
-          @genelist      = count_ids.keys 
-          @componentlist = components
-          @mrnalist      = mrnas
-          @cdslist       = cdss
-          @exonlist      = exons
-          @sequencelist  = sequences
+          @genelist      = @count_ids.keys 
         end
 
         def each_item list
