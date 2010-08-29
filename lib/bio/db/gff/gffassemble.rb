@@ -187,6 +187,10 @@ module Bio
         def assemble sequence, startpos, rec
           retval = ""
           Sections::sort(rec).each do | section |
+            # p sequence
+            if sequence.kind_of?(Bio::FastaFormat)
+              sequence = sequence.seq
+            end
             retval += sequence[(section.rec.start-startpos)..(section.rec.end-startpos)]
           end
           retval

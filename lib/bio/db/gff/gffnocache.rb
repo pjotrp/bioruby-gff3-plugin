@@ -15,16 +15,36 @@ module Bio
 
       module NoCacheHelpers 
 
-        class SeekRecList < Hash
+        module SeekRec
+          # Fetch a record using fh and file seek position
+          def SeekRec::fetch(fh,fpos)
+            return nil if fh==nil or fpos==nil
+            fh.seek(fpos)
+            GFF::GFF3::FileRecord.new(fpos, fh.gets)
+          end
+        end
+
+        # The hardwired to file RecList
+        class SeekRecList 
           def initialize fh
             @fh = fh
+            @h = {}
+          end
+
+          def []= id, fpos
+            raise "id #{id} occurs twice!" if @h[id]
+            @h[id] = fpos
           end
 
           def [](id)
-            fpos = fetch(id, nil)
-            return nil if fpos == nil
-            @fh.seek(fpos)
-            GFF::GFF3::FileRecord.new(fpos, @fh.gets)
+            fpos = @h[id]
+            SeekRec::fetch(@fh,fpos)
+          end
+
+          def each 
+            @h.each do | id,fpos |
+              yield id, self[id]
+            end
           end
         end
 
@@ -157,7 +177,7 @@ module Bio
           each_mRNA do | id, reclist, component |
             if component
               sequence = @sequencelist[component.seqname]
-              p sequence
+              # p sequence
               if sequence
                 yield description(id,component,reclist), assemble(sequence,component.start,reclist)
               else 
@@ -171,7 +191,7 @@ module Bio
           each_CDS do | id, reclist, component |
             if component
               sequence = @sequencelist[component.seqname]
-              p sequence
+              # p sequence
               if sequence
                 seq = assemble(sequence,component.start,reclist)
                 if seq.size % 3 != 0
