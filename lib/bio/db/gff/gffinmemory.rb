@@ -14,10 +14,6 @@ module Bio
 
       class InMemory
         include Parser
-        # include Helpers
-        # include Helpers::Error
-        # include Gff3Component
-        # include Gff3Features
         include Gff3Sequence
 
         def initialize filename

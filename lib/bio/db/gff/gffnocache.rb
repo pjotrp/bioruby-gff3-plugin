@@ -67,11 +67,7 @@ module Bio
 
       class NoCache
         include Parser
-        # include Helpers
-        # include Helpers::Error
         include NoCacheHelpers
-        include Gff3Component
-        include Gff3Features
         include Gff3Sequence
 
         def initialize filename

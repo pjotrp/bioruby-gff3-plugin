@@ -14,10 +14,8 @@ module Bio
 
         include Bio::GFFbrowser::Helpers
         include Bio::GFFbrowser::Helpers::Error
-        # include NoCacheHelpers
         include Gff3Component
         include Gff3Features
-        # include Gff3Sequence
 
         def store_record rec
             return if rec.comment # skip GFF comments
