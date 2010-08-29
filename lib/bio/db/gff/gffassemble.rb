@@ -18,7 +18,7 @@ module Bio
         end
 
         def warn str,id=''
-          $stderr.print "Warning: "+str+" <#{id}>\n"
+          Kernel.warn "Warning: "+str+" <#{id}>"
         end
       end
 
@@ -117,6 +117,7 @@ module Bio
       end
 
       module Record
+        include Error
         # Format a record ID by, first, getting the ID attribute. If that fails
         # the seqname is used with the start/stop positions.
         def Record::formatID rec  
