@@ -13,15 +13,49 @@ module Bio
 
     module Digest
 
+      module NoCacheHelpers 
+
+        class SeekRecList < Hash
+          def initialize fh
+            @fh = fh
+          end
+
+          def [](id)
+            fpos = fetch(id, nil)
+            return nil if fpos == nil
+            @fh.seek(fpos)
+            GFF::GFF3::FileRecord.new(fpos, @fh.gets)
+          end
+        end
+
+        class SeekLinkedRecs < Hash
+          include Helpers::Error
+          def add id, rec
+            info "Adding #{rec.feature_type} <#{id}>"
+            self[id] = [] if self[id] == nil
+            self[id] << rec.io_seek
+          end
+          def validate_seqname
+          end
+          def validate_nonoverlapping
+          end
+          def validate_shared_parent
+          end
+        end
+      end
+
       class NoCache
+
         include Helpers
         include Helpers::Error
+        include NoCacheHelpers
         include Gff3Component
         include Gff3Features
         include Gff3Sequence
 
         def initialize filename
           @filename = filename
+          @iter = Bio::GFF::GFF3::FileIterator.new(@filename)
         end
 
         # parse the whole file once and store all seek locations, 
@@ -30,14 +64,12 @@ module Bio
           info "---- Digest DB and store data in mRNA Hash (NoCache)"
           count_ids       = Counter.new   # Count ids
           count_seqnames  = Counter.new   # Count seqnames
-          components      = {} # Store containers, like genes, contigs
-          mrnas           = LinkedRecs.new   # Store linked mRNA records
-          cdss            = LinkedRecs.new
-          exons           = LinkedRecs.new
+          components      = SeekRecList.new(@iter.fh) # Store containers, like genes, contigs
+          mrnas           = SeekLinkedRecs.new   # Store linked mRNA records
+          cdss            = SeekLinkedRecs.new
+          exons           = SeekLinkedRecs.new
           sequences       = {}
           unrecognized_features = {}
-
-          iter = Bio::GFF::GFF3::FileIterator.new(@filename)
 
           @iter.each_rec do | id, rec |
             next if rec.comment # skip GFF comments
@@ -48,7 +80,7 @@ module Bio
             if COMPONENT_TYPES.include?(rec.feature_type)
               # check for container ID
               warn("Container <#{rec.feature_type}> has no ID, so using sequence name instead",id) if rec.id == nil
-              components[id] = rec
+              components[id] = rec.io_seek
               info "Added #{rec.feature_type} with component ID #{id}"
             else
               case rec.feature_type
@@ -62,7 +94,7 @@ module Bio
               end
             end
           end
-          gff.sequences.each do | seq |
+          @iter.each_sequence do | id, seq |
             id = seq.entry_id
             sequences[id] = seq
           end
@@ -78,7 +110,8 @@ module Bio
           unrecognized_features.keys.each do | k |
             warn "Feature has no match",k if k
           end
-          # Finally we are going to index the sequences
+          # p [:components, components]
+          # p [:mrnas, mrnas]
           @genelist      = count_ids.keys 
           @componentlist = components
           @mrnalist      = mrnas
@@ -88,7 +121,14 @@ module Bio
         end
 
         def each_item list
-          list.each do | id, recs |
+          p list.class
+          fh = @iter.fh
+          list.each do | id, io_seeklist |
+            recs = []
+            io_seeklist.each do | fpos |
+              fh.seek(fpos)
+              recs << GFF::GFF3::FileRecord.new(fpos, fh.gets)
+            end
             seqid = recs[0].seqname
             component = find_component(recs[0])
             yield id, recs, component
@@ -117,6 +157,7 @@ module Bio
           each_mRNA do | id, reclist, component |
             if component
               sequence = @sequencelist[component.seqname]
+              p sequence
               if sequence
                 yield description(id,component,reclist), assemble(sequence,component.start,reclist)
               else 
@@ -130,6 +171,7 @@ module Bio
           each_CDS do | id, reclist, component |
             if component
               sequence = @sequencelist[component.seqname]
+              p sequence
               if sequence
                 seq = assemble(sequence,component.start,reclist)
                 if seq.size % 3 != 0
