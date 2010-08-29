@@ -18,6 +18,28 @@ module Bio
         # include Gff3Component
         # include Gff3Features
         # include Gff3Sequence
+
+        def validate_mrnas mrnas
+          # validate gene/container/component seqname is shared
+          mrnas.validate_seqname
+          mrnas.validate_shared_parent
+        end
+
+        def validate_cdss cdss
+          cdss.validate_seqname
+          # validate CDS sections do not overlap
+          cdss.validate_nonoverlapping
+          # validate sections share the parent
+          cdss.validate_shared_parent
+          # display unhandled features
+        end
+
+        def show_unrecognized_features unrecognized_features
+          unrecognized_features.keys.each do | k |
+            warn "Feature has no match",k if k
+          end
+        end
+
         # Yield the id, recs, component and sequence of mRNAs
         def each_mRNA
           parse if !@mrnalist

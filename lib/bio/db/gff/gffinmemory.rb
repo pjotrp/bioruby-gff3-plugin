@@ -64,19 +64,9 @@ module Bio
             id = seq.entry_id
             sequences[id] = seq
           end
-          # validate gene/container/component seqname is shared
-          mrnas.validate_seqname
-          cdss.validate_seqname
-          # validate CDS sections do not overlap
-          cdss.validate_nonoverlapping
-          # validate sections share the parent
-          mrnas.validate_shared_parent
-          cdss.validate_shared_parent
-          # display unhandled features
-          unrecognized_features.keys.each do | k |
-            warn "Feature has no match",k if k
-          end
-          # Finally we are going to index the sequences
+          validate_mrnas mrnas
+          validate_cdss cdss
+          show_unrecognized_features unrecognized_features
           @genelist      = count_ids.keys 
           @componentlist = components
           @mrnalist      = mrnas
