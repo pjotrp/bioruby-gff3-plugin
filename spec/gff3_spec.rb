@@ -33,6 +33,11 @@ describe Bio::GFF::GFF3::FileIterator, "iterates a file" do
       last = rec
     end
     last.source[0..5].should == "test01"
+    firstid = 'unknown'
+    @iter.each_sequence do | id, seq |
+      firstid = id
+    end
+    firstid.should == "test01"
   end
 end
 
