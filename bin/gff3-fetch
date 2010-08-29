@@ -3,11 +3,14 @@
 # Author:: Pjotr Prins
 # Copyright:: August 2010
 # License:: Ruby License
+#
+# Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl>
+
 
 USAGE = <<EOM
   Fetch mRNAs, exons, or CDS and print as FASTA format
 
-  gff3-fetch mRNA|CDS|exon filename.gff
+  gff3-fetch [--no-cache] mRNA|CDS|exon filename.gff
 EOM
 
 rootpath = File.dirname(File.dirname(__FILE__))
@@ -20,24 +23,29 @@ if ARGV.size == 0
 end
 
 gfftype = ARGV.shift
+caching = true
+if gfftype == "--no-cache"
+  caching = false
+  gfftype = ARGV.shift
+end
 raise "Unknown GFF type '#{gfftype}'" if gfftype !~ /mrna|cds|exon/i
 
 ARGV.each do | fn |
-  gff3 = Bio::GFF::GFF3.new(File.read(fn))
-  gffdb = Bio::GFFbrowser::GFFdb.new(gff3)
+  gffdb = Bio::GFFbrowser::GFFdb.new(fn)
+  gff = gffdb.assembler
   case gfftype
     when 'mrna'||'mRNA' :
-          gffdb.each_mRNA_seq do | id, seq |
+          gff.each_mRNA_seq do | id, seq |
             puts ">"+id
             puts seq
           end
     when 'exon':
-          gffdb.each_exon_seq do | id, seq |
+          gff.each_exon_seq do | id, seq |
             puts ">"+id
             puts seq
           end
     when 'CDS':
-          gffdb.each_CDS_seq do | id, seq |
+          gff.each_CDS_seq do | id, seq |
             puts ">"+id
             puts seq
           end

@@ -31,7 +31,7 @@ module Bio
           @cdslist            = LinkedRecs.new
           @exonlist           = LinkedRecs.new
           @sequencelist       = {}
-          unrecognized_features = {}
+          @unrecognized_features = {}
           @gff.records.each do | rec |
             store_record(rec)
           end
@@ -41,7 +41,7 @@ module Bio
           end
           validate_mrnas
           validate_cdss 
-          show_unrecognized_features unrecognized_features
+          show_unrecognized_features 
           @genelist      = @count_ids.keys 
         end
 

@@ -35,7 +35,7 @@ module Bio
                 when 'exon' || 'SO:0000147' : @exonlist.add(id,rec)
                 else
                   if !IGNORE_FEATURES.include?(rec.feature_type)
-                    unrecognized_features[rec.feature_type] = true
+                    @unrecognized_features[rec.feature_type] = true
                   end
               end
             end
@@ -56,8 +56,8 @@ module Bio
           # display unhandled features
         end
 
-        def show_unrecognized_features unrecognized_features
-          unrecognized_features.keys.each do | k |
+        def show_unrecognized_features 
+          @unrecognized_features.keys.each do | k |
             warn "Feature has no match",k if k
           end
         end

@@ -56,10 +56,13 @@ module Bio
             self[id] = [] if self[id] == nil
             self[id] << rec.io_seek
           end
+          # validation is switched off for NoCache
           def validate_seqname
           end
+          # validation is switched off for NoCache
           def validate_nonoverlapping
           end
+          # validation is switched off for NoCache
           def validate_shared_parent
           end
         end
@@ -86,7 +89,7 @@ module Bio
           @cdslist            = SeekLinkedRecs.new
           @exonlist           = SeekLinkedRecs.new
           @sequencelist       = {}
-          unrecognized_features = {}
+          @unrecognized_features = {}
           @iter.each_rec do | id, rec |
             store_record(rec)
           end
@@ -96,7 +99,7 @@ module Bio
           end
           validate_mrnas 
           validate_cdss
-          show_unrecognized_features unrecognized_features
+          show_unrecognized_features
           @genelist      = @count_ids.keys 
         end
 
