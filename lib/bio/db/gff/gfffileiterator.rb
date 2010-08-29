@@ -34,11 +34,12 @@ module Bio
         def each_rec
           fpos = 0
           @fh.each_line do | line |
-            if line.strip == "##FASTA"
+            line = line.strip
+            if line == "##FASTA"
               @fasta_io_seek = fpos
               break
             end
-            if line.strip.size != 0 and line !~ /^#/
+            if line.size != 0 and line !~ /^#/
               rec = FileRecord.new(fpos, line)
               lastpos = @fh.tell
               yield rec.id, rec
@@ -61,8 +62,8 @@ module Bio
             @fh.seek(@fasta_io_seek)
           end
           # read FASTA records
-          seqs   = []
           header = nil
+          seqs   = []
           @fh.each_line do | line |
             line = line.strip
             next if line =~ /^#/
