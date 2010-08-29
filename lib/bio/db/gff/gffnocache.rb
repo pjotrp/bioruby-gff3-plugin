@@ -106,8 +106,7 @@ module Bio
           list.each do | id, io_seeklist |
             recs = []
             io_seeklist.each do | fpos |
-              fh.seek(fpos)
-              recs << GFF::GFF3::FileRecord.new(fpos, fh.gets)
+              recs << SeekRec::fetch(fh,fpos)
             end
             seqid = recs[0].seqname
             component = find_component(recs[0])
