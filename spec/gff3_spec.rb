@@ -9,6 +9,7 @@ $: << "../lib"
 require 'bio/db/gff/gffdb'
 
 TEST1='test/data/gff/test.gff3'
+TEST2='test/data/gff/standard.gff3'
 
 describe Bio::GFF::GFF3::FileIterator, "iterates a file" do
 
@@ -19,9 +20,19 @@ describe Bio::GFF::GFF3::FileIterator, "iterates a file" do
 
   it "should parse a file and yield records" do 
     @iter.each_rec do | id, rec |
-      p [id, rec]
+      # p [id, rec, rec.io_seek]
+      rec.io_seek.should == 51
+      break
     end
+  end
 
+  it "should handle embedded FASTA records" do
+    @iter = Bio::GFF::GFF3::FileIterator.new(TEST1)
+    last = nil
+    @iter.each_rec do | id, rec |
+      last = rec
+    end
+    last.source[0..5].should == "test01"
   end
 end
 
