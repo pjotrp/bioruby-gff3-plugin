@@ -15,6 +15,7 @@ EOM
 
 rootpath = File.dirname(File.dirname(__FILE__))
 $: << rootpath+'/lib'
+$: << rootpath+'/../bioruby/lib'
 
 require 'bio/db/gff/gffdb'
 
