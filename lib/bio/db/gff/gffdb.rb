@@ -27,9 +27,9 @@ module Bio
         @assembler = 
           case cache_recs
             when :cache_none :
-              NoCache.new(filename)
+              NoCache.new(filename, options)
             else
-              InMemory.new(filename)  # default 
+              InMemory.new(filename, options)  # default 
           end
       end
 

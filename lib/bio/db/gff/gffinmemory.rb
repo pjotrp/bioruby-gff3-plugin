@@ -16,7 +16,8 @@ module Bio
         include Parser
         include Gff3Sequence
 
-        def initialize filename
+        def initialize filename, options
+          @options = options
           @gff = Bio::GFF::GFF3.new(File.read(filename))
         end
 
