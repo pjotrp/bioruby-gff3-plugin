@@ -127,7 +127,7 @@ module Bio
               id = "#{rec.seqname} #{rec.start} #{rec.end}".strip
             else
               id = 'unknown'
-              warn "Record with unknown ID",rec.to_s
+              $stderr.print "Record with unknown ID"+rec.to_s
             end
           end
           id
@@ -135,6 +135,8 @@ module Bio
       end
 
       module Gff3Component
+
+        include Error
 
         COMPONENT_TYPES = %w{
           gene SO:0000704 contig transcript Component region

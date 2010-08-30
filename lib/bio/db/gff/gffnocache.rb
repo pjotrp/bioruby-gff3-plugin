@@ -73,8 +73,9 @@ module Bio
         include NoCacheHelpers
         include Gff3Sequence
 
-        def initialize filename
+        def initialize filename, options
           @filename = filename
+          @options = options
           @iter = Bio::GFF::GFF3::FileIterator.new(@filename)
         end
 

@@ -31,8 +31,8 @@ end
 raise "Unknown GFF type '#{gfftype}'" if gfftype !~ /mrna|cds|exon/i
 
 ARGV.each do | fn |
-  options = {}
-  options = {:cache_components => :cache_none, :cache_records => :cache_none} if caching == false
+  options = {:validate => false}
+  options = {:validate => false, :cache_components => :cache_none, :cache_records => :cache_none} if caching == false
   p options
 
   gffdb = Bio::GFFbrowser::GFFdb.new(fn,options)
