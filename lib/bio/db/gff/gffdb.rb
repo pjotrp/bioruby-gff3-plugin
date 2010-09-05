@@ -9,6 +9,7 @@
 
 require 'bio'
 require 'bio/db/gff/gfffileiterator'
+require 'bio/db/gff/gfffasta'
 require 'bio/db/gff/gffassemble'
 require 'bio/db/gff/gffparser'
 require 'bio/db/gff/gffinmemory'

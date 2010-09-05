@@ -11,7 +11,7 @@ require 'bio/db/gff/gffdb'
 TEST1='test/data/gff/test.gff3'
 TEST2='test/data/gff/standard.gff3'
 
-describe Bio::GFF::GFF3::FileIterator, "iterates a file" do
+describe Bio::GFF::GFF3::FileIterator, "iterates a GFF3 file" do
 
   it "should parse a file and yield records" do 
     iter = Bio::GFF::GFF3::FileIterator.new(TEST1)
@@ -29,13 +29,15 @@ describe Bio::GFF::GFF3::FileIterator, "iterates a file" do
       # p [id, rec]
       last = rec
     end
-    last.io_seek == 3256
+    last.io_seek.should == 3256
     firstid = 'unknown'
     iter.each_sequence do | id, seq |
+      # p [id, seq]
       firstid = id
     end
     firstid.should == "test01"
   end
+
 end
 
 

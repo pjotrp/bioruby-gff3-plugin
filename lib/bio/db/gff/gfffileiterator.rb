@@ -62,34 +62,15 @@ module Bio
           else
             @fh.seek(@fasta_io_seek)
           end
-          # read FASTA records
-          header = nil
-          seqs   = []
-          @fh.each_line do | line |
-            line = line.strip
-            next if line =~ /^#/
-            if line =~ /^>/  # FASTA record header
-              yield fasta_rec(header, seqs) if header
-              header = line
-              seqs   = []
-            else
-              seqs << line
-            end
+          fasta = FastaReader.new(@fh)
+          fasta.each do | id, fastarec |
+            yield fastarec
           end
-          yield fasta_rec(header, seqs) if header
-        end
-
-      private
-
-        def fasta_rec header, buf
-          fst = Bio::FastaFormat.new(header+"\n"+buf.to_s)
-          return fst.definition, fst
         end
       end
-
-    end
-  end
-end
+    end # GFF3
+  end # GFF
+end # Bio
 
     
 
