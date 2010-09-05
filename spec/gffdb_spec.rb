@@ -76,11 +76,14 @@ end
 
 describe GFFdb, "GFF3 API (InMemory) with external FASTA" do
   before :all do 
-    # initialize
     gffdb = Bio::GFFbrowser::GFFdb.new(TESTGFF1EXT, :fasta_filename => TESTGFF1FASTA)
     @gff = gffdb.assembler
   end
 
+  it "should have a sequence list" do 
+    @gff.parse
+    @gff.sequencelist["test02"].should_not == nil
+  end
   iterators_should_be_implemented
 end
 

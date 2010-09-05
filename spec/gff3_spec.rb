@@ -35,7 +35,7 @@ describe Bio::GFF::GFF3::FileIterator, "iterates a GFF3 file" do
       # p [id, seq]
       firstid = id
     end
-    firstid.should == "test01"
+    firstid.should == "test02"
   end
 
 end

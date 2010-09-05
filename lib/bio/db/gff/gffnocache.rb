@@ -94,9 +94,8 @@ module Bio
           @iter.each_rec do | id, rec |
             store_record(rec)
           end
-          @iter.each_sequence do | id, seq |
-            id = seq.entry_id
-            @sequencelist[id] = seq
+          @iter.each_sequence do | id, bioseq |
+            @sequencelist[id] = bioseq.to_s
           end
           validate_mrnas 
           validate_cdss
@@ -105,7 +104,7 @@ module Bio
         end
 
         def each_item list
-          p list.class
+          # p list.class
           fh = @iter.fh
           list.each do | id, io_seeklist |
             recs = []

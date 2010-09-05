@@ -104,7 +104,7 @@ module Bio
               if sequence
                 seq = assemble(sequence,component.start,reclist)
                 if seq.size % 3 != 0
-                  p reclist
+                  p reclist # leave this in
                   raise "CDS size #{seq.size} is not a multiple of 3! <#{seq}>"
                 end
                 yield description(id,component,reclist), seq

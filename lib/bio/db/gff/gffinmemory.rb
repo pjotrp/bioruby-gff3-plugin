@@ -15,9 +15,11 @@ module Bio
       class InMemory
         include Parser
         include Gff3Sequence
+        attr_reader :sequencelist
 
         def initialize filename, options
           @options = options
+          # Invoke the BioRuby in memory parser
           @gff = Bio::GFF::GFF3.new(File.read(filename))
         end
 
@@ -36,14 +38,24 @@ module Bio
           @gff.records.each do | rec |
             store_record(rec)
           end
-          @gff.sequences.each do | seq |
-            id = seq.entry_id
-            @sequencelist[id] = seq
+          @gff.sequences.each do | bioseq |
+            id = bioseq.entry_id
+            @sequencelist[id] = bioseq.to_s # in Bio::Sequence with contained Bio::FastaFormat
           end
           validate_mrnas
           validate_cdss 
           show_unrecognized_features 
           @genelist      = @count_ids.keys 
+          if @options[:fasta_filename]
+            File.open(@options[:fasta_filename]) do | f |
+              fasta = Bio::GFF::FastaReader.new(f)
+              fasta.each do | id, fastarec |
+                # p fastarec
+                @sequencelist[id] = fastarec
+              end
+            end
+          end
+          # p :inmemory, @sequencelist
         end
 
         def each_item list

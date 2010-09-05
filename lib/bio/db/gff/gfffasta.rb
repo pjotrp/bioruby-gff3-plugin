@@ -29,14 +29,14 @@ module Bio
           line = line.strip
           next if line =~ /^#/
           if line =~ /^>/  # FASTA record header
-            @h[header] = fasta_rec(header, seqs) if header
+            add(header,seqs)
             header = line
             seqs   = []
           else
             seqs << line
           end
         end
-        @h[header] = fasta_rec(header, seqs) if header
+        add(header,seqs)
       end
 
       def [] index
@@ -50,6 +50,12 @@ module Bio
       end
 
     private
+       def add header, seqs
+         if header
+           id, fastarec = fasta_rec(header, seqs)
+           @h[id] = fastarec.data.strip
+         end
+       end
 
       def fasta_rec header, buf
         fst = Bio::FastaFormat.new(header+"\n"+buf.to_s)

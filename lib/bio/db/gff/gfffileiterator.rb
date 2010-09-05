@@ -62,9 +62,9 @@ module Bio
           else
             @fh.seek(@fasta_io_seek)
           end
-          fasta = FastaReader.new(@fh)
+          fasta = Bio::GFF::FastaReader.new(@fh)
           fasta.each do | id, fastarec |
-            yield fastarec
+            yield id, fastarec
           end
         end
       end
