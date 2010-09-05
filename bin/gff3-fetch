@@ -8,9 +8,33 @@
 
 
 USAGE = <<EOM
-  Fetch mRNAs, exons, or CDS and print as FASTA format
+  Fetch and assemble mRNAs, or CDS and print in FASTA format. 
 
-  gff3-fetch [--no-cache] mRNA|CDS|exon filename.gff
+    gff3-fetch [--no-cache] mRNA|CDS [filename.fa] filename.gff
+
+  Where:
+
+    --no-cache      : do not load everything in memory 
+    mRNA            : assemble mRNA
+    CDS             : assemble CDS 
+
+  Multiple GFF3 files can be used. For external FASTA files, always the last
+  one before the GFF file is used.
+
+  Examples:
+
+    Find mRNA and CDS information from test.gff3 (which includes sequence information)
+
+      ./bin/gff3-fetch mRNA test/data/gff/test.gff3
+      ./bin/gff3-fetch CDS test/data/gff/test.gff3
+
+    Find mRNA from external FASTA file, without loading everythin in RAM
+
+      ./bin/gff3-fetch --no-cache mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
+
+  If you use this software, please cite http://dx.doi.org/10.1093/bioinformatics/btq475
+
+
 EOM
 
 rootpath = File.dirname(File.dirname(__FILE__))
@@ -18,6 +42,8 @@ $: << rootpath+'/lib'
 $: << rootpath+'/../bioruby/lib'
 
 require 'bio/db/gff/gffdb'
+
+print "BioRuby GFF3 Plugin Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl>\n\n"
 
 if ARGV.size == 0
   print USAGE
@@ -31,15 +57,22 @@ if gfftype == "--no-cache"
 end
 raise "Unknown GFF type '#{gfftype}'" if gfftype !~ /mrna|cds|exon/i
 
+fastafn = nil
+
 ARGV.each do | fn |
+  if File.extname(fn) =~ /fa|fas|fasta/i
+    fastafn = fn
+    next
+  end
   options = {:validate => false}
   options = {:validate => false, :cache_components => :cache_none, :cache_records => :cache_none} if caching == false
+  options[:fasta_filename] = fastafn if fastafn
   p options
 
   gffdb = Bio::GFFbrowser::GFFdb.new(fn,options)
   gff = gffdb.assembler
-  case gfftype
-    when 'mrna'||'mRNA' :
+  case gfftype.downcase
+    when 'mrna' :
           gff.each_mRNA_seq do | id, seq |
             puts ">"+id
             puts seq
@@ -49,7 +82,7 @@ ARGV.each do | fn |
             puts ">"+id
             puts seq
           end
-    when 'CDS':
+    when 'cds':
           gff.each_CDS_seq do | id, seq |
             puts ">"+id
             puts seq

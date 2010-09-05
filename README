@@ -28,3 +28,37 @@ advantage that it is faster and does not consume all memory.
 For a write-up see http://thebird.nl/bioruby/BioRuby_GFF3.html 
 
 Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl> 
+
+-------------------------------------------------------------------------------
+
+Usage:
+
+BioRuby GFF3 Plugin Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl>
+
+  Fetch and assemble mRNAs, or CDS and print in FASTA format. 
+
+    gff3-fetch [--no-cache] mRNA|CDS [filename.fa] filename.gff
+
+  Where:
+
+    --no-cache      : do not load everything in memory 
+    mRNA            : assemble mRNA
+    CDS             : assemble CDS 
+
+  Multiple GFF3 files can be used. For external FASTA files, always the last
+  one before the GFF file is used.
+
+  Examples:
+
+    Find mRNA and CDS information from test.gff3 (which includes sequence information)
+
+      ./bin/gff3-fetch mRNA test/data/gff/test.gff3
+      ./bin/gff3-fetch CDS test/data/gff/test.gff3
+
+    Find mRNA from external FASTA file, without loading everythin in RAM
+
+      ./bin/gff3-fetch --no-cache mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
+
+  If you use this software, please cite http://dx.doi.org/10.1093/bioinformatics/btq475
+
+
