@@ -30,9 +30,12 @@ module Bio
               info "Added #{rec.feature_type} with component ID #{id}"
             else
               case rec.feature_type
-                when 'mRNA' || 'SO:0000234' : @mrnalist.add(id,rec)
-                when 'CDS'  || 'SO:0000316' : @cdslist.add(id,rec)
-                when 'exon' || 'SO:0000147' : @exonlist.add(id,rec)
+                when 'mRNA' || 'SO:0000234'
+                  @mrnalist.add(id,rec)
+                when 'CDS'  || 'SO:0000316'
+                  @cdslist.add(id,rec)
+                when 'exon' || 'SO:0000147'
+                  @exonlist.add(id,rec)
                 else
                   if !IGNORE_FEATURES.include?(rec.feature_type)
                     @unrecognized_features[rec.feature_type] = true

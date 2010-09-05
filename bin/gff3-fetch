@@ -72,17 +72,17 @@ ARGV.each do | fn |
   gffdb = Bio::GFFbrowser::GFFdb.new(fn,options)
   gff = gffdb.assembler
   case gfftype.downcase
-    when 'mrna' :
+    when 'mrna' 
           gff.each_mRNA_seq do | id, seq |
             puts ">"+id
             puts seq
           end
-    when 'exon':
+    when 'exon'
           gff.each_exon_seq do | id, seq |
             puts ">"+id
             puts seq
           end
-    when 'cds':
+    when 'cds'
           gff.each_CDS_seq do | id, seq |
             puts ">"+id
             puts seq
