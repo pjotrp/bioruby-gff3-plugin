@@ -13,7 +13,11 @@ include Bio::GFFbrowser
 
 TEST_NON_IMPLEMENTED=false
 
-TEST1='test/data/gff/test.gff3'
+# GFF3 with included FASTA:
+TESTGFF1='test/data/gff/test.gff3'
+# GFF3 with external FASTA:
+TESTGFF1EXT='test/data/gff/test-ext-fasta.gff3'
+TESTGFF1FASTA='test/data/gff/test-ext-fasta.fa'
 
 def iterators_should_be_implemented
   if TEST_NON_IMPLEMENTED
@@ -36,7 +40,7 @@ def iterators_should_be_implemented
   end
 end
 
-describe GFFdb, "GFF3 API with everything in memory" do
+describe GFFdb, "GFF3 API (InMemory) with everything in memory" do
 
   before :all do 
     # initialize
@@ -52,6 +56,7 @@ describe GFFdb, "GFF3 API with :cache_components => 1000, :cache_records => :cac
 end
 
 describe GFFdb, "GFF3 API with :cache_components => 1000, :cache_records => 1000" do
+  it "should implement real caching"
   # iterators_should_be_implemented
 end
 
@@ -59,7 +64,7 @@ describe GFFdb, "GFF3 API with :cache_records => :cache_none" do
   # iterators_should_be_implemented
 end
 
-describe GFFdb, "GFF3 API with :cache_components => :cache_none, :cache_records => :cache_none" do
+describe GFFdb, "GFF3 API (NoCache) with :cache_components => :cache_none, :cache_records => :cache_none" do
   before :all do 
     # initialize
     gffdb = Bio::GFFbrowser::GFFdb.new(TEST1, :cache_components => :cache_none, :cache_records => :cache_none)
@@ -69,7 +74,13 @@ describe GFFdb, "GFF3 API with :cache_components => :cache_none, :cache_records 
   iterators_should_be_implemented
 end
 
-describe GFFdb, "GFF3 API with external FASTA" do
+describe GFFdb, "GFF3 API (InMemory) with external FASTA" do
+  it "should support external FASTA"
+  # iterators_should_be_implemented
+end
+
+describe GFFdb, "GFF3 API (NoCache) with external FASTA" do
+  it "should support external FASTA"
   # iterators_should_be_implemented
 end
 
