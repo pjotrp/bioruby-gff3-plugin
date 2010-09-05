@@ -88,8 +88,12 @@ describe GFFdb, "GFF3 API (InMemory) with external FASTA" do
 end
 
 describe GFFdb, "GFF3 API (NoCache) with external FASTA" do
-  it "should support external FASTA"
-  # iterators_should_be_implemented
+  before :all do 
+    gffdb = Bio::GFFbrowser::GFFdb.new(TESTGFF1EXT, :fasta_filename => TESTGFF1FASTA, :cache_components => :cache_none, :cache_records => :cache_none)
+    @gff = gffdb.assembler
+  end
+
+  iterators_should_be_implemented
 end
 
 

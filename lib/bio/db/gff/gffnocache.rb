@@ -101,6 +101,16 @@ module Bio
           validate_cdss
           show_unrecognized_features
           @genelist      = @count_ids.keys 
+          if @options[:fasta_filename]
+            File.open(@options[:fasta_filename]) do | f |
+              fasta = Bio::GFF::FastaReader.new(f)
+              fasta.each do | id, fastarec |
+                # p fastarec
+                @sequencelist[id] = fastarec
+              end
+            end
+          end
+          # p :inmemory, @sequencelist
         end
 
         def each_item list
