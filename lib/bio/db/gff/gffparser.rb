@@ -64,6 +64,19 @@ module Bio
           end
         end
 
+        def read_fasta
+          if @options[:fasta_filename]
+            File.open(@options[:fasta_filename]) do | f |
+              fasta = Bio::GFF::FastaReader.new(f)
+              fasta.each do | id, fastarec |
+                # p fastarec
+                @sequencelist[id] = fastarec
+              end
+            end
+          end
+          # p :inmemory, @sequencelist
+        end
+
         # Yield the id, recs, component and sequence of mRNAs
         def each_mRNA
           parse if !@mrnalist
