@@ -44,7 +44,7 @@ describe GFFdb, "GFF3 API (InMemory) with everything in memory" do
 
   before :all do 
     # initialize
-    gffdb = Bio::GFFbrowser::GFFdb.new(TEST1)
+    gffdb = Bio::GFFbrowser::GFFdb.new(TESTGFF1)
     @gff = gffdb.assembler
   end
 
@@ -67,7 +67,7 @@ end
 describe GFFdb, "GFF3 API (NoCache) with :cache_components => :cache_none, :cache_records => :cache_none" do
   before :all do 
     # initialize
-    gffdb = Bio::GFFbrowser::GFFdb.new(TEST1, :cache_components => :cache_none, :cache_records => :cache_none)
+    gffdb = Bio::GFFbrowser::GFFdb.new(TESTGFF1, :cache_components => :cache_none, :cache_records => :cache_none)
     @gff = gffdb.assembler
   end
 
@@ -75,8 +75,13 @@ describe GFFdb, "GFF3 API (NoCache) with :cache_components => :cache_none, :cach
 end
 
 describe GFFdb, "GFF3 API (InMemory) with external FASTA" do
-  it "should support external FASTA"
-  # iterators_should_be_implemented
+  before :all do 
+    # initialize
+    gffdb = Bio::GFFbrowser::GFFdb.new(TESTGFF1EXT, :fasta_filename => TESTGFF1FASTA)
+    @gff = gffdb.assembler
+  end
+
+  iterators_should_be_implemented
 end
 
 describe GFFdb, "GFF3 API (NoCache) with external FASTA" do
