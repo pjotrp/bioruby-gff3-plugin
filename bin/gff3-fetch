@@ -28,7 +28,11 @@ USAGE = <<EOM
       ./bin/gff3-fetch mRNA test/data/gff/test.gff3
       ./bin/gff3-fetch CDS test/data/gff/test.gff3
 
-    Find mRNA from external FASTA file, without loading everythin in RAM
+    Find CDS from exteranl FASTA file
+
+      ./bin/gff3-fetch cds test/data/gff/MhA1_Contig1133.fa test/data/gff/MhA1_Contig1133.gff3
+
+    Find mRNA from external FASTA file, without loading everything in RAM
 
       ./bin/gff3-fetch --no-cache mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
 
