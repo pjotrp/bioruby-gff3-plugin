@@ -77,10 +77,11 @@ describe GFFdb, "Assemble CDS" do
     cds1rev = cds1
     cds1rev.strand = '-'
     seq = @gff.assemble(@contigsequence,component.start,[cds1rev])
-    seq[0..3].should == "ACAA"
+    seq[0..3].should == "AACA"
     aaseq = @gff.assembleAA(@contigsequence,component.start,[cds1rev])
     aaseq.should_not == "EKLMRQAACIGRKQLGSFGTCLGKFTKGGSFFLHITSLDYLAPYALAKIWLKPQAEQQFLYGNNIVKSGVGRMSEGIEEKQ"
   end
   it "should assemble 3 CDSs for MhA1_Contig1133.frz3.gene4"
+  it "should assemble CDSs, correcting for CODON size"
 end
 

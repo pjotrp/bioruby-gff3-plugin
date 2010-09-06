@@ -209,6 +209,10 @@ module Bio
             frame = 0
             frame = rec1.frame if rec1.frame
             seq = sequence[(rec1.start-1+frame)..(rec1.end-1)]
+            # if strand is negative, reverse
+            if rec1.strand == '-'
+              seq = seq.reverse
+            end
             retval += seq
           end
           retval
