@@ -194,7 +194,9 @@ module Bio
 
       module Gff3Sequence
         # Patch a sequence together from a Sequence string and an array
-        # of records
+        # of records. Note that rec positions are 1-based coordinates, relative 
+        # to the landmark given in column 1 - in this case the sequence as it
+        # is passed in. The container startpos is unused.
         def assemble sequence, startpos, rec
           retval = ""
           Sections::sort(rec).each do | section |
@@ -202,7 +204,12 @@ module Bio
             if sequence.kind_of?(Bio::FastaFormat)
               sequence = sequence.seq
             end
-            retval += sequence[(section.rec.start-startpos)..(section.rec.end-startpos)]
+            rec1 = section.rec
+            # p [startpos,section.rec,section.rec.start-startpos]
+            frame = 0
+            frame = rec1.frame if rec1.frame
+            seq = sequence[(rec1.start-1+frame)..(rec1.end-1)]
+            retval += seq
           end
           retval
         end
@@ -210,6 +217,9 @@ module Bio
         # Patch a sequence together from a Sequence string and an array
         # of records and translate in the correct direction and frame
         def assembleAA sequence, startpos, rec
+          seq = assemble(sequence, startpos, rec)
+          ntseq = Bio::Sequence::NA.new(seq)
+          ntseq.translate
         end
 
         # Create a description for output
