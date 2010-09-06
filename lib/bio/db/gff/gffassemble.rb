@@ -13,8 +13,8 @@ module Bio
     module Helpers
 
       module Error
-        def info str
-          $stderr.print "Info: "+str+"\n"
+        def info str, id=''
+          $stderr.print "Info: "+str+" <#{id}>\n"
         end
 
         def warn str,id=''
@@ -149,14 +149,19 @@ module Bio
           parent = rec.get_attribute('Parent')
           if @componentlist[parent] 
             # nice, there is a match
+            info "find_component: Matched parent", parent
             return @componentlist[parent]
           end
           search = rec.seqname
-          return @componentlist[search] if @componentlist[search]
+          if @componentlist[search]
+            info "find_component: Matched seqname", search
+            return @componentlist[search] 
+          end
           @componentlist.each do | componentid, component |
             # dissemble id
             (id, start, stop) = componentid.split(/ /)
             if id==search and rec.start >= start.to_i and rec.end <= stop.to_i
+              info "find_component: Matched column 0 and location", componentid
               return component
             end
           end
@@ -165,6 +170,9 @@ module Bio
           # ID for every component individually
           @componentlist.each do | componentid, component |
             if component.seqname==search and rec.start >= component.start and rec.end <= component.end
+              # p ["----",search,rec]
+              # p component
+              info "find_component: Matched (long search) column 0 and location", componentid
               return component
             end
           end
@@ -197,6 +205,11 @@ module Bio
             retval += sequence[(section.rec.start-startpos)..(section.rec.end-startpos)]
           end
           retval
+        end
+
+        # Patch a sequence together from a Sequence string and an array
+        # of records and translate in the correct direction and frame
+        def assembleAA sequence, startpos, rec
         end
 
         # Create a description for output
