@@ -209,6 +209,9 @@ module Bio
             frame = 0
             frame = rec1.frame if rec1.frame
             seq = sequence[(rec1.start-1+frame)..(rec1.end-1)]
+            # correct size to multiple of 3
+            reduce = seq.size % 3
+            seq = seq[0..seq.size - 1 - reduce] if reduce
             # if strand is negative, reverse
             if rec1.strand == '-'
               seq = seq.reverse
