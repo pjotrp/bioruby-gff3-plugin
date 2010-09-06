@@ -80,24 +80,25 @@ module Bio
           # p :inmemory, @sequencelist
         end
 
-        # Yield the id, recs, component and sequence of mRNAs
+        # Yield the id, recs, containing component and sequence of mRNAs
         def each_mRNA
           parse if !@mrnalist
           each_item(@mrnalist) { |id, recs, component | yield id, recs, component }
         end
 
-        # Yield the id, recs, and component
+        # Yield the id, recs, and containing component
         def each_CDS
           parse if !@cdslist
           each_item(@cdslist) { |id, recs, component | yield id, recs, component }
         end
 
-        # Yield the id, recs, and component
+        # Yield the id, recs, and containing component
         def each_exon
           parse if !@exonlist
           each_item(@exonlist) { |id, recs, component | yield id, recs, component }
         end
 
+        # Yield a unique description and the sequence
         def each_mRNA_seq
           each_mRNA do | id, reclist, component |
             if component
@@ -112,6 +113,7 @@ module Bio
           end
         end
 
+        # Yield a unique description and the sequence
         def each_CDS_seq
           each_CDS do | id, reclist, component |
             if component
@@ -131,6 +133,7 @@ module Bio
           end
         end
 
+        # Yield a unique description and the sequence
         def each_exon_seq
           each_exon do | id, reclist, component |
             if component
@@ -144,7 +147,6 @@ module Bio
             end
           end
         end
-
       end
     end
   end
