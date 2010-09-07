@@ -211,17 +211,16 @@ module Bio
             # field. 
             frame = 0
             frame = rec1.frame if rec1.frame
-            # seq = sequence[(rec1.start-1+frame)..(rec1.end-1)]
-            seq = sequence[(rec1.start-1)..(rec1.end-1)]
+            seq = sequence[(rec1.start-1)..rec1.end]
             # if strand is negative, reverse
-            if rec1.strand == '-'
-              seq = seq.reverse
-            end
+            reversed = (rec1.strand == '-')
+            seq = seq.reverse if reversed
             # correct phase and size to multiple of 3
             if codonize
-              seq = seq[frame..-1]
+              seq = seq[frame..-1] if frame != 0 # set phase
+              # seq = seq[1..-1] if reversed # test bug
               reduce = seq.size % 3
-              seq = seq[0..seq.size - 1 - reduce] if reduce
+              seq = seq[0..(seq.size-1-reduce)] if reduce
             end
             retval += seq
           end
