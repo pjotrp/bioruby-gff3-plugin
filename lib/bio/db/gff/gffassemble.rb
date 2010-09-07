@@ -197,7 +197,8 @@ module Bio
         # of records. Note that rec positions are 1-based coordinates, relative 
         # to the landmark given in column 1 - in this case the sequence as it
         # is passed in. The container startpos is unused.
-        def assemble sequence, startpos, rec
+        def assemble sequence, startpos, rec, options = { :codonize=>true }
+          codonize = options[:codonize]
           retval = ""
           Sections::sort(rec).each do | section |
             # p sequence
@@ -205,16 +206,22 @@ module Bio
               sequence = sequence.seq
             end
             rec1 = section.rec
-            # p [startpos,section.rec,section.rec.start-startpos]
+            # For forward strand features, phase is counted from the start
+            # field. For reverse strand features, phase is counted from the end
+            # field. 
             frame = 0
             frame = rec1.frame if rec1.frame
-            seq = sequence[(rec1.start-1+frame)..(rec1.end-1)]
-            # correct size to multiple of 3
-            reduce = seq.size % 3
-            seq = seq[0..seq.size - 1 - reduce] if reduce
+            # seq = sequence[(rec1.start-1+frame)..(rec1.end-1)]
+            seq = sequence[(rec1.start-1)..(rec1.end-1)]
             # if strand is negative, reverse
             if rec1.strand == '-'
               seq = seq.reverse
+            end
+            # correct phase and size to multiple of 3
+            if codonize
+              seq = seq[frame..-1]
+              reduce = seq.size % 3
+              seq = seq[0..seq.size - 1 - reduce] if reduce
             end
             retval += seq
           end

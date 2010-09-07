@@ -60,7 +60,7 @@ describe GFFdb, "Assemble CDS" do
     cds0 = recs[0]
     cds0.seqname.should == 'MhA1_Contig1133'
     seq = @gff.assemble(@contigsequence,component.start,[cds0])
-    seq.should == "ATGCGTCCTTTAACAGATGAAGAAACTGAAAAGTTTTTCAAAAAACTTTCAAATTATATTGGTGACAATATTAAACTTTTATTGGAAAGAGAAGATGGAGAATATGTTTTTCGTTTACATAAAGACAGAGTTTATTATTGCAG"
+    seq.should == "ATGCGTCCTTTAACAGATGAAGAAACTGAAAAGTTTTTCAAAAAACTTTCAAATTATATTGGTGACAATATTAAACTTTTATTGGAAAGAGAAGATGGAGAATATGTTTTTCGTTTACATAAAGACAGAGTTTATTATTGC"
     aaseq = @gff.assembleAA(@contigsequence,component.start,[cds0])
     aaseq.should == "MRPLTDEETEKFFKKLSNYIGDNIKLLLEREDGEYVFRLHKDRVYYC"
   end
@@ -68,7 +68,9 @@ describe GFFdb, "Assemble CDS" do
     recs = @cdslist['cds:MhA1_Contig1133.frz3.gene4']
     component = @componentlist['cds:MhA1_Contig1133.frz3.gene4']
     cds1 = recs[1]
-    seq = @gff.assemble(@contigsequence,component.start,[cds1])
+    seq = @gff.assemble(@contigsequence,component.start,[cds1], :codonize => false)
+    seq.should == "TGAAAAATTAATGCGACAAGCAGCATGTATTGGACGTAAACAATTGGGATCTTTTGGAACTTGTTTGGGTAAATTCACAAAAGGAGGGTCTTTCTTTCTTCATATAACATCATTGGATTATTTGGCACCTTATGCTTTAGCAAAAATTTGGTTAAAACCACAAGCTGAACAACAATTTTTATATGGAAATAATATTGTTAAATCTGGTGTTGGAAGAATGAGTGAAGGGATTGAAGAAAAACAA"
+    seq = @gff.assemble(@contigsequence,component.start,[cds1], :codonize => true)
     seq.should == "GAAAAATTAATGCGACAAGCAGCATGTATTGGACGTAAACAATTGGGATCTTTTGGAACTTGTTTGGGTAAATTCACAAAAGGAGGGTCTTTCTTTCTTCATATAACATCATTGGATTATTTGGCACCTTATGCTTTAGCAAAAATTTGGTTAAAACCACAAGCTGAACAACAATTTTTATATGGAAATAATATTGTTAAATCTGGTGTTGGAAGAATGAGTGAAGGGATTGAAGAAAAACAA"
     aaseq = @gff.assembleAA(@contigsequence,component.start,[cds1])
     # note it should handle the frame shift and direction!
@@ -82,6 +84,24 @@ describe GFFdb, "Assemble CDS" do
     aaseq.should_not == "EKLMRQAACIGRKQLGSFGTCLGKFTKGGSFFLHITSLDYLAPYALAKIWLKPQAEQQFLYGNNIVKSGVGRMSEGIEEKQ"
   end
   it "should assemble 3 CDSs for MhA1_Contig1133.frz3.gene4"
+  it "should assemble a reverse CDS in MhA1_Contig1133.frz3.gene11" do
+    recs = @cdslist['cds:MhA1_Contig1133.frz3.gene11']
+    component = @componentlist['cds:MhA1_Contig1133.frz3.gene11']
+    cds1 = recs[1]
+    p cds1
+    seq = @gff.assemble(@contigsequence,component.start,[cds1])
+    seq.should == "ACACGGTAACTGTTATTACTTTCTTAACAAGCAGAAGACGAATCCATGCCTCGAACACAATTACGGTTTCTGTGACTTGAAACCTGTGGTAACGTGCGTCGACGTACAACACGAATATAACTATAACAAGCTAACGAATAACGT"
+    aaseq = @gff.assembleAA(@contigsequence,component.start,[cds1])
+    # note it should handle the frame shift and direction!
+    aaseq.should == "EKLMRQAACIGRKQLGSFGTCLGKFTKGGSFFLHITSLDYLAPYALAKIWLKPQAEQQFLYGNNIVKSGVGRMSEGIEEKQ"
+    # we are going to force a change of direction
+    cds1rev = cds1
+    cds1rev.strand = '-'
+    seq = @gff.assemble(@contigsequence,component.start,[cds1rev])
+    seq[0..3].should == "AACA"
+    aaseq = @gff.assembleAA(@contigsequence,component.start,[cds1rev])
+    aaseq.should_not == "EKLMRQAACIGRKQLGSFGTCLGKFTKGGSFFLHITSLDYLAPYALAKIWLKPQAEQQFLYGNNIVKSGVGRMSEGIEEKQ"
+  end
   it "should assemble CDSs, correcting for CODON size"
 end
 
