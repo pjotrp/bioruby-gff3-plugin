@@ -196,7 +196,12 @@ module Bio
         # Patch a sequence together from a Sequence string and an array
         # of records. Note that rec positions are 1-based coordinates, relative 
         # to the landmark given in column 1 - in this case the sequence as it
-        # is passed in. The container startpos is unused.
+        # is passed in. The container startpos is unused (it should not differ
+        # from the startpos). The following options are possible:
+        #
+        #   codonize      : sets phase and makes sure sequence is multiple of 3,
+        #                   otherwise return the raw sequence (no phase, no strand, no multiple of 3)
+        #
         def assemble sequence, startpos, rec, options = { :codonize=>true }
           codonize = options[:codonize]
           retval = ""
@@ -211,12 +216,12 @@ module Bio
             # field. 
             frame = 0
             frame = rec1.frame if rec1.frame
-            seq = sequence[(rec1.start-1)..rec1.end]
-            # if strand is negative, reverse
-            reversed = (rec1.strand == '-')
-            seq = seq.reverse if reversed
+            seq = sequence[(rec1.start-1)..(rec1.end-1)]
             # correct phase and size to multiple of 3
             if codonize
+              # if strand is negative, reverse
+              reversed = (rec1.strand == '-')
+              seq = seq.reverse if reversed
               seq = seq[frame..-1] if frame != 0 # set phase
               # seq = seq[1..-1] if reversed # test bug
               reduce = seq.size % 3
