@@ -196,14 +196,16 @@ module Bio
         # Patch a sequence together from a Sequence string and an array
         # of records. Note that rec positions are 1-based coordinates, relative 
         # to the landmark given in column 1 - in this case the sequence as it
-        # is passed in. The container startpos is unused (it should not differ
-        # from the startpos). The following options are possible:
+        # is passed in. The following options are available:
         #
-        #   codonize      : sets phase and makes sure sequence is multiple of 3,
-        #                   otherwise return the raw sequence (no phase, no strand, no multiple of 3)
+        #   codonize      : sets phase and makes sure sequence is multiple of
+        #                   3, otherwise return the raw sequence (no phase, 
+        #                   no strand, no multiple of 3)
+        #   complement    : additionally complement result (default false)
         #
-        def assemble sequence, startpos, rec, options = { :codonize=>true }
+        def assemble sequence, startpos, rec, options = { :codonize=>true, :complement=>false }
           codonize = options[:codonize]
+          complement = options[:complement]
           retval = ""
           Sections::sort(rec).each do | section |
             # p sequence
@@ -211,9 +213,6 @@ module Bio
               sequence = sequence.seq
             end
             rec1 = section.rec
-            # For forward strand features, phase is counted from the start
-            # field. For reverse strand features, phase is counted from the end
-            # field. 
             frame = 0
             frame = rec1.frame if rec1.frame
             seq = sequence[(rec1.start-1)..(rec1.end-1)]
@@ -222,10 +221,16 @@ module Bio
               # if strand is negative, reverse
               reversed = (rec1.strand == '-')
               seq = seq.reverse if reversed
+              # For forward strand features, phase is counted from the start
+              # field. For reverse strand features, phase is counted from the end
+              # field. 
               seq = seq[frame..-1] if frame != 0 # set phase
-              # seq = seq[1..-1] if reversed # test bug
               reduce = seq.size % 3
               seq = seq[0..(seq.size-1-reduce)] if reduce
+            end
+            if complement
+              ntseq = Bio::Sequence::NA.new(seq)
+              seq = ntseq.complement
             end
             retval += seq
           end
@@ -235,9 +240,9 @@ module Bio
         # Patch a sequence together from a Sequence string and an array
         # of records and translate in the correct direction and frame
         def assembleAA sequence, startpos, rec
-          seq = assemble(sequence, startpos, rec)
+          seq = assemble(sequence, startpos, rec, :codonize=>true, :complement=>true)
           ntseq = Bio::Sequence::NA.new(seq)
-          ntseq.translate
+          ntseq.complement.translate
         end
 
         # Create a description for output

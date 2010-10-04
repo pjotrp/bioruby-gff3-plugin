@@ -78,9 +78,12 @@ describe GFFdb, "Assemble CDS" do
     cds0 = recs[0]
     cds0.seqname.should == 'MhA1_Contig1133'
     seq = @gff.assemble(@contigsequence,component.start,[cds0])
-    seq.should == "ATGCGTCCTTTAACAGATGAAGAAACTGAAAAGTTTTTCAAAAAACTTTCAAATTATATTGGTGACAATATTAAACTTTTATTGGAAAGAGAAGATGGAGAATATGTTTTTCGTTTACATAAAGACAGAGTTTATTATTGCAGG"
+    seq.size.should == 143
+    seq.should == "ATGCGTCCTTTAACAGATGAAGAAACTGAAAAGTTTTTCAAAAAACTTTCAAATTATATTGGTGACAATATTAAACTTTTATTGGAAAGAGAAGATGGAGAATATGTTTTTCGTTTACATAAAGACAGAGTTTATTATTGCAG"
     aaseq = @gff.assembleAA(@contigsequence,component.start,[cds0])
-    aaseq.should == "MRPLTDEETEKFFKKLSNYIGDNIKLLLEREDGEYVFRLHKDRVYYCR"
+    # aaseq.should == "MRPLTDEETEKFFKKLSNYIGDNIKLLLEREDGEYVFRLHKDRVYYCR"
+    aaseq.should == "MRPLTDEETEKFFKKLSNYIGDNIKLLLEREDGEYVFRLHKDRVYYCX"
+
   end
   it "should translate CDS 8065:8308 (in frame 1, + strand)" do
     recs = @cdslist['cds:MhA1_Contig1133.frz3.gene4']
@@ -93,16 +96,9 @@ describe GFFdb, "Assemble CDS" do
     aaseq = @gff.assembleAA(@contigsequence,component.start,[cds1])
     # note it should handle the frame shift and direction!
     aaseq.should == "EKLMRQAACIGRKQLGSFGTCLGKFTKGGSFFLHITSLDYLAPYALAKIWLKPQAEQQFLYGNNIVKSGVGRMSEGIEEKQ"
-    # we are going to force a change of direction
-    # cds1rev = cds1
-    # cds1rev.strand = '-'
-    # seq = @gff.assemble(@contigsequence,component.start,[cds1rev])
-    # seq.should == "ACAAAAAGAAGTTAGGGAAGTGAGTAAGAAGGTTGTGGTCTAAATTGTTATAATAAAGGTATATTTTTAACAACAAGTCGAACACCAAAATTGGTTTAAAAACGATTTCGTATTCCACGGTTTATTAGGTTACTACAATATACTTCTTTCTTTCTGGGAGGAAAACACTTAAATGGGTTTGTTCAAGGTTTTCTAGGGTTAACAAATGCAGGTTATGTACGACGAACAGCGTAATTAAAAAGT"
-    # aaseq = @gff.assembleAA(@contigsequence,component.start,[cds1rev])
-    # aaseq.should == "EKLMRQAACIGRKQLGSFGTCLGKFTKGGSFFLHITSLDYLAPYALAKIWLKPQAEQQFLYGNNIVKSGVGRMSEGIEEKQ"
   end
   it "should assemble 3 CDSs for MhA1_Contig1133.frz3.gene4"
-  # > class=Sequence position=MhA1_Contig1133:27463..29904 (- strand)
+  # > class=Sequence position=MhA1_Contig1133:27463..29904 (- strand); shown in frame 1!
   # ATGGACCATC ATGCATTGGT GGAGGAATTA CCAGAAATTG AAAAATTAAC TCCTCAAGAA CGTATTGCAT TAGCTAGAGA
   # ACGCCGTGCT GAACAACTTC GACAGAATGC TGCACGGGAG GCTCAATTGC CAATGCCTGC ACAGCGCCGG CCTCGTCTTC
   # GATTTACACC AGATGTTGCT TTACTTGAGG CAACAGTTAG GGGTGATACC CAAGAAGGTT ATACATAAAG ATTATTGATT
@@ -151,7 +147,9 @@ describe GFFdb, "Assemble CDS" do
     seq = @gff.assemble(@contigsequence,component.start,[cds1], :codonize=>false)
     seq.should == "CGCTGTATTAGAAGAAAGGTCTTCTTTACTATTATAACTTCTAATAAGGTCAGAACCCTCTCTTTGTGCTTCCAAACGAGCTAATGACATTCCACTACGATCTCGCAATGATTGTCGTCTAATTGCACCTCTAGCTGAGAAAGGATTTTCTAATGTTGAAGGTGGTTGTTGAGGAGATTCAAACTTTTTTCTT"
     seq.size.should == 193
-    seq = @gff.assemble(@contigsequence,component.start,[cds1])
+    seq = @gff.assemble(@contigsequence,component.start,[cds1],:codonize=>true,:complement=>true)
+    seq.should == "AGAAAAAAGTTTGAATCTCCTCAACAACCACCTTCAACATTAGAAAATCCTTTCTCAGCTAGAGGTGCAATTAGACGACAATCATTGCGAGATCGTAGTGGAATGTCATTAGCTCGTTTGGAAGCACAAAGAGAGGGTTCTGACCTTATTAGAAGTTATAATAGTAAAGAAGACCTTTCTTCTAATACAGCG"
+    # codonize has reversed the sequence, so
     seq.reverse.should == "CGCTGTATTAGAAGAAAGGTCTTCTTTACTATTATAACTTCTAATAAGGTCAGAACCCTCTCTTTGTGCTTCCAAACGAGCTAATGACATTCCACTACGATCTCGCAATGATTGTCGTCTAATTGCACCTCTAGCTGAGAAAGGATTTTCTAATGTTGAAGGTGGTTGTTGAGGAGATTCAAACTTTTTTCT"
     seq.size.should == 192
     aaseq = @gff.assembleAA(@contigsequence,component.start,[cds1])
@@ -196,6 +194,50 @@ describe GFFdb, "Assemble CDS" do
     # note it should handle the frame shift and direction!
     aaseq.should == "HGNCYYFLNKQKTNPCLEHNYGFCDLKPVVTCVDVQHEYNYNKLTNNV"
   end
+  it "should assemle the gene into"
+  #   >MhA1_Contig1133:27463..29904
+  # tcacaaaacagagcaacatccttgtttgcgccgtctattgggtccagagcccattgctaa
+  # ttgttgttttgaagctccaccaaatgttgctgttggaccaccattcatttctattaaacg
+  # aaaaataaatataaaattcaaaaaaaatattttaattcaccttgctgacctctcgctcct
+  # ccaccaccaccactcttcattctttgtcctcctttaagttcagattgtaattcaccatct
+  # tctccatcattatctcgaaaacctgcagaatctgcttctaattttttcagccattcatct
+  # ggagacatttgttgtttttgtttttgatgagaagcacttctagccattaatgcacgttta
+  # ggtggagattcacgacgttgttgttgatgtggagttccgtgtaatgctgaagaggaagca
+  # ctagccgaggctgttggattgttgagatatgaagaacttccaacatttaaagaatcatcc
+  # taaaaattaagaaaaaattacaattttaaaaaacaaaccgctgtattagaagaaaggtct
+  # tctttactattataacttctaataaggtcagaaccctctctttgtgcttccaaacgagct
+  # aatgacattccactacgatctcgcaatgattgtcgtctaattgcacctctagctgagaaa
+  # ggattttctaatgttgaaggtggttgttgaggagattcaaacttttttcttctagataaa
+  # aagatgaaaagaaaatataaatttaaaattactttcggctttgtcgtcgagaatcacgaa
+  # caccaaagtaaccaccacctggaccacgccgtctccttgcttctgtctgagcgattgttc
+  # taattacttgttgggttggttcatcttcagttaattcttaatttaaaaaaatatatagac
+  # agaaaatagttaggaaggcgataagttaaaagtatgtcaaaattctagcctttcttaaaa
+  # tagccatgtaaaaataaaaaagcctcccgacgtggtcacatacatattttgagaaaaatt
+  # aaaggtcttaagaaaatgggtgtgaaccgaaaaatcctgatattgagaaatttaattcct
+  # tattgttagttcctctcccctcatacttaatagcaaatatttataaattataagattcaa
+  # taaaataaacctaaagggctttccccagctccagtttttgcatttatatcagccccatat
+  # tcgcataaaagctcgattaagtctggttgattccaagaagcagctgcatgaattggttgc
+  # cacaaatctatatctctcaatgctggagaaacattacaacgaagaaggaaagcagcaaca
+  # tcataataaccattagctgctgctatatgtaactaaaaaggaataaaactgtaataatcc
+  # tttcataataatctttacataaatttccctttctccagaaaaacttacaaaagtagattt
+  # atcaacagaatttctttgatctaaaggtaatcctctttgatgtaaaattttcatatcatt
+  # taacatttccctttctggttgttgtcttctttcatcaatcatttcttgtgtaattcctct
+  # agcagccatttcagattcaataaggtcaagggtttgttcatcatcacaaatatcataagg
+  # catattaccatctgcatttactgctagtaaatctgcgttgcttaaaaagaaatttttaat
+  # atgaaagaagttttcgataaaatatgacgcaaaaataaaaatcgatgacctaaaaactgg
+  # atgtttacccattaaactaaaccacaaaacttacgaacttttagaagacgaattaattat
+  # taaatgaaaatacgtaaagattaaaaatacaaaaaatttaaaaggaagtcccgtttgttt
+  # aaaataaatatttctgtaaaacttaagaaatttatttaaaaaaaaaattaaaaaaaaact
+  # aactgtgcaataagcaatcgaacaatatcaatataagcacaacatgcagctgcgtgcaat
+  # ggtgtccaaagttcagtgtctttggcattaacacaagctccgtacctaagcagaagacga
+  # acaattctttcattattgtcaatggcacactaaaaataaatttaaaaaaattaatttggt
+  # ttttgcctgatgtaaaggtgttaatccatcctcattatgtgaatcagcattgacaccttc
+  # cattaaaagtctttcaactaaaaaataaataaattcatttaaaatcaataatctttatgt
+  # ataaccttcttgggtatcacccctaactgttgcctcaagtaaagcaacatctggtgtaaa
+  # tcgaagacgaggccggcgctgtgcaggcattggcaattgagcctcccgtgcagcattctg
+  # tcgaagttgttcagcacggcgttctctagctaatgcaatacgttcttgaggagttaattt
+  # ttcaatttctggtaattcctccaccaatgcatgatggtccat
+
   it "should assemble CDSs, correcting for CODON size"
 end
-
+ 
