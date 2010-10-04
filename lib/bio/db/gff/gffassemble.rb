@@ -200,14 +200,30 @@ module Bio
         #
         #   :phase        : set phase (default true)
         #   :reverse      : do reverse if reverse is indicated (true)
+        #   :complement   : do complement if reverse is indicated (true)
         #   :trim         : make sure sequence is multiple of 3 nucleotide bps (false)
-        #   :complement    : additionally complement result (default false)
+        #
+        # there are two special options:
+        #
+        #   :raw          : raw sequence (all above false)
+        #   :codonize     : codon sequence (all above true)
         #
         def assemble sequence, startpos, rec, options = { :phase=>true, :reverse=>true, :trim=>false, :complement=>false }
           do_phase = options[:phase]
           do_reverse = options[:reverse]
           do_trim = options[:trim]
           do_complement = options[:complement]
+          if options[:raw]
+            do_phase = false
+            do_reverse = false
+            do_trim = false
+            do_complement = false
+          elsif options[:codonize]
+            do_phase = true
+            do_reverse = true
+            do_trim = true
+            do_complement = true
+          end
           retval = ""
           Sections::sort(rec).each do | section |
             # p sequence
@@ -221,8 +237,7 @@ module Bio
             # correct phase and size to multiple of 3
             if do_reverse
               # if strand is negative, reverse
-              reversed = (rec1.strand == '-')
-              seq = seq.reverse if reversed
+              seq = seq.reverse if rec1.strand == '-'
             end
             if do_phase
               # For forward strand features, phase is counted from the start
@@ -231,8 +246,11 @@ module Bio
               seq = seq[frame..-1] if frame != 0 # set phase
             end
             if do_complement
-              ntseq = Bio::Sequence::NA.new(seq)
-              seq = ntseq.complement
+              # if strand is negative, complement
+              if rec1.strand == '-'
+                ntseq = Bio::Sequence::NA.new(seq)
+                seq = ntseq.forward_complement.upcase
+              end
             end
             retval += seq
           end
@@ -248,7 +266,7 @@ module Bio
         # Patch a sequence together from a Sequence string and an array
         # of records and translate in the correct direction and frame
         def assembleAA sequence, startpos, rec
-          seq = assemble(sequence, startpos, rec)
+          seq = assemble(sequence, startpos, rec, :phase=>true, :reverse=>true, :complement=>true)
           ntseq = Bio::Sequence::NA.new(seq)
           ntseq.translate
         end
