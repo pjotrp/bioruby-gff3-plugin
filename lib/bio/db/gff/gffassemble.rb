@@ -198,14 +198,16 @@ module Bio
         # to the landmark given in column 1 - in this case the sequence as it
         # is passed in. The following options are available:
         #
-        #   codonize      : sets phase and makes sure sequence is multiple of
-        #                   3, otherwise return the raw sequence (no phase, 
-        #                   no strand, no multiple of 3)
-        #   complement    : additionally complement result (default false)
+        #   :phase        : set phase (default true)
+        #   :reverse      : do reverse if reverse is indicated (true)
+        #   :trim         : make sure sequence is multiple of 3 nucleotide bps (false)
+        #   :complement    : additionally complement result (default false)
         #
-        def assemble sequence, startpos, rec, options = { :codonize=>true, :complement=>false }
-          codonize = options[:codonize]
-          complement = options[:complement]
+        def assemble sequence, startpos, rec, options = { :phase=>true, :reverse=>true, :trim=>false, :complement=>false }
+          do_phase = options[:phase]
+          do_reverse = options[:reverse]
+          do_trim = options[:trim]
+          do_complement = options[:complement]
           retval = ""
           Sections::sort(rec).each do | section |
             # p sequence
@@ -217,22 +219,28 @@ module Bio
             frame = rec1.frame if rec1.frame
             seq = sequence[(rec1.start-1)..(rec1.end-1)]
             # correct phase and size to multiple of 3
-            if codonize
+            if do_reverse
               # if strand is negative, reverse
               reversed = (rec1.strand == '-')
               seq = seq.reverse if reversed
+            end
+            if do_phase
               # For forward strand features, phase is counted from the start
               # field. For reverse strand features, phase is counted from the end
               # field. 
               seq = seq[frame..-1] if frame != 0 # set phase
-              reduce = seq.size % 3
-              seq = seq[0..(seq.size-1-reduce)] if reduce
             end
-            if complement
+            if do_complement
               ntseq = Bio::Sequence::NA.new(seq)
               seq = ntseq.complement
             end
             retval += seq
+          end
+          if do_trim
+            seq = retval
+            reduce = seq.size % 3
+            seq = seq[0..(seq.size-1-reduce)] if reduce
+            retval = seq
           end
           retval
         end
@@ -240,9 +248,9 @@ module Bio
         # Patch a sequence together from a Sequence string and an array
         # of records and translate in the correct direction and frame
         def assembleAA sequence, startpos, rec
-          seq = assemble(sequence, startpos, rec, :codonize=>true, :complement=>true)
+          seq = assemble(sequence, startpos, rec)
           ntseq = Bio::Sequence::NA.new(seq)
-          ntseq.complement.translate
+          ntseq.translate
         end
 
         # Create a description for output
