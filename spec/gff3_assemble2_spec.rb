@@ -37,7 +37,8 @@ PROTEINS = {
 
 describe GFFdb, "Assemble CDS (Contig125)" do
   before :all do 
-    gffdb = Bio::GFFbrowser::GFFdb.new(GFF3FILE2, :fasta_filename => FASTAFILE2,:cache_components => :cache_none, :cache_records => :cache_none)
+    # gffdb = Bio::GFFbrowser::GFFdb.new(GFF3FILE2, :fasta_filename => FASTAFILE2,:cache_components => :cache_none, :cache_records => :cache_none)
+    gffdb = Bio::GFFbrowser::GFFdb.new(GFF3FILE2, :fasta_filename => FASTAFILE2)
     @gff = gffdb.assembler
     @gff.parse
     @contigsequence = @gff.sequencelist["MhA1_Contig125"]
