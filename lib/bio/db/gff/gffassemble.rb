@@ -208,7 +208,7 @@ module Bio
         #   :raw          : raw sequence (all above false)
         #   :codonize     : codon sequence (all above true)
         #
-        def assemble sequence, startpos, rec, options = { :phase=>true, :reverse=>true, :trim=>false, :complement=>false }
+        def assemble sequence, startpos, reclist, options = { :phase=>true, :reverse=>true, :trim=>false, :complement=>false }
           do_phase = options[:phase]
           do_reverse = options[:reverse]
           do_trim = options[:trim]
@@ -225,29 +225,33 @@ module Bio
             do_complement = true
           end
           retval = ""
-          Sections::sort(rec).each do | section |
+          Sections::sort(reclist).each_with_index do | section, idx |
             # p sequence
             if sequence.kind_of?(Bio::FastaFormat)
               sequence = sequence.seq
             end
-            rec1 = section.rec
+            rec = section.rec
             frame = 0
-            frame = rec1.frame if rec1.frame
-            seq = sequence[(rec1.start-1)..(rec1.end-1)]
+            frame = rec.frame if rec.frame
+            seq = sequence[(rec.start-1)..(rec.end-1)]
             # correct phase and size to multiple of 3
             if do_reverse
               # if strand is negative, reverse
-              seq = seq.reverse if rec1.strand == '-'
+              seq = seq.reverse if rec.strand == '-'
             end
             if do_phase
               # For forward strand features, phase is counted from the start
               # field. For reverse strand features, phase is counted from the end
               # field. 
-              seq = seq[frame..-1] if frame != 0 # set phase
+              #
+              # The phase is only used for the first CDS record.
+              if rec.feature != "CDS" or idx == 0
+                seq = seq[frame..-1] if frame != 0 # set phase
+              end
             end
             if do_complement
               # if strand is negative, complement
-              if rec1.strand == '-'
+              if rec.strand == '-'
                 ntseq = Bio::Sequence::NA.new(seq)
                 seq = ntseq.forward_complement.upcase
               end
