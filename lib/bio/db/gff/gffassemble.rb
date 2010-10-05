@@ -225,45 +225,49 @@ module Bio
             do_complement = true
           end
           retval = ""
-          Sections::sort(reclist).each_with_index do | section, idx |
+          sectionlist = Sections::sort(reclist)
+          reverse = false
+          # we assume strand is always the same
+          rec0 = sectionlist.first.rec
+          reverse = (rec0.strand == '-') if rec0.strand
+          if reverse
+            rec0 = sectionlist.last.rec
+          end
+          frame = 0
+          frame = rec0.frame if rec0.frame
+          sectionlist.each do | section |
             # p sequence
             if sequence.kind_of?(Bio::FastaFormat)
               sequence = sequence.seq
             end
             rec = section.rec
-            frame = 0
-            frame = rec.frame if rec.frame
             seq = sequence[(rec.start-1)..(rec.end-1)]
-            # correct phase and size to multiple of 3
-            if do_reverse
-              # if strand is negative, reverse
-              seq = seq.reverse if rec.strand == '-'
-            end
-            if do_phase
-              # For forward strand features, phase is counted from the start
-              # field. For reverse strand features, phase is counted from the end
-              # field. 
-              #
-              # The phase is only used for the first CDS record.
-              if rec.feature != "CDS" or idx == 0
-                seq = seq[frame..-1] if frame != 0 # set phase
-              end
-            end
-            if do_complement
-              # if strand is negative, complement
-              if rec.strand == '-'
-                ntseq = Bio::Sequence::NA.new(seq)
-                seq = ntseq.forward_complement.upcase
-              end
-            end
             retval += seq
           end
+          seq = retval
+          # correct phase and size to multiple of 3
+          if do_reverse
+            # if strand is negative, reverse
+            seq = seq.reverse if reverse
+          end
+          if do_phase
+            # For forward strand features, phase is counted from the start
+            # field. For reverse strand features, phase is counted from the end
+            # field. 
+            seq = seq[frame..-1] if frame != 0 # set phase
+          end
+          if do_complement
+            # if strand is negative, complement
+            if reverse
+              ntseq = Bio::Sequence::NA.new(seq)
+              seq = ntseq.forward_complement.upcase
+            end
+          end
           if do_trim
-            seq = retval
             reduce = seq.size % 3
             seq = seq[0..(seq.size-1-reduce)] if reduce
-            retval = seq
           end
+          retval = seq
           retval
         end
 
