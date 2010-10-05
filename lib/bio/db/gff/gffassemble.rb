@@ -231,12 +231,12 @@ module Bio
           rec0 = sectionlist.first.rec
           reverse = (rec0.strand == '-') if rec0.strand
           if reverse
+            # fetch phase from the last feature when reversed
             rec0 = sectionlist.last.rec
           end
           frame = 0
           frame = rec0.frame if rec0.frame
           sectionlist.each do | section |
-            # p sequence
             if sequence.kind_of?(Bio::FastaFormat)
               sequence = sequence.seq
             end
@@ -245,18 +245,18 @@ module Bio
             retval += seq
           end
           seq = retval
+          if do_reverse
+            # if strand is negative, reverse
+            seq = seq.reverse if reverse
+          end
           if do_phase
             # For forward strand features, phase is counted from the start
             # field. For reverse strand features, phase is counted from the end
             # field. 
             seq = seq[frame..-1] if frame != 0 # set phase
           end
-          if do_reverse
-            # if strand is negative, reverse
-            seq = seq.reverse if reverse
-          end
           if do_complement
-            # if strand is negative, complement
+            # if strand is negative, forward complement
             if reverse
               ntseq = Bio::Sequence::NA.new(seq)
               seq = ntseq.forward_complement.upcase
