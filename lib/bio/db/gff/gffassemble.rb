@@ -253,7 +253,15 @@ module Bio
             # For forward strand features, phase is counted from the start
             # field. For reverse strand features, phase is counted from the end
             # field. 
-            seq = seq[frame..-1] if frame != 0 # set phase
+            #
+            # With a reverse protein coding string in Wormbase 
+            # the phase appears to be disregarded - or rather handled 
+            # by start-stop. This is a hack.
+            if do_reverse and reverse and (seq.size % 3 == 0)
+              # do nothing
+            else
+              seq = seq[frame..-1] if frame != 0 # set phase
+            end
           end
           if do_complement
             # if strand is negative, forward complement
