@@ -1,0 +1,15 @@
+##gff-version 3 ##sequence-regio
+# Gene gene:MhA1_Contig1040.frz3.gene29
+MhA1_Contig1040	WormBase	gene	1	182	.	-	.	ID=gene:MhA1_Contig1040.frz3.g
+ene29;Name=MhA1_Contig1040.frz3.gene29;Note=PREDICTED	protein_coding;public_name
+=MhA1_Contig1040.frz3.gene29
+MhA1_Contig1040	WormBase	mRNA	1	182	.	-	.	ID=transcript:MhA1_Contig1040.
+frz3.gene29;Parent=gene:MhA1_Contig1040.frz3.gene29;Name=MhA1_Contig1040.frz3.ge
+ne29;public_name=MhA1_Contig1040.frz3.gene29
+MhA1_Contig1040	WormBase	exon	1	182	.	-	.	ID=exon:MhA1_Contig1040.frz3.g
+ene29.1;Parent=transcript:MhA1_Contig1040.frz3.gene29
+MhA1_Contig1040	WormBase	CDS	1	180	.	-	2	ID=cds:MhA1_Contig1040.frz3.gene
+29;Parent=transcript:MhA1_Contig1040.frz3.gene29
+##FASTA
+>MhA1_Contig1040
+TTAATTAATTTGCCTAGAAAAACAAAGGCATAACATGCTTGCAGTCATCATACGGTAAGAGAGAAACCAACGATATGTTAATAATGTTGATGGGGGAATATCCTCATTAGAATTCTTTTTTGGGTGAATTGAAATTGCCATATTATTAGTATTATTAGAAAATATTAAATTTGTTGATAAAC
