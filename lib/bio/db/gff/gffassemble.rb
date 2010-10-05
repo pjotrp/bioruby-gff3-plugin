@@ -245,16 +245,15 @@ module Bio
             retval += seq
           end
           seq = retval
-          # correct phase and size to multiple of 3
-          if do_reverse
-            # if strand is negative, reverse
-            seq = seq.reverse if reverse
-          end
           if do_phase
             # For forward strand features, phase is counted from the start
             # field. For reverse strand features, phase is counted from the end
             # field. 
             seq = seq[frame..-1] if frame != 0 # set phase
+          end
+          if do_reverse
+            # if strand is negative, reverse
+            seq = seq.reverse if reverse
           end
           if do_complement
             # if strand is negative, complement
@@ -265,7 +264,7 @@ module Bio
           end
           if do_trim
             reduce = seq.size % 3
-            seq = seq[0..(seq.size-1-reduce)] if reduce
+            seq = seq[0..(seq.size-1-reduce)] if reduce != 0
           end
           retval = seq
           retval

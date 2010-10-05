@@ -39,6 +39,26 @@ describe GFFdb, "Assemble CDS (extra checks)" do
     aaseq = @gff.assembleAA(@contigsequence,component.start,recs)
     aaseq.should == "LSTNLIFSNNTNNMAISIHPKKNSNEDIPPSTLLTYRWFLSYRMMTASMLCLCFSRQIN*"
   end
+  it "should translate gene MhA1_Contig2992.frz3.gene1" do
+    @contigsequence = @gff.sequencelist["MhA1_Contig2992"]
+    @componentlist = {}
+    @cdslist = {}
+    @gff.each_CDS do | id, reclist, component |
+      @componentlist[id] = component
+      @cdslist[id] = reclist
+    end
+    name = "cds:MhA1_Contig2992.frz3.gene1"
+    recs = @cdslist[name]
+    component = @componentlist[name]
+    p recs
+    cds0 = recs[0]
+    ntseq = @gff.assemble(@contigsequence,component.start,recs,:raw=>true)
+    ntseq.should == ""
+    ntseq = @gff.assemble(@contigsequence,component.start,recs,:codonize=>true)
+    ntseq.should == ""
+    aaseq = @gff.assembleAA(@contigsequence,component.start,recs)
+    aaseq.should == ""
+  end
 end
 
 
