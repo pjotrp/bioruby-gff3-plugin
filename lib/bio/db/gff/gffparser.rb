@@ -120,7 +120,7 @@ module Bio
               sequence = @sequencelist[component.seqname]
               # p sequence
               if sequence
-                seq = assemble(sequence,component.start,reclist)
+                seq = assemble(sequence,component.start,reclist,:codonize=>true)
                 if seq.size % 3 != 0
                   p reclist # leave this in
                   # raise "CDS size #{seq.size} is not a multiple of 3! <#{seq}>"

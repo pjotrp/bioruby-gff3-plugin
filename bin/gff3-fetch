@@ -47,7 +47,7 @@ $: << rootpath+'/../bioruby/lib'
 
 require 'bio/db/gff/gffdb'
 
-print "BioRuby GFF3 Plugin Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl>\n\n"
+$stderr.print "BioRuby GFF3 Plugin Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl>\n\n"
 
 if ARGV.size == 0
   print USAGE
@@ -71,7 +71,6 @@ ARGV.each do | fn |
   options = {:validate => false}
   options = {:validate => false, :cache_components => :cache_none, :cache_records => :cache_none} if caching == false
   options[:fasta_filename] = fastafn if fastafn
-  p options
 
   gffdb = Bio::GFFbrowser::GFFdb.new(fn,options)
   gff = gffdb.assembler
