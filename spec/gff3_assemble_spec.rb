@@ -197,6 +197,21 @@ describe GFFdb, "Assemble CDS" do
     # >27981..28173_4 RKKFESPQQPPSTLENPFSARGAIRRQSLRDRSGMSLARLEAQREGSDLIRSYNSKEDLSSNTA
     aaseq.should == "RKKFESPQQPPSTLENPFSARGAIRRQSLRDRSGMSLARLEAQREGSDLIRSYNSKEDLSSNTA"
   end
+  it "should assemble the 1st reverse CDS in MhA1_Contig1133.frz3.gene11" do
+    recs = @cdslist['cds:MhA1_Contig1133.frz3.gene11']
+    component = @componentlist['cds:MhA1_Contig1133.frz3.gene11']
+    cds1 = recs[0].clone
+    cds1.start.should == 29710
+    cds1.frame.should == 0
+    cds1.strand.should == '-'
+    seq = @gff.assemble(@contigsequence,component.start,[cds1],:raw=>true)
+    seq.size.should == 195
+    seq.should == "TGTTGCCTCAAGTAAAGCAACATCTGGTGTAAATCGAAGACGAGGCCGGCGCTGTGCAGGCATTGGCAATTGAGCCTCCCGTGCAGCATTCTGTCGAAGTTGTTCAGCACGGCGTTCTCTAGCTAATGCAATACGTTCTTGAGGAGTTAATTTTTCAATTTCTGGTAATTCCTCCACCAATGCATGATGGTCCAT"
+    seq = @gff.assemble(@contigsequence,component.start,[cds1],:codonize=>true)
+    seq.should == "ATGGACCATCATGCATTGGTGGAGGAATTACCAGAAATTGAAAAATTAACTCCTCAAGAACGTATTGCATTAGCTAGAGAACGCCGTGCTGAACAACTTCGACAGAATGCTGCACGGGAGGCTCAATTGCCAATGCCTGCACAGCGCCGGCCTCGTCTTCGATTTACACCAGATGTTGCTTTACTTGAGGCAACA"
+    aaseq = @gff.assembleAA(@contigsequence,component.start,[cds1])
+    aaseq.should == "MDHHALVEELPEIEKLTPQERIALARERRAEQLRQNAAREAQLPMPAQRRPRLRFTPDVALLEAT"
+  end
   it "should assemble the 3rd reverse CDS in MhA1_Contig1133.frz3.gene11" do
     recs = @cdslist['cds:MhA1_Contig1133.frz3.gene11']
     component = @componentlist['cds:MhA1_Contig1133.frz3.gene11']
@@ -214,7 +229,17 @@ describe GFFdb, "Assemble CDS" do
     # note it should handle the frame shift and direction!
     aaseq.should == "NADLLAVNADGNMPYDICDDEQTLDLIESEMAARGITQEMIDERRQQPEREMLNDMKILHQRGLPLDQRNSVDKSTFVSFSGEREIY"
   end
-  it "should assemble the gene into"
+  it "should assemble the protein sequence for MhA1_Contig1133.frz3.gene11" do
+    recs = @cdslist['cds:MhA1_Contig1133.frz3.gene11']
+    component = @componentlist['cds:MhA1_Contig1133.frz3.gene11']
+    seq = @gff.assemble(@contigsequence,component.start,recs)
+    seq.should == "AACGCAGATTTACTAGCAGTAAATGCAGATGGTAATATGCCddTTATGATATTTGTGATGATGAACAAACCCTTGACCTTATTGAATCTGAAATGGCTGCTAGAGGAATTACACAAGAAATGATTGATGAAAGAAGACAACAACCAGAAAGGGAAATGTTAAATGATATGAAAATTTTACATCAAAGAGGATTACCTTTAGATCAAAGAAATTCTGTTGATAAATCTACTTTTGTAAGTTTTTCTGGAGAAAGGGAAATTTAT"
+    # cds1.frame = 1
+    aaseq = @gff.assembleAA(@contigsequence,component.start,[cds2])
+    # note it should handle the frame shift and direction!
+    aaseq.should == "NADLLAVNADGNMPYDICDDEQTLDLIESEMAARGITQEMIDERRQQPEREMLNDMKILHQRGLPLDQRNSVDKSTFVSFSGEREIY"
+  end
+  it "should assemble the gene into" 
   #   >MhA1_Contig1133:27463..29904
   # tcacaaaacagagcaacatccttgtttgcgccgtctattgggtccagagcccattgctaa
   # ttgttgttttgaagctccaccaaatgttgctgttggaccaccattcatttctattaaacg
@@ -257,7 +282,5 @@ describe GFFdb, "Assemble CDS" do
   # tcgaagacgaggccggcgctgtgcaggcattggcaattgagcctcccgtgcagcattctg
   # tcgaagttgttcagcacggcgttctctagctaatgcaatacgttcttgaggagttaattt
   # ttcaatttctggtaattcctccaccaatgcatgatggtccat
-
-  it "should assemble CDSs, correcting for CODON size"
 end
  
