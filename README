@@ -23,7 +23,8 @@ You can also run RSpec with something like
    ruby -I ../bioruby/lib/ ~/.gems/bin/spec spec/gffdb_spec.rb
 
 This implementation depends on BioRuby's basic GFF3 parser, with the possible
-advantage that it is faster and does not consume all memory. 
+advantage that the plugin is faster and does not consume all memory. The Gff3
+specs are based on the output of the Wormbase genome browser.
 
 For a write-up see http://thebird.nl/bioruby/BioRuby_GFF3.html 
 
