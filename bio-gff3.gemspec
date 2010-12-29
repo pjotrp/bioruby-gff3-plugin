@@ -5,25 +5,56 @@
 
 Gem::Specification.new do |s|
   s.name = %q{bio-gff3}
-  s.version = "0.0.0"
+  s.version = "0.6.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pjotr Prins"]
-  s.date = %q{2010-12-28}
-  s.description = %q{TODO: longer description of your gem}
-  s.email = %q{pjotr.public01@thebird.nl}
+  s.date = %q{2010-12-29}
+  s.default_executable = %q{gff3-fetch}
+  s.description = %q{GFF3 (genome browser) information and digest mRNA and CDS sequences.
+Options for low memory use and caching of records.
+Support for external FASTA files.
+}
+  s.email = %q{pjotr.prins@thebird.nl}
+  s.executables = ["gff3-fetch"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
+    "README",
     "README.rdoc"
   ]
   s.files = [
-    ".document",
     "Gemfile",
+    "Gemfile.lock",
     "LICENSE.txt",
+    "README",
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "bin/gff3-fetch",
+    "bio-gff3.gemspec",
     "lib/bio-gff3.rb",
+    "lib/bio/db/gff/gffassemble.rb",
+    "lib/bio/db/gff/gffdb.rb",
+    "lib/bio/db/gff/gfffasta.rb",
+    "lib/bio/db/gff/gfffileiterator.rb",
+    "lib/bio/db/gff/gffinmemory.rb",
+    "lib/bio/db/gff/gffnocache.rb",
+    "lib/bio/db/gff/gffparser.rb",
+    "lib/bio/system/lruhash.rb",
+    "spec/gff3_assemble2_spec.rb",
+    "spec/gff3_assemble3_spec.rb",
+    "spec/gff3_assemble_spec.rb",
+    "spec/gff3_fileiterator_spec.rb",
+    "spec/gffdb_spec.rb",
+    "test/data/gff/MhA1_Contig1133.fa",
+    "test/data/gff/MhA1_Contig1133.gff3",
+    "test/data/gff/MhA1_Contig125.fa",
+    "test/data/gff/MhA1_Contig125.gff3",
+    "test/data/gff/standard.gff3",
+    "test/data/gff/test-cds.gff3",
+    "test/data/gff/test-ext-fasta.fa",
+    "test/data/gff/test-ext-fasta.gff3",
+    "test/data/gff/test.gff3",
     "test/helper.rb",
     "test/test_bio-gff3.rb"
   ]
@@ -31,8 +62,13 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
-  s.summary = %q{TODO: one-line summary of your gem}
+  s.summary = %q{BioRuby GFF3 plugin for big data}
   s.test_files = [
+    "spec/gff3_assemble2_spec.rb",
+    "spec/gff3_assemble3_spec.rb",
+    "spec/gff3_assemble_spec.rb",
+    "spec/gff3_fileiterator_spec.rb",
+    "spec/gffdb_spec.rb",
     "test/helper.rb",
     "test/test_bio-gff3.rb"
   ]
