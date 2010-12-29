@@ -1,19 +1,69 @@
 = bio-gff3
 
-Description goes here.
+GFF3 plugin for BioRuby, aimed at parsing big data =
 
-== Contributing to bio-gff3
- 
-* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
-* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
-* Fork the project
-* Start a feature/bugfix branch
-* Commit and push until you are happy with your contribution
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+Features:
+
+# Take GFF (genome browser) information and digest mRNA and CDS sequences
+# Options for low memory use and caching of records
+# Support for external FASTA files
+
+You can use this plugin in two ways. First as a standalone program, next as a
+plugin library to BioRuby.
+
+For example, fetch mRNA and CDS information from GFF3 files and output to FASTA:
+
+  ./bin/gff3-fetch mrna test/data/gff/test.gff3
+  ./bin/gff3-fetch cds test/data/gff/test.gff3
+
+Or clone this repository and add the 'lib' dir to the Ruby search path and 
+
+  require 'bio/db/gff/gffdb'
+
+You can also run RSpec with something like
+
+   ruby -I ../bioruby/lib/ ~/.gems/bin/spec spec/gffdb_spec.rb
+
+This implementation depends on BioRuby's basic GFF3 parser, with the possible
+advantage that the plugin is faster and does not consume all memory. The Gff3
+specs are based on the output of the Wormbase genome browser.
+
+For a write-up see http://thebird.nl/bioruby/BioRuby_GFF3.html 
+
+-------------------------------------------------------------------------------
+
+Usage:
+
+BioRuby GFF3 Plugin Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl>
+
+  Fetch and assemble mRNAs, or CDS and print in FASTA format. 
+
+    gff3-fetch [--no-cache] mRNA|CDS [filename.fa] filename.gff
+
+  Where:
+
+    --no-cache      : do not load everything in memory 
+    mRNA            : assemble mRNA
+    CDS             : assemble CDS 
+
+  Multiple GFF3 files can be used. For external FASTA files, always the last
+  one before the GFF file is used.
+
+  Examples:
+
+    Find mRNA and CDS information from test.gff3 (which includes sequence information)
+
+      ./bin/gff3-fetch mRNA test/data/gff/test.gff3
+      ./bin/gff3-fetch CDS test/data/gff/test.gff3
+
+    Find mRNA from external FASTA file, without loading everythin in RAM
+
+      ./bin/gff3-fetch --no-cache mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
+
+  If you use this software, please cite http://dx.doi.org/10.1093/bioinformatics/btq475
+
 
 == Copyright
 
-Copyright (c) 2010 Pjotr Prins. See LICENSE.txt for
-further details.
+Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl> 
 
