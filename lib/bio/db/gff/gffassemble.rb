@@ -198,15 +198,15 @@ module Bio
         # to the landmark given in column 1 - in this case the sequence as it
         # is passed in. The following options are available:
         #
-        #   :reverse      : do reverse if reverse is indicated (true)
-        #   :complement   : do complement if reverse is indicated (true)
+        #   :reverse      : do reverse if reverse is indicated (default true)
+        #   :complement   : do complement if reverse is indicated (default true)
         #   :phase        : do set CDS phase (default false, normally ignore)
-        #   :trim         : make sure sequence is multiple of 3 nucleotide bps (false)
+        #   :trim         : make sure sequence is multiple of 3 nucleotide bps (default false)
         #
         # there are two special options:
         #
         #   :raw          : raw sequence (all above false)
-        #   :codonize     : codon sequence (all above true)
+        #   :codonize     : codon sequence (reverse, complement and trim are true)
         #
         def assemble sequence, startpos, reclist, options = { :phase=>false, :reverse=>true, :trim=>false, :complement=>true, :debug=>false }
           do_debug = options[:debug]
@@ -220,7 +220,7 @@ module Bio
             do_trim = false
             do_complement = false
           elsif options[:codonize]
-            do_phase = true
+            do_phase = false
             do_reverse = true
             do_trim = true
             do_complement = true
@@ -278,7 +278,8 @@ module Bio
         end
 
         # Patch a sequence together from a Sequence string and an array
-        # of records and translate in the correct direction and frame
+        # of records and translate in the correct direction and frame. The options 
+        # are the same as for +assemble+.
         def assembleAA sequence, startpos, reclist, options = { :phase=>false, :reverse=>true, :trim=>false, :complement=>true }
           seq = assemble(sequence, startpos, reclist, options)
           ntseq = Bio::Sequence::NA.new(seq)
