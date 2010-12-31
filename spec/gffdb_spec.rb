@@ -1,6 +1,6 @@
 # RSpec for BioRuby-GFF3-Plugin. Run with something like:
 #
-#   ruby -I ../bioruby/lib/ ~/.gems/bin/spec spec/gffdb_spec.rb 
+#   rspec -I ../bioruby/lib/ spec/gffdb_spec.rb 
 #
 # Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl>
 #
@@ -30,7 +30,7 @@ def iterators_should_be_implemented
     it "should implement each_CDS" 
   end
   it "should implement each_mRNA_seq" do
-    h = {} ; @gff.each_mRNA_seq { | id, seq | h[id] = seq }
+    h = {} ; @gff.each_mRNA_seq { | id, seq | h[id] = seq ; p [id,seq] }
     h["mrna01short Sequence:test01_1:400 (3:14)"].should == "GAAGATTTGTAT"
   end
   it "should implement each_CDS_seq" do

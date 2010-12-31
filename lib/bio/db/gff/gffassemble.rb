@@ -208,7 +208,7 @@ module Bio
         #   :raw          : raw sequence (all above false)
         #   :codonize     : codon sequence (all above true)
         #
-        def assemble sequence, startpos, reclist, options = { :phase=>true, :reverse=>true, :trim=>false, :complement=>false }
+        def assemble sequence, startpos, reclist, options = { :phase=>true, :reverse=>true, :trim=>false, :complement=>true }
           do_phase = options[:phase]
           do_reverse = options[:reverse]
           do_trim = options[:trim]
