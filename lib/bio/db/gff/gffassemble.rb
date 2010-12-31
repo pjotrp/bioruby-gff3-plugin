@@ -224,51 +224,41 @@ module Bio
             do_trim = true
             do_complement = true
           end
-          retval = ""
           sectionlist = Sections::sort(reclist)
-          reverse = false
-          # we assume strand is always the same
           rec0 = sectionlist.first.rec
-          reverse = (rec0.strand == '-') if rec0.strand
-          if reverse
-            # fetch phase from the last feature when reversed
-            rec0 = sectionlist.last.rec
+          # we assume ORF is always read in the same direction
+          orf_reverse = do_reverse && rec0.strand && (rec0.strand == '-')
+          orf_frame = startpos - 1
+          sectionlist = sectionlist.reverse if orf_reverse
+
+          if sequence.kind_of?(Bio::FastaFormat)
+            # BioRuby conversion
+            sequence = sequence.seq
           end
-          frame = 0
-          frame = rec0.frame if rec0.frame
-          sectionlist.each do | section |
-            if sequence.kind_of?(Bio::FastaFormat)
-              sequence = sequence.seq
-            end
+          # Generate array of sequences
+          seq = sectionlist.map { | section |
             rec = section.rec
-            seq = sequence[(rec.start-1)..(rec.end-1)]
-            retval += seq
-          end
-          seq = retval
-          if do_reverse
-            # if strand is negative, reverse
-            seq = seq.reverse if reverse
-          end
-          if do_phase
-            # For forward strand features, phase is counted from the start
-            # field. For reverse strand features, phase is counted from the end
-            # field. 
-            #
-            # With a reverse protein coding string in Wormbase 
-            # the phase appears to be disregarded - or rather handled 
-            # by start-stop. This is a hack.
-            if do_reverse and reverse and (seq.size % 3 == 0)
-              # do nothing
-            else
-              seq = seq[frame..-1] if frame != 0 # set phase
+            s = sequence[(section.begin-1)..(section.end-1)]
+            # Check for reversed
+            if rec.strand
+              if orf_reverse
+                raise 'Strand error' if rec.strand != '-'
+                s = s.reverse 
+              else
+                raise 'Strand error' if rec.strand != '+'
+              end
             end
-          end
-          if do_complement
-            # if strand is negative, forward complement
-            if reverse
-              ntseq = Bio::Sequence::NA.new(seq)
-              seq = ntseq.forward_complement.upcase
+            # Correct for phase
+            if rec.phase
+              s = s[rec.phase.to_i..-1]
             end
+            s
+          }
+          # p seq
+          seq = seq.join
+          if do_complement and orf_reverse
+            ntseq = Bio::Sequence::NA.new(seq)
+            seq = ntseq.forward_complement.upcase
           end
           if do_trim
             reduce = seq.size % 3

@@ -58,7 +58,7 @@ module Bio
        end
 
       def fasta_rec header, buf
-        fst = Bio::FastaFormat.new(header+"\n"+buf.to_s)
+        fst = Bio::FastaFormat.new(header+"\n"+buf.join(''))
         return fst.definition, fst
       end
 
