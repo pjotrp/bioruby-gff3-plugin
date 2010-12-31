@@ -198,9 +198,9 @@ module Bio
         # to the landmark given in column 1 - in this case the sequence as it
         # is passed in. The following options are available:
         #
-        #   :phase        : set phase (default true)
         #   :reverse      : do reverse if reverse is indicated (true)
         #   :complement   : do complement if reverse is indicated (true)
+        #   :phase        : do set CDS phase (default false, normally ignore)
         #   :trim         : make sure sequence is multiple of 3 nucleotide bps (false)
         #
         # there are two special options:
@@ -208,11 +208,12 @@ module Bio
         #   :raw          : raw sequence (all above false)
         #   :codonize     : codon sequence (all above true)
         #
-        def assemble sequence, startpos, reclist, options = { :phase=>true, :reverse=>true, :trim=>false, :complement=>true }
+        def assemble sequence, startpos, reclist, options = { :phase=>false, :reverse=>true, :trim=>false, :complement=>true, :debug=>false }
+          do_debug = options[:debug]
           do_phase = options[:phase]
-          do_reverse = options[:reverse]
-          do_trim = options[:trim]
-          do_complement = options[:complement]
+          do_reverse = (options[:reverse] == false ? false : true)
+          do_trim    = (options[:trim] == false ? false : true)
+          do_complement = (options[:complement] == false ? false : true)
           if options[:raw]
             do_phase = false
             do_reverse = false
@@ -227,9 +228,18 @@ module Bio
           sectionlist = Sections::sort(reclist)
           rec0 = sectionlist.first.rec
           # we assume ORF is always read in the same direction
-          orf_reverse = do_reverse && rec0.strand && (rec0.strand == '-')
+          orf_reverse = (rec0.strand == '-')
           orf_frame = startpos - 1
+          orf_frameshift = orf_frame % 3
           sectionlist = sectionlist.reverse if orf_reverse
+          if do_debug
+            p "------------------"
+            p options 
+            p [:reverse,do_reverse]
+            p [:complement,do_complement]
+            p [:trim,do_trim]
+            p [:orf_reverse, orf_reverse, rec0.strand]
+          end
 
           if sequence.kind_of?(Bio::FastaFormat)
             # BioRuby conversion
@@ -239,24 +249,23 @@ module Bio
           seq = sectionlist.map { | section |
             rec = section.rec
             s = sequence[(section.begin-1)..(section.end-1)]
-            # Check for reversed
-            if rec.strand
-              if orf_reverse
-                raise 'Strand error' if rec.strand != '-'
-                s = s.reverse 
-              else
-                raise 'Strand error' if rec.strand != '+'
-              end
+            if do_reverse and orf_reverse
+              s = s.reverse 
             end
-            # Correct for phase
+            # Correct for phase. Unfortunately the use of phase is ambiguous.
+            # Here we check whether rec.start is in line with orf_frame. If it
+            # is, we correct for phase. Otherwise it is ignored.
             if do_phase and rec.phase
-              s = s[rec.phase.to_i..-1]
+              phase = rec.phase.to_i
+              # if ((rec.start-startpos) % 3 == 0) 
+              s = s[phase..-1]
+              # end
             end
             s
           }
           # p seq
           seq = seq.join
-          if do_complement and orf_reverse
+          if do_complement and do_reverse and orf_reverse
             ntseq = Bio::Sequence::NA.new(seq)
             seq = ntseq.forward_complement.upcase
           end
@@ -270,8 +279,8 @@ module Bio
 
         # Patch a sequence together from a Sequence string and an array
         # of records and translate in the correct direction and frame
-        def assembleAA sequence, startpos, rec
-          seq = assemble(sequence, startpos, rec, :phase=>true, :reverse=>true, :complement=>true)
+        def assembleAA sequence, startpos, reclist, options = { :phase=>false, :reverse=>true, :trim=>false, :complement=>true }
+          seq = assemble(sequence, startpos, reclist, options)
           ntseq = Bio::Sequence::NA.new(seq)
           ntseq.translate
         end

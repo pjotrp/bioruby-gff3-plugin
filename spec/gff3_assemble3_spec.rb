@@ -1,8 +1,8 @@
 # RSpec for BioRuby-GFF3-Plugin. Run with something like:
 #
-#   ruby -I ../bioruby/lib/ ~/.gems/bin/spec spec/gff3_assemble3_spec.rb 
+#   rspec -I ../bioruby/lib/ spec/gff3_assemble3_spec.rb 
 #
-# Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl>
+# Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl>
 #
 $: << "../lib"
 
