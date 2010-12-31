@@ -4,7 +4,7 @@
 # Copyright:: August 2010
 # License:: Ruby License
 #
-# Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl>
+# Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl>
 
 
 USAGE = <<EOM
@@ -14,7 +14,7 @@ USAGE = <<EOM
 
   Where:
 
-    --no-cache      : do not load everything in memory 
+    --no-cache      : do not load everything in memory (slower)
     mRNA            : assemble mRNA
     CDS             : assemble CDS 
 
@@ -25,19 +25,22 @@ USAGE = <<EOM
 
     Find mRNA and CDS information from test.gff3 (which includes sequence information)
 
-      ./bin/gff3-fetch mRNA test/data/gff/test.gff3
-      ./bin/gff3-fetch CDS test/data/gff/test.gff3
+      gff3-fetch mRNA test/data/gff/test.gff3
+      gff3-fetch CDS test/data/gff/test.gff3
 
-    Find CDS from exteranl FASTA file
+    Find CDS from external FASTA file
 
-      ./bin/gff3-fetch cds test/data/gff/MhA1_Contig1133.fa test/data/gff/MhA1_Contig1133.gff3
+      gff3-fetch CDS test/data/gff/MhA1_Contig1133.fa test/data/gff/MhA1_Contig1133.gff3
 
     Find mRNA from external FASTA file, without loading everything in RAM
 
-      ./bin/gff3-fetch --no-cache mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
+      gff3-fetch --no-cache mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
 
   If you use this software, please cite http://dx.doi.org/10.1093/bioinformatics/btq475
 
+== Copyright
+
+Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl> 
 
 EOM
 
@@ -45,9 +48,9 @@ rootpath = File.dirname(File.dirname(__FILE__))
 $: << rootpath+'/lib'
 $: << rootpath+'/../bioruby/lib'
 
-require 'bio/db/gff/gffdb'
+require 'bio-gff3'
 
-$stderr.print "BioRuby GFF3 Plugin Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl>\n\n"
+$stderr.print "BioRuby GFF3 Plugin Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl>\n\n"
 
 if ARGV.size == 0
   print USAGE

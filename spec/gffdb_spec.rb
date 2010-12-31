@@ -7,7 +7,7 @@
 $: << "../lib"
 
 
-require 'bio/db/gff/gffdb'
+require 'bio-gff3'
 
 include Bio::GFFbrowser
 

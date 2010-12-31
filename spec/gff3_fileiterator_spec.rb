@@ -6,7 +6,7 @@
 #
 $: << "../lib"
 
-require 'bio/db/gff/gffdb'
+require 'bio-gff3'
 
 TEST1='test/data/gff/test.gff3'
 TEST2='test/data/gff/standard.gff3'

@@ -1,6 +1,6 @@
 = bio-gff3
 
-GFF3 plugin for BioRuby, aimed at parsing big data =
+GFF3 plugin for BioRuby, aimed at parsing big data
 
 Features:
 
@@ -22,7 +22,7 @@ Or clone this repository and add the 'lib' dir to the Ruby search path and
 
 You can also run RSpec with something like
 
-   ruby -I ../bioruby/lib/ ~/.gems/bin/spec spec/gffdb_spec.rb
+  rspec -I ../bioruby/lib/ spec/*.rb 
 
 This implementation depends on BioRuby's basic GFF3 parser, with the possible
 advantage that the plugin is faster and does not consume all memory. The Gff3
@@ -32,9 +32,6 @@ For a write-up see http://thebird.nl/bioruby/BioRuby_GFF3.html
 
 -------------------------------------------------------------------------------
 
-Usage:
-
-BioRuby GFF3 Plugin Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl>
 
   Fetch and assemble mRNAs, or CDS and print in FASTA format. 
 
@@ -42,7 +39,7 @@ BioRuby GFF3 Plugin Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl>
 
   Where:
 
-    --no-cache      : do not load everything in memory 
+    --no-cache      : do not load everything in memory (slower)
     mRNA            : assemble mRNA
     CDS             : assemble CDS 
 
@@ -53,17 +50,20 @@ BioRuby GFF3 Plugin Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl>
 
     Find mRNA and CDS information from test.gff3 (which includes sequence information)
 
-      ./bin/gff3-fetch mRNA test/data/gff/test.gff3
-      ./bin/gff3-fetch CDS test/data/gff/test.gff3
+      gff3-fetch mRNA test/data/gff/test.gff3
+      gff3-fetch CDS test/data/gff/test.gff3
 
-    Find mRNA from external FASTA file, without loading everythin in RAM
+    Find CDS from external FASTA file
 
-      ./bin/gff3-fetch --no-cache mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
+      gff3-fetch CDS test/data/gff/MhA1_Contig1133.fa test/data/gff/MhA1_Contig1133.gff3
+
+    Find mRNA from external FASTA file, without loading everything in RAM
+
+      gff3-fetch --no-cache mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
 
   If you use this software, please cite http://dx.doi.org/10.1093/bioinformatics/btq475
 
-
 == Copyright
 
-Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl> 
+Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl> 
 
