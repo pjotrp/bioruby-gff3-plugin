@@ -249,7 +249,7 @@ module Bio
               end
             end
             # Correct for phase
-            if rec.phase
+            if do_phase and rec.phase
               s = s[rec.phase.to_i..-1]
             end
             s

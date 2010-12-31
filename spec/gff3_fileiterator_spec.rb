@@ -1,6 +1,6 @@
 # RSpec for BioRuby-GFF3-Plugin. Run with something like:
 #
-#   ruby -I ../bioruby/lib/ ~/.gems/bin/spec spec/gff3_spec.rb 
+#   rspec -I ../bioruby/lib/ spec/gff3_fileiterator_spec.rb 
 #
 # Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl>
 #

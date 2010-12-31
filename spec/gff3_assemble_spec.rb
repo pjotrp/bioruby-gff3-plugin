@@ -1,8 +1,8 @@
 # RSpec for BioRuby-GFF3-Plugin. Run with something like:
 #
-#   ruby -I ../bioruby/lib/ ~/.gems/bin/spec spec/gff3_assemble_spec.rb 
+#   rspec -I ../bioruby/lib/ spec/gff3_assemble_spec.rb 
 #
-# Copyright (C) 2010 Pjotr Prins <pjotr.prins@thebird.nl>
+# Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl>
 #
 $: << "../lib"
 
@@ -83,6 +83,7 @@ describe GFFdb, "Assemble CDS" do
     aaseq = @gff.assembleAA(@contigsequence,component.start,[cds0])
     aaseq.should == "MRPLTDEETEKFFKKLSNYIGDNIKLLLEREDGEYVFRLHKDRVYYC"
   end
+  # MhA1_Contig1133	WormBase	CDS	8065	8308	.	+	1	ID=cds:MhA1_Contig1133.frz3.gene4;Parent=transcript:MhA1_Contig1133.frz3.gene4
   it "should translate CDS 8065:8308 (in frame 1, + strand)" do
     recs = @cdslist['cds:MhA1_Contig1133.frz3.gene4']
     component = @componentlist['cds:MhA1_Contig1133.frz3.gene4']
