@@ -7,33 +7,50 @@
 # Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl>
 
 USAGE = <<EOM
-  Fetch and assemble mRNAs, or CDS and print in FASTA format. 
+  Fetch and assemble GFF3 types, e.g. mRNAs, CDS, and print in FASTA format. 
 
-    gff3-fetch [--no-cache] mRNA|CDS [filename.fa] filename.gff
+    gff3-fetch [--low-mem] type [filename.fa] filename.gff
 
   Where:
 
-    --no-cache      : do not load everything in memory (slower)
+		--no-assemble   : output each record as a sequence
+		--add-phase     : output records using phase (useful w. CDS to AA)
+		--translate     : output as amino acid sequence -- NYI
+	
+	type is any valid type in the GFF3 definition. For example:
+
+    gene            : list genes -- NYI
     mRNA            : assemble mRNA
     CDS             : assemble CDS 
 
-  Multiple GFF3 files can be used. For external FASTA files, always the last
-  one before the GFF file is used.
+  and the following performance options:
+
+		--low-mem       : use LRU cache (limit RAM use, fast) -- NYI
+    --no-cache      : do not load anything in memory (slow)
+    --max-cpus num  : use num threads -- NYI
+
+  Multiple GFF3 files can be used. With external FASTA files, always the last
+  one before the GFF3 filename is matched.
 
   Examples:
 
-    Find mRNA and CDS information from test.gff3 (which includes sequence information)
+    Assemble mRNA and CDS information from test.gff3 (which includes sequence information)
 
       gff3-fetch mRNA test/data/gff/test.gff3
       gff3-fetch CDS test/data/gff/test.gff3
 
-    Find CDS from external FASTA file
+    Find CDS records from external FASTA file, adding phase and translate to protein sequence
 
-      gff3-fetch CDS test/data/gff/MhA1_Contig1133.fa test/data/gff/MhA1_Contig1133.gff3
+      gff3-fetch --no-assemble --add-phase --translate CDS test/data/gff/MhA1_Contig1133.fa test/data/gff/MhA1_Contig1133.gff3
 
     Find mRNA from external FASTA file, without loading everything in RAM
 
+      gff3-fetch --low-mem mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
       gff3-fetch --no-cache mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
+
+    Find GENEID predicted terminal exons
+
+      gff3-fetch terminal chromosome1.fa geneid.gff3
 
   If you use this software, please cite http://dx.doi.org/10.1093/bioinformatics/btq475
 
