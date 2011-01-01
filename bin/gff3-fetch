@@ -6,7 +6,6 @@
 #
 # Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl>
 
-
 USAGE = <<EOM
   Fetch and assemble mRNAs, or CDS and print in FASTA format. 
 
@@ -44,13 +43,14 @@ Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl>
 
 EOM
 
-rootpath = File.dirname(File.dirname(__FILE__))
-$: << rootpath+'/lib'
-$: << rootpath+'/../bioruby/lib'
+SEP = File::SEPARATOR
+rootpath = File.dirname(File.dirname(__FILE__))+SEP
+$: << rootpath+'lib'
+GFF3_VERSION = File.new(rootpath+'VERSION').read.chomp
 
 require 'bio-gff3'
 
-$stderr.print "BioRuby GFF3 Plugin Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl>\n\n"
+$stderr.print "BioRuby GFF3 Plugin "+GFF3_VERSION+" Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl>\n\n"
 
 if ARGV.size == 0
   print USAGE
