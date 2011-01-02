@@ -72,11 +72,9 @@ time gff3-fetch cds m_hapla.WS217.dna.fa m_hapla.WS217.gff3 > test.fa
 
   Cache      real     user     sys
   ----------------------------------------------------
-  full       12m41s   12m28s   0m9s  (0.8.0 Jan. 2011)
-  none       too long(!)             (0.8.0 Jan. 2011)
+  full       12m41s   12m28s   0m09s (0.8.0 Jan. 2011)
+  none      504m39s  477m49s  26m50s (0.8.0 Jan. 2011)
   ----------------------------------------------------
-
-time gff3-fetch --cache none CDS m_hapla.WS217.dna.fa m_hapla.WS217.gff3 > test.fa
 
 where
 
@@ -84,7 +82,6 @@ where
   456M m_hapla.WS217.gff3
 
 ruby 1.9.2p136 (2010-12-25 revision 30365) [x86_64-linux]
-
 on an 8 CPU, 2.6 GHz (6MB cache), 16 GB RAM machine. 
 
 == Cite
