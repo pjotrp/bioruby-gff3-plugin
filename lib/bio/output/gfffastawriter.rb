@@ -9,7 +9,12 @@ module Bio
 
       def put id, seq
         puts '>'+id
-        puts seq
+        if @do_translate
+          ntseq = Bio::Sequence::NA.new(seq)
+          puts ntseq.translate
+        else
+          puts seq
+        end
       end
 
     end
