@@ -19,6 +19,7 @@ module Bio
 
         def warn str,id=''
           Kernel.warn "Warning: "+str+" <#{id}>"
+          exit(1) if $stop_on_error
         end
       end
 

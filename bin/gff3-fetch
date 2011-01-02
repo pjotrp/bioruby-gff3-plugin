@@ -55,28 +55,28 @@ USAGE = <<EOM
 
     Find mRNA from external FASTA file, without loading everything in RAM
 
-      gff3-fetch --low-mem mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
-      gff3-fetch --cache=none mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
+      gff3-fetch --cache none mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
+      gff3-fetch --cache none mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
 
-    Validate GFF3 file using EMBOSS translation
+    Validate GFF3 file using EMBOSS translation and validation
 
-      gff3-fetch --low-mem --validate --emboss mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
+      gff3-fetch --cache none --validate --emboss mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
 
     Find GENEID predicted terminal exons
 
       gff3-fetch terminal chromosome1.fa geneid.gff3
 
-  If you use this software, please cite http://dx.doi.org/10.1093/bioinformatics/btq475
-
 == Performance
 
 time gff3-fetch cds m_hapla.WS217.dna.fa m_hapla.WS217.gff3 > test.fa
 
-Cache      real     user     sys             
-full       12m41s   12m28s   0m9s  (0.8.0 Jan. 2011)
-none                               (0.8.0 Jan. 2011)
+  Cache      real     user     sys
+  ----------------------------------------------------
+  full       12m41s   12m28s   0m9s  (0.8.0 Jan. 2011)
+  none       too long(!)             (0.8.0 Jan. 2011)
+  ----------------------------------------------------
 
-time gff3-fetch --no-cache CDS m_hapla.WS217.dna.fa m_hapla.WS217.gff3 > test.fa
+time gff3-fetch --cache none CDS m_hapla.WS217.dna.fa m_hapla.WS217.gff3 > test.fa
 
 where
 
@@ -86,6 +86,12 @@ where
 ruby 1.9.2p136 (2010-12-25 revision 30365) [x86_64-linux]
 
 on an 8 CPU, 2.6 GHz (6MB cache), 16 GB RAM machine. 
+
+== Cite
+
+  If you use this software, please cite 
+  
+    http://dx.doi.org/10.1093/bioinformatics/btq475
 
 == Copyright
 
@@ -136,6 +142,7 @@ opts = OptionParser.new() { |opts|
 
   opts.on("--validate", "validate GFF3 file by translating") do |v|
     options.validate = v
+    $stop_on_error = true  # replace global in near future
   end
 
   # opts.on("-q", "--quiet", "Run quietly") do |q|
