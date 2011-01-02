@@ -49,30 +49,40 @@ For a write-up see http://thebird.nl/bioruby/BioRuby_GFF3.html
 
 -------------------------------------------------------------------------------
 
-  Fetch and assemble GFF3 types, e.g. mRNAs, CDS, and print in FASTA format. 
 
-    gff3-fetch [--low-mem] type [filename.fa] filename.gff
 
-  Where:
+  Fetch and assemble GFF3 types (e.g. ORF, mRNA, CDS) + print in FASTA format. 
 
-		--no-assemble   : output each record as a sequence
-		--add-phase     : output records using phase (useful w. CDS to AA)
-		--translate     : output as amino acid sequence -- NYI
-	
-	type is any valid type in the GFF3 definition. For example:
+    gff3-fetch [--low-mem] [--validate] type [filename.fa] filename.gff3
 
-    gene            : list genes -- NYI
+  Where (NYI == Not Yet Implemented):
+
+    --validate      : validate GFF3 file by translating frames 
+    --no-assemble   : output each record as a sequence -- NYI
+    --add-phase     : output records using phase (useful w. CDS to AA) --NYI
+    --translate     : output as amino acid sequence -- NYI
+    --fix           : check 3-frame translation and fix, if possible -- NYI
+  
+  type is any valid type in the GFF3 definition. For example:
+
     mRNA            : assemble mRNA
     CDS             : assemble CDS 
+		exon            : list all exons
+    gene/ORF        : list gene ORFs -- NYI
+    other           : use any type from GFF3 definition, e.g. 'Terminate' -- NYI
 
   and the following performance options:
 
-		--low-mem       : use LRU cache (limit RAM use, fast) -- NYI
-    --no-cache      : do not load anything in memory (slow)
+    --cache none    : do not load anything in memory (slow)
+    --low-mem       : use LRU cache (limit RAM use, fast) -- NYI
     --max-cpus num  : use num threads -- NYI
+    --emboss        : use EMBOSS translation (fast) -- NYI
 
   Multiple GFF3 files can be used. With external FASTA files, always the last
   one before the GFF3 filename is matched.
+
+  Note that above switches are only partially implemented at this stage. Full
+  feature support is projected Feb. 2011.
 
   Examples:
 
@@ -88,13 +98,36 @@ For a write-up see http://thebird.nl/bioruby/BioRuby_GFF3.html
     Find mRNA from external FASTA file, without loading everything in RAM
 
       gff3-fetch --low-mem mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
-      gff3-fetch --no-cache mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
+      gff3-fetch --cache=none mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
+
+    Validate GFF3 file using EMBOSS translation
+
+      gff3-fetch --low-mem --validate --emboss mRNA test/data/gff/test-ext-fasta.fa test/data/gff/test-ext-fasta.gff3   
 
     Find GENEID predicted terminal exons
 
       gff3-fetch terminal chromosome1.fa geneid.gff3
 
   If you use this software, please cite http://dx.doi.org/10.1093/bioinformatics/btq475
+
+== Performance
+
+time gff3-fetch cds m_hapla.WS217.dna.fa m_hapla.WS217.gff3 > test.fa
+
+Cache      real     user     sys             
+full       12m41s   12m28s   0m9s  (0.8.0 Jan. 2011)
+none                               (0.8.0 Jan. 2011)
+
+time gff3-fetch --no-cache CDS m_hapla.WS217.dna.fa m_hapla.WS217.gff3 > test.fa
+
+where
+
+   52M m_hapla.WS217.dna.fa
+  456M m_hapla.WS217.gff3
+
+ruby 1.9.2p136 (2010-12-25 revision 30365) [x86_64-linux]
+
+on an 8 CPU, 2.6 GHz (6MB cache), 16 GB RAM machine. 
 
 == Copyright
 
