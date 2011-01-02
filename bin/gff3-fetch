@@ -100,6 +100,7 @@ GFF3_VERSION = File.new(rootpath+'VERSION').read.chomp
 require 'bio-gff3'
 require 'optparse'
 require 'ostruct'
+require 'bio/output/gfffastawriter'
 
 $stderr.print "BioRuby GFF3 Plugin "+GFF3_VERSION+" Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl>\n\n"
 
@@ -164,26 +165,23 @@ ARGV.each do | fn |
 
   opts = {}
   opts[:validate] = options.validate
-  opts[:translate] = options.translate
   opts[:cache_components] = options.cache
   opts[:cache_records]    = options.cache
   gffdb = Bio::GFFbrowser::GFFdb.new(fn,opts)
   gff = gffdb.assembler
+	writer = Bio::GFFbrowser::FastaWriter.new(options.translate)
   case gfftype.downcase
     when 'mrna' 
           gff.each_mRNA_seq do | id, seq |
-            puts ">"+id
-            puts seq
+					  writer.put(id,seq)
           end
     when 'exon'
           gff.each_exon_seq do | id, seq |
-            puts ">"+id
-            puts seq
+					  writer.put(id,seq)
           end
     when 'cds'
           gff.each_CDS_seq do | id, seq |
-            puts ">"+id
-            puts seq
+					  writer.put(id,seq)
           end
     else
       raise "Unknown action <#{gfftype}>"
