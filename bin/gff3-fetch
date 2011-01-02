@@ -15,7 +15,7 @@ USAGE = <<EOM
   Where (NYI == Not Yet Implemented):
 
     --translate     : output as amino acid sequence 
-    --validate      : validate GFF3 file by translating frames 
+    --validate      : validate GFF3 file by translating
     --no-assemble   : output each record as a sequence -- NYI
     --add-phase     : output records using phase (useful w. CDS to AA) --NYI
     --fix           : check 3-frame translation and fix, if possible -- NYI
@@ -24,7 +24,7 @@ USAGE = <<EOM
 
     mRNA            : assemble mRNA
     CDS             : assemble CDS 
-		exon            : list all exons
+    exon            : list all exons
     gene/ORF        : list gene ORFs -- NYI
     other           : use any type from GFF3 definition, e.g. 'Terminate' -- NYI
 
@@ -133,7 +133,7 @@ opts = OptionParser.new() { |opts|
     options.translate = b
   end
 
-  opts.on("--validate", "validate GFF3 file by translating frames") do |v|
+  opts.on("--validate", "validate GFF3 file by translating") do |v|
     options.validate = v
   end
 
@@ -169,19 +169,19 @@ ARGV.each do | fn |
   opts[:cache_records]    = options.cache
   gffdb = Bio::GFFbrowser::GFFdb.new(fn,opts)
   gff = gffdb.assembler
-	writer = Bio::GFFbrowser::FastaWriter.new(options.translate)
+  writer = Bio::GFFbrowser::FastaWriter.new(options.translate, options.validate)
   case gfftype.downcase
     when 'mrna' 
           gff.each_mRNA_seq do | id, seq |
-					  writer.put(id,seq)
+            writer.put(id,seq)
           end
     when 'exon'
           gff.each_exon_seq do | id, seq |
-					  writer.put(id,seq)
+            writer.put(id,seq)
           end
     when 'cds'
           gff.each_CDS_seq do | id, seq |
-					  writer.put(id,seq)
+            writer.put(id,seq)
           end
     else
       raise "Unknown action <#{gfftype}>"
