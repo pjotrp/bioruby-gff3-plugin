@@ -1,22 +1,34 @@
 = bio-gff3
 
-GFF3 plugin for BioRuby, aimed at parsing big data
+GFF3 parser, aimed at parsing big data GFF3 to return sequences of any type, 
+including assembled mRNA, protein and CDS sequences.
 
 Features:
 
-# Take GFF (genome browser) information and digest mRNA and CDS sequences
+# Take GFF3 (genome browser) information of any type, and assemble sequences, e.g. mRNA and CDS
 # Options for low memory use and caching of records
-# Support for external FASTA files
+# Support for external FASTA input files
+# Use of multi-cores (NYI)
+
+Currently the output is a FASTA file.
 
 You can use this plugin in two ways. First as a standalone program, next as a
 plugin library to BioRuby.
 
-For example, fetch mRNA and CDS information from GFF3 files and output to FASTA:
+== Install and run gff3-fetch
+
+After installing ruby 1.9, or later, you can use rubygems
+
+  gem install bio-gff3
+
+Then, fetch mRNA and CDS information from GFF3 files and output to FASTA:
 
   gff3-fetch mrna test/data/gff/test.gff3
   gff3-fetch cds test/data/gff/test.gff3
 
-Or clone this repository and add the 'lib' dir to the Ruby search path and 
+== Development
+
+To use the library
 
   require 'bio-gff3'
 
@@ -26,7 +38,7 @@ You can run RSpecs with something like
 
   rspec -I ../bioruby/lib/ spec/*.rb 
 
-(supposing you use a bioruby source repository)
+(supposing you are referring a bioruby source repository)
 
 This implementation depends on BioRuby's basic GFF3 parser, with the possible
 advantage that the plugin can assemble sequences, is faster and does not
