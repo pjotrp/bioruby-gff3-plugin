@@ -15,6 +15,8 @@ module Bio
 
       module NoCacheHelpers 
 
+        # Module to fetch a line from GFF3 file and returns a parsed 
+        # record
         module SeekRec
           # Fetch a record using fh and file seek position
           def SeekRec::fetch(fh,fpos)
@@ -24,7 +26,8 @@ module Bio
           end
         end
 
-        # The hardwired to file RecList
+        # Helper class which gives Hash-like access to the 
+        # no-cache GFF3 file
         class SeekRecList 
           def initialize fh
             @fh = fh
@@ -49,6 +52,7 @@ module Bio
           end
         end
 
+        # List of ids
         class SeekLinkedRecs < Hash
           include Helpers::Error
           def add id, rec

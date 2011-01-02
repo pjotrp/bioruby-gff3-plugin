@@ -14,10 +14,10 @@ USAGE = <<EOM
 
   Where (NYI == Not Yet Implemented):
 
+    --translate     : output as amino acid sequence 
     --validate      : validate GFF3 file by translating frames 
     --no-assemble   : output each record as a sequence -- NYI
     --add-phase     : output records using phase (useful w. CDS to AA) --NYI
-    --translate     : output as amino acid sequence -- NYI
     --fix           : check 3-frame translation and fix, if possible -- NYI
   
   type is any valid type in the GFF3 definition. For example:
@@ -119,13 +119,17 @@ opts = OptionParser.new() { |opts|
     case cache.downcase
       when 'none'
         options.cache = :cache_none
-      when 'lru'
-        options.cache = :cache_lru
+      # when 'lru'
+      #   options.cache = :cache_lru
       when 'full'
         options.cache = :cache_full
       else
         raise 'Unknown --cache option'
     end
+  end
+
+  opts.on("--translate", "output as amino acid sequence") do |b|
+    options.translate = b
   end
 
   opts.on("--validate", "validate GFF3 file by translating frames") do |v|
@@ -160,6 +164,7 @@ ARGV.each do | fn |
 
   opts = {}
   opts[:validate] = options.validate
+  opts[:translate] = options.translate
   opts[:cache_components] = options.cache
   opts[:cache_records]    = options.cache
   gffdb = Bio::GFFbrowser::GFFdb.new(fn,opts)
