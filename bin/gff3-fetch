@@ -187,15 +187,15 @@ ARGV.each do | fn |
   gff = gffdb.assembler
   writer = Bio::GFFbrowser::FastaWriter.new(options.translate, options.validate)
   case gfftype.downcase
-    when 'gene' 
+    when 'gene'
           gff.each_gene_seq do | id, seq |
             writer.put(id,seq)
           end
-    when 'orf' 
+    when 'orf'
           gff.each_gene_seq do | id, seq |
             writer.put(id,seq)
           end
-    when 'mrna' 
+    when 'mrna'
           gff.each_mRNA_seq do | id, seq |
             writer.put(id,seq)
           end

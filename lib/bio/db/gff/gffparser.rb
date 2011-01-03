@@ -106,6 +106,7 @@ module Bio
           each_item(@exonlist) { |id, recs, component | yield id, recs, component }
         end
 
+        # Yield a unique description and the sequence
         def each_gene_seq
           each_gene do | id, reclist, component |
             if component
@@ -120,7 +121,6 @@ module Bio
           end
         end
 
-        # Yield a unique description and the sequence
         # Yield a unique description and the sequence
         def each_mRNA_seq
           each_mRNA do | id, reclist, component |
