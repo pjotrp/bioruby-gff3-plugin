@@ -10,11 +10,11 @@ module Bio
 
       def put id, seq
         puts '>'+id
-        put_seq seq
+        put_seq id, seq
       end
       private
 
-      def put_seq seq
+      def put_seq id, seq
         if @do_translate or @do_validate
           ntseq = Bio::Sequence::NA.new(seq)
           aaseq = ntseq.translate

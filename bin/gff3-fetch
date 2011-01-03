@@ -16,6 +16,7 @@ USAGE = <<EOM
 
     --translate     : output as amino acid sequence 
     --validate      : validate GFF3 file by translating
+    --fix-wormbase  : fix 3-frame translation one ORFs named 'gene1'
     --no-assemble   : output each record as a sequence -- NYI
     --add-phase     : output records using phase (useful w. no-assemble CDS to AA) --NYI
     --fix           : check 3-frame translation and fix, if possible -- NYI
@@ -142,6 +143,10 @@ opts = OptionParser.new() { |opts|
     $stop_on_error = true  # replace global in near future
   end
 
+  opts.on("--fix-wormbase", "Wormbase fix gene1 frame error") do |v|
+    options.fix_wormbase = true
+  end
+
   # opts.on("-q", "--quiet", "Run quietly") do |q|
   #   options.quiet = q
   # end
@@ -174,6 +179,7 @@ ARGV.each do | fn |
   opts[:cache_components] = options.cache
   opts[:cache_records]    = options.cache
   opts[:fasta_filename] = fastafn if fastafn
+  opts[:fix_wormbase] = options.fix_wormbase
   gffdb = Bio::GFFbrowser::GFFdb.new(fn,opts)
   gff = gffdb.assembler
   writer = Bio::GFFbrowser::FastaWriter.new(options.translate, options.validate)
