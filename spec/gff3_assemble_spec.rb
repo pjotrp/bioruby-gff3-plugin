@@ -77,7 +77,7 @@ describe GFFdb, "Assemble CDS" do
     component = @componentlist['cds:MhA1_Contig1133.frz3.gene4']
     cds0 = recs[0]
     cds0.seqname.should == 'MhA1_Contig1133'
-    seq = @gff.assemble(@contigsequence,component.start,[cds0])
+    seq = @gff.assemble(@contigsequence,component.start,[cds0],:trim=>false)
     seq.size.should == 143
     seq.should == "ATGCGTCCTTTAACAGATGAAGAAACTGAAAAGTTTTTCAAAAAACTTTCAAATTATATTGGTGACAATATTAAACTTTTATTGGAAAGAGAAGATGGAGAATATGTTTTTCGTTTACATAAAGACAGAGTTTATTATTGCAG"
     aaseq = @gff.assembleAA(@contigsequence,component.start,[cds0])
@@ -88,7 +88,7 @@ describe GFFdb, "Assemble CDS" do
     recs = @cdslist['cds:MhA1_Contig1133.frz3.gene4']
     component = @componentlist['cds:MhA1_Contig1133.frz3.gene4']
     cds1 = recs[1]
-    seq = @gff.assemble(@contigsequence,component.start,[cds1])
+    seq = @gff.assemble(@contigsequence,component.start,[cds1],:trim=>false)
     seq.size.should == 244
     seq.should == "TGAAAAATTAATGCGACAAGCAGCATGTATTGGACGTAAACAATTGGGATCTTTTGGAACTTGTTTGGGTAAATTCACAAAAGGAGGGTCTTTCTTTCTTCATATAACATCATTGGATTATTTGGCACCTTATGCTTTAGCAAAAATTTGGTTAAAACCACAAGCTGAACAACAATTTTTATATGGAAATAATATTGTTAAATCTGGTGTTGGAAGAATGAGTGAAGGGATTGAAGAAAAACAA"
     seq = @gff.assemble(@contigsequence,component.start,[cds1],:phase => true)

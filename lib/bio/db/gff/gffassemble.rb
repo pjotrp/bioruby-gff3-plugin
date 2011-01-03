@@ -281,7 +281,7 @@ module Bio
           # This is the place to fix sequences (e.g. the Wormbase bug)
           if do_fix or @options[:fix] or @options[:fix_wormbase]
             if @options[:fix_wormbase] and rec0.id.index('gene1')==0
-              # !gene1, so ignoer
+              # Wormbase gene1 only, so ignore rest
             else
               test_frame = 0
               ntseq = Bio::Sequence::NA.new(seq)
@@ -311,7 +311,7 @@ module Bio
           if @options[:validate]
             ntseq = Bio::Sequence::NA.new(seq)
             aaseq = ntseq.translate
-            raise 'Validation problem '+rec0.id if aaseq.count('*') > 1
+            raise 'Validate translation problem '+rec0.id+"\n"+seq if aaseq.count('*') > 1
           end
 
           retval = seq
@@ -320,8 +320,8 @@ module Bio
 
         # Patch a sequence together from a Sequence string and an array
         # of records and translate in the correct direction and frame. The options 
-        # are the same as for +assemble+.
-        def assembleAA sequence, startpos, reclist, options = { :phase=>false, :reverse=>true, :trim=>false, :complement=>true }
+        # are the same as for +assemble+, except :trim defaults to true.
+        def assembleAA sequence, startpos, reclist, options = { :phase=>false, :reverse=>true, :trim=>true, :complement=>true }
           seq = assemble(sequence, startpos, reclist, options)
           ntseq = Bio::Sequence::NA.new(seq)
           ntseq.translate
