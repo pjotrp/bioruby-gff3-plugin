@@ -29,7 +29,7 @@ describe Bio::GFF::GFF3::FileIterator, "iterates a GFF3 file" do
       # p [id, rec]
       last = rec
     end
-    last.io_seek.should == 3256
+    last.io_seek.should == 3342
     firstid = 'unknown'
     iter.each_sequence do | id, seq |
       # p [id, seq]

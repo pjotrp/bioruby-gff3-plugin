@@ -22,12 +22,14 @@ TESTGFF1FASTA='test/data/gff/test-ext-fasta.fa'
 def iterators_should_be_implemented
   if TEST_NON_IMPLEMENTED
     it "should implement each_gene" 
-    it "should implement each_gene" 
-    it "should implement each_gene_seq" 
     it "should implement each_mRNA" 
     it "should implement each_exon" 
     it "should implement each_exon_seq" 
     it "should implement each_CDS" 
+  end
+  it "should implement each_gene_seq" do
+    h = {} ; @gff.each_gene_seq { | id, seq | h[id] = seq }
+    h["gene01 Sequence:test01_1:400 (3:280)"].should == "GAAGATTTGTATGACTGATTTATCCTGGACAGGCATTGGTCAGATGTCTCCTTCCGTATCGTCGTTTAGTTGCAAATCCGAGTGTTCGGGGGTATTGCTATTTGCCACCTAGAAGCGCAACATGCCCAGCTTCACACACCATAGCGAACACGCCGCCCCGGTGGCGACTATCGGTCGAAGTTAAGACAATTCATGGGCGAAACGAGATAATGGGTACTGCACCCCTCGTCCTGTAGAGACGTCACAGCCAACGTGCCTTCTTATCTTGATACATTA" if h["gene01 Sequence:test01_1:400 (3:280)"]
   end
   it "should implement each_mRNA_seq" do
     h = {} ; @gff.each_mRNA_seq { | id, seq | h[id] = seq }

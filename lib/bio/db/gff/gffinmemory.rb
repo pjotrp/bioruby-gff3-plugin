@@ -30,6 +30,7 @@ module Bio
           @count_ids          = Counter.new   # Count ids
           @count_seqnames     = Counter.new   # Count seqnames
           @componentlist      = {} # Store containers, like genes, contigs
+          @orflist            = LinkedRecs.new
           @mrnalist           = LinkedRecs.new   # Store linked mRNA records
           @cdslist            = LinkedRecs.new
           @exonlist           = LinkedRecs.new

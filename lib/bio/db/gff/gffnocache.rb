@@ -90,6 +90,7 @@ module Bio
           @count_ids          = Counter.new   # Count ids
           @count_seqnames     = Counter.new   # Count seqnames
           @componentlist      = SeekRecList.new(@iter.fh) # Store containers, like genes, contigs
+          @orflist            = SeekLinkedRecs.new   # Store linked gene records
           @mrnalist           = SeekLinkedRecs.new   # Store linked mRNA records
           @cdslist            = SeekLinkedRecs.new
           @exonlist           = SeekLinkedRecs.new

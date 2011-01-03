@@ -44,6 +44,7 @@ Contig4	confirmed	CDS	32000	35000	.	+	.	ID=Misc:thing3;mRNA=trans-9
 ##gff-version 3
 ##sequence-region test01 1 400
 test01	RANDOM	contig	1	400	.	+	.	ID=test01;Note=this is test
+test01	.	gene	3	280	.	+	.	ID=gene01;Name=tesGene;Parent=test01;Note=this is test gene
 test01	.	mRNA	3	14	.	+	.	ID=mrna01short;Name=testmRNA;Note=this is test mRNA
 test01	.	mRNA	101	230	.	+	.	ID=mrna01;Name=testmRNA;Note=this is test mRNA
 test01	.	mRNA	101	280	.	+	.	ID=mrna01a;Name=testmRNAalterative;Note=test of alternative splicing variant

@@ -23,24 +23,26 @@ module Bio
             @count_ids.add(id)
             @count_seqnames.add(rec.seqname)
 
-            if COMPONENT_TYPES.include?(rec.feature_type)
+            is_component = COMPONENT_TYPES.include?(rec.feature_type)
+            if is_component
               # check for container ID
               warn("Container <#{rec.feature_type}> has no ID, so using sequence name instead",id) if rec.id == nil
               @componentlist[id] = rec
               info "Added #{rec.feature_type} with component ID #{id}"
-            else
-              case rec.feature_type
-                when 'mRNA' || 'SO:0000234'
-                  @mrnalist.add(id,rec)
-                when 'CDS'  || 'SO:0000316'
-                  @cdslist.add(id,rec)
-                when 'exon' || 'SO:0000147'
-                  @exonlist.add(id,rec)
-                else
-                  if !IGNORE_FEATURES.include?(rec.feature_type)
-                    @unrecognized_features[rec.feature_type] = true
-                  end
-              end
+            end 
+            case rec.feature_type
+              when 'gene' || 'SO:0000704'
+                @orflist.add(id,rec)
+              when 'mRNA' || 'SO:0000234'
+                @mrnalist.add(id,rec)
+              when 'CDS'  || 'SO:0000316'
+                @cdslist.add(id,rec)
+              when 'exon' || 'SO:0000147'
+                @exonlist.add(id,rec)
+              else
+                if !is_component and !IGNORE_FEATURES.include?(rec.feature_type)
+                  @unrecognized_features[rec.feature_type] = true
+                end
             end
         end
 
@@ -80,6 +82,12 @@ module Bio
           # p :inmemory, @sequencelist
         end
 
+        # Yield the id, recs, containing component and sequence of genes
+        def each_gene
+          parse if !@orflist
+          each_item(@orflist) { |id, recs, component | yield id, recs, component }
+        end
+
         # Yield the id, recs, containing component and sequence of mRNAs
         def each_mRNA
           parse if !@mrnalist
@@ -98,6 +106,21 @@ module Bio
           each_item(@exonlist) { |id, recs, component | yield id, recs, component }
         end
 
+        def each_gene_seq
+          each_gene do | id, reclist, component |
+            if component
+              sequence = @sequencelist[component.seqname]
+              # p sequence
+              if sequence
+                yield description(id,component,reclist), assemble(sequence,component.start,reclist)
+              else 
+                error "No sequence information for",id
+              end
+            end
+          end
+        end
+
+        # Yield a unique description and the sequence
         # Yield a unique description and the sequence
         def each_mRNA_seq
           each_mRNA do | id, reclist, component |

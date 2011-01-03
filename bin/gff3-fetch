@@ -26,7 +26,7 @@ USAGE = <<EOM
     mRNA            : assemble mRNA
     CDS             : assemble CDS 
     exon            : list all exons
-    gene/ORF        : list gene ORFs -- NYI
+    gene|ORF        : list gene ORFs 
     other           : use any type from GFF3 definition, e.g. 'Terminate' -- NYI
 
   and the following performance options:
@@ -167,8 +167,6 @@ opts.parse!(ARGV)
 
 gfftype = ARGV.shift
 
-raise "Unknown GFF type '#{gfftype}'" if gfftype !~ /mrna|cds|exon/i
-
 fastafn = nil
 
 ARGV.each do | fn |
@@ -189,6 +187,14 @@ ARGV.each do | fn |
   gff = gffdb.assembler
   writer = Bio::GFFbrowser::FastaWriter.new(options.translate, options.validate)
   case gfftype.downcase
+    when 'gene' 
+          gff.each_gene_seq do | id, seq |
+            writer.put(id,seq)
+          end
+    when 'orf' 
+          gff.each_gene_seq do | id, seq |
+            writer.put(id,seq)
+          end
     when 'mrna' 
           gff.each_mRNA_seq do | id, seq |
             writer.put(id,seq)
@@ -202,7 +208,7 @@ ARGV.each do | fn |
             writer.put(id,seq)
           end
     else
-      raise "Unknown action <#{gfftype}>"
+      raise "Unknown action on type <#{gfftype}>"
   end
   fastafn = nil
 end
