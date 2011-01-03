@@ -107,7 +107,7 @@ module Bio
               if sequence
                 yield description(id,component,reclist), assemble(sequence,component.start,reclist)
               else 
-                warn "No sequence information for",id
+                error "No sequence information for",id
               end
             end
           end
@@ -128,7 +128,7 @@ module Bio
                 end
                 yield description(id,component,reclist), seq
               else 
-                warn "No sequence information for",id
+                error "No sequence information for",id
               end
             end
           end
@@ -143,7 +143,7 @@ module Bio
                 seq = assemble(sequence,component.start,reclist)
                 yield description(id,component,reclist), seq
               else 
-                warn "No sequence information for",id
+                error "No sequence information for",id
               end
             end
           end

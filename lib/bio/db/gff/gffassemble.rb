@@ -17,8 +17,12 @@ module Bio
           $stderr.print "Info: "+str+" <#{id}>\n"
         end
 
-        def warn str,id=''
+        def warn str, id=''
           Kernel.warn "Warning: "+str+" <#{id}>"
+        end
+
+        def error str, id=''
+          Kernel.warn "Error: "+str+" <#{id}>"
           exit(1) if $stop_on_error
         end
       end

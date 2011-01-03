@@ -163,7 +163,8 @@ raise "Unknown GFF type '#{gfftype}'" if gfftype !~ /mrna|cds|exon/i
 fastafn = nil
 
 ARGV.each do | fn |
-  if File.extname(fn) =~ /fa|fas|fasta/i
+  if File.extname(fn) =~ /fa|fas|fasta$/i
+    raise "Only one fasta file allowed per GFF3" if fastafn != nil
     fastafn = fn
     next
   end
@@ -172,6 +173,7 @@ ARGV.each do | fn |
   opts[:validate] = options.validate
   opts[:cache_components] = options.cache
   opts[:cache_records]    = options.cache
+  opts[:fasta_filename] = fastafn if fastafn
   gffdb = Bio::GFFbrowser::GFFdb.new(fn,opts)
   gff = gffdb.assembler
   writer = Bio::GFFbrowser::FastaWriter.new(options.translate, options.validate)
@@ -191,6 +193,7 @@ ARGV.each do | fn |
     else
       raise "Unknown action <#{gfftype}>"
   end
+  fastafn = nil
 end
 
 
