@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{bio-gff3}
-  s.version = "0.8.0"
+  s.version = "0.8.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pjotr Prins"]
-  s.date = %q{2010-12-31}
+  s.date = %q{2011-01-03}
   s.default_executable = %q{gff3-fetch}
   s.description = %q{GFF3 (genome browser) information and digest mRNA and CDS sequences.
 Options for low memory use and caching of records.
@@ -38,6 +38,7 @@ Support for external FASTA files.
     "lib/bio/db/gff/gffinmemory.rb",
     "lib/bio/db/gff/gffnocache.rb",
     "lib/bio/db/gff/gffparser.rb",
+    "lib/bio/output/gfffastawriter.rb",
     "lib/bio/system/lruhash.rb",
     "spec/gff3_assemble2_spec.rb",
     "spec/gff3_assemble3_spec.rb",
@@ -76,27 +77,30 @@ Support for external FASTA files.
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<bio>, [">= 1.3.1"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
-      s.add_development_dependency(%q<bio>, [">= 1.4.1"])
-      s.add_development_dependency(%q<rspec>, [">= 0"])
+      s.add_development_dependency(%q<bio>, [">= 1.3.1"])
+      s.add_development_dependency(%q<rspec>, [">= 2.0.0"])
     else
+      s.add_dependency(%q<bio>, [">= 1.3.1"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_dependency(%q<rcov>, [">= 0"])
-      s.add_dependency(%q<bio>, [">= 1.4.1"])
-      s.add_dependency(%q<rspec>, [">= 0"])
+      s.add_dependency(%q<bio>, [">= 1.3.1"])
+      s.add_dependency(%q<rspec>, [">= 2.0.0"])
     end
   else
+    s.add_dependency(%q<bio>, [">= 1.3.1"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
     s.add_dependency(%q<rcov>, [">= 0"])
-    s.add_dependency(%q<bio>, [">= 1.4.1"])
-    s.add_dependency(%q<rspec>, [">= 0"])
+    s.add_dependency(%q<bio>, [">= 1.3.1"])
+    s.add_dependency(%q<rspec>, [">= 2.0.0"])
   end
 end
 
