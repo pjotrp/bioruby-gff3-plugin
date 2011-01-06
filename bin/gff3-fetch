@@ -97,10 +97,17 @@ Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl>
 
 EOM
 
-SEP = File::SEPARATOR
-rootpath = File.dirname(File.dirname(__FILE__))+SEP
-$: << rootpath+'lib'
-GFF3_VERSION = File.new(rootpath+'VERSION').read.chomp
+rootpath = File.dirname(File.dirname(__FILE__))
+$: << File.join(rootpath,'lib')
+require "rubygems"
+begin
+  gem "bio-logger", "> 0.0"
+rescue
+  $: << File.join(rootpath,'..','bioruby-logger','lib')
+	$stderr.print "bio-logger loaded directly\n"
+end
+require 'bio-logger'
+GFF3_VERSION = File.new(File.join(rootpath,'VERSION')).read.chomp
 
 require 'bio-gff3'
 require 'optparse'
