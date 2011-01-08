@@ -13,17 +13,21 @@ module Bio
     module Helpers
 
       module Error
+        include Bio::Log
+
         def info str, id=''
-          $stderr.print "Info: "+str+" <#{id}>\n"
+          log = LoggerPlus['bio-gff3']
+          log.info str+" <#{id}>"
         end
 
         def warn str, id=''
-          Kernel.warn "Warning: "+str+" <#{id}>"
+          log = LoggerPlus['bio-gff3']
+          log.warn str+" <#{id}>"
         end
 
         def error str, id=''
-          Kernel.warn "Error: "+str+" <#{id}>"
-          exit(1) if $stop_on_error
+          log = LoggerPlus['bio-gff3']
+          log.error str+" <#{id}>"
         end
       end
 
@@ -132,7 +136,8 @@ module Bio
               id = "#{rec.seqname} #{rec.start} #{rec.end}".strip
             else
               id = 'unknown'
-              $stderr.print "Record with unknown ID"+rec.to_s
+              log = Bio::Log::LoggerPlus['bio-gff3']
+              log.warn "Record with unknown ID"+rec.to_s.chomp
             end
           end
           id

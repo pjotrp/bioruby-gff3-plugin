@@ -99,14 +99,7 @@ EOM
 
 rootpath = File.dirname(File.dirname(__FILE__))
 $: << File.join(rootpath,'lib')
-require "rubygems"
-begin
-  gem "bio-logger", "> 0.0"
-rescue
-  $: << File.join(rootpath,'..','bioruby-logger','lib')
-	$stderr.print "bio-logger loaded directly\n"
-end
-require 'bio-logger'
+
 GFF3_VERSION = File.new(File.join(rootpath,'VERSION')).read.chomp
 
 require 'bio-gff3'
@@ -119,6 +112,8 @@ $stderr.print "BioRuby GFF3 Plugin "+GFF3_VERSION+" Copyright (C) 2010,2011 Pjot
 if ARGV.size == 0
   print USAGE
 end
+
+Bio::Log::CLI.logger('stderr')
 
 options = OpenStruct.new()
 opts = OptionParser.new() { |opts|
@@ -158,19 +153,30 @@ opts = OptionParser.new() { |opts|
     options.fix_wormbase = true
   end
 
-  # opts.on("-q", "--quiet", "Run quietly") do |q|
-  #   options.quiet = q
-  # end
+  opts.on("--logger filename",String,"Log to file (default stderr)") do | name |
+	  Bio::Log::CLI.logger(name)
+  end
 
-  # opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
-  #   options.verbose = v
-  # end
+  opts.on("--trace options",String,"Set log level (default INFO, see bio-logger)") do | s |
+	  Bio::Log::CLI.trace(s)
+  end
 
-  # opts.on("-t", "--[no-]trace", "Debug") do |t|
-  #   options.trace = t
-  # end
-}
+  opts.on("-q", "--quiet", "Run quietly") do |q|
+	  Bio::Log::CLI.trace('error')
+  end
+
+  opts.on("-v", "--verbose", "Run verbosely") do |v|
+	  Bio::Log::CLI.trace('info')
+  end
+
+  opts.on("--debug", "Show debug messages") do |v|
+	  Bio::Log::CLI.trace('debug')
+  end
+
+ }
 opts.parse!(ARGV)
+
+Bio::Log::CLI.configure('bio-gff3')
 
 gfftype = ARGV.shift
 
