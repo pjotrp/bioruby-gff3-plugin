@@ -247,12 +247,11 @@ module Bio
           orf_frameshift = orf_frame % 3
           sectionlist = sectionlist.reverse if orf_reverse
           if do_debug
-            p "------------------"
-            p options 
-            p [:reverse,do_reverse]
-            p [:complement,do_complement]
-            p [:trim,do_trim]
-            p [:orf_reverse, orf_reverse, rec0.strand]
+            debug options.to_s
+            debug [:reverse,do_reverse].to_s
+            debug [:complement,do_complement].to_s
+            debug [:trim,do_trim].to_s
+            debug [:orf_reverse, orf_reverse, rec0.strand].to_s
           end
 
           if sequence.kind_of?(Bio::FastaFormat)

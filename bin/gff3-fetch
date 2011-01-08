@@ -67,6 +67,14 @@ USAGE = <<EOM
 
       gff3-fetch terminal chromosome1.fa geneid.gff3
 
+    Fine tuning output - show errors only
+
+		  gff3-fetch mRNA test/data/gff/test.gff3 --trace ERROR
+
+    Fine tuning output - write log messages to file.log
+
+		  gff3-fetch mRNA test/data/gff/test.gff3 --trace ERROR --logger file.log
+
 == Performance
 
 time gff3-fetch cds m_hapla.WS217.dna.fa m_hapla.WS217.gff3 > test.fa
