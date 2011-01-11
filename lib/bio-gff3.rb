@@ -23,5 +23,5 @@ require 'bio/db/gff/file/gfffasta'
 require 'bio/db/gff/gffparser'
 require 'bio/db/gff/cache/gffinmemory'
 require 'bio/db/gff/cache/gffnocache'
-require 'bio/db/gff/gffdb'
+require 'bio/db/gff/gff3'
 

@@ -35,11 +35,11 @@ PROTEINS = {
 "cds:MhA1_Contig125.frz3.gene22" =>
 "MAKALISGFVSSGFISKSNISICTRSEATAKSWRLQGFTSAYSKDVFYSEVKKPRAIILIAVKPQIFPSFINEVKANEWFYFGVPGILCISIMSGISLQHFDKEMKSVGFDGHSMRLMPNVNCAVSTGTLVLSADPETPQELVTLVSVLSSYVGKCIRVDEAHFNAASSISGCGPAFIALVIEALADGGVVAGLSRELANQLAADTVKGTGHLFMTKMASVSPTSDNPSPAQLKDQVCSPAGTTIEGVRELEKHGVRSAFIEAIQASTRRAFELSQ*" }
 
-describe GFFdb, "Assemble CDS (Contig125)" do
+describe GFF3, "Assemble CDS (Contig125)" do
   before :all do 
     # gffdb = Bio::GFFbrowser::GFFdb.new(GFF3FILE2, :fasta_filename => FASTAFILE2,:cache_components => :cache_none, :cache_records => :cache_none)
-    gffdb = Bio::GFFbrowser::GFFdb.new(GFF3FILE2, :fasta_filename => FASTAFILE2)
-    @gff = gffdb.assembler
+    gff3 = Bio::GFFbrowser::GFF3.new(GFF3FILE2, :fasta_filename => FASTAFILE2)
+    @gff = gff3.assembler
     @gff.parse
     @contigsequence = @gff.sequencelist["MhA1_Contig125"]
     @componentlist = {}

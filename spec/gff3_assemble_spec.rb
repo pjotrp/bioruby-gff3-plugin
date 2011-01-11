@@ -13,10 +13,10 @@ include Bio::GFFbrowser
 FASTAFILE="test/data/gff/MhA1_Contig1133.fa"  
 GFF3FILE="test/data/gff/MhA1_Contig1133.gff3"
 
-describe GFFdb, "Assemble CDS" do
+describe GFF3, "Assemble CDS" do
   before :all do 
-    gffdb = Bio::GFFbrowser::GFFdb.new(GFF3FILE, :fasta_filename => FASTAFILE)
-    @gff = gffdb.assembler
+    GFF3 = Bio::GFFbrowser::GFF3.new(GFF3FILE, :fasta_filename => FASTAFILE)
+    @gff = GFF3.assembler
     @gff.parse
     @contigsequence = @gff.sequencelist["MhA1_Contig1133"]
     @componentlist = {}

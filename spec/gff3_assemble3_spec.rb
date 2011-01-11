@@ -12,10 +12,10 @@ include Bio::GFFbrowser
 
 GFF3FILE3="test/data/gff/test-cds.gff3"
 
-describe GFFdb, "Assemble CDS (extra checks)" do
+describe GFF3, "Assemble CDS (extra checks)" do
   before :all do 
-    gffdb = Bio::GFFbrowser::GFFdb.new(GFF3FILE3)
-    @gff = gffdb.assembler
+    gff3 = Bio::GFFbrowser::GFF3.new(GFF3FILE3)
+    @gff = gff3.assembler
     @gff.parse
   end
 

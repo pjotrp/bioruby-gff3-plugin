@@ -225,8 +225,8 @@ ARGV.each do | fn |
   opts[:fasta_filename]   = fastafn if fastafn
   opts[:fix_wormbase]     = options.fix_wormbase
   opts[:fix]              = options.fix
-  gffdb = Bio::GFFbrowser::GFFdb.new(fn,opts)
-  gff = gffdb.assembler
+  gff3 = Bio::GFFbrowser::GFF3.new(fn,opts)
+  gff = gff3.assembler
   writer = Bio::GFFbrowser::FastaWriter.new(options.translate, options.validate)
   case gfftype.downcase
     when 'gene'

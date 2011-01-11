@@ -42,44 +42,44 @@ def iterators_should_be_implemented
   end
 end
 
-describe GFFdb, "GFF3 API (InMemory) with everything in memory" do
+describe GFF3, "GFF3 API (InMemory) with everything in memory" do
 
   before :all do 
     # initialize
-    gffdb = Bio::GFFbrowser::GFFdb.new(TESTGFF1)
-    @gff = gffdb.assembler
+    gff3 = Bio::GFFbrowser::GFF3.new(TESTGFF1)
+    @gff = gff3.assembler
   end
 
   iterators_should_be_implemented
 end
 
-describe GFFdb, "GFF3 API with :cache_components => 1000, :cache_records => :cache_none" do
+describe GFF3, "GFF3 API with :cache_components => 1000, :cache_records => :cache_none" do
   # iterators_should_be_implemented
 end
 
-describe GFFdb, "GFF3 API with :cache_components => 1000, :cache_records => 1000" do
+describe GFF3, "GFF3 API with :cache_components => 1000, :cache_records => 1000" do
   it "should implement real caching"
   # iterators_should_be_implemented
 end
 
-describe GFFdb, "GFF3 API with :cache_records => :cache_none" do
+describe GFF3, "GFF3 API with :cache_records => :cache_none" do
   # iterators_should_be_implemented
 end
 
-describe GFFdb, "GFF3 API (NoCache) with :cache_components => :cache_none, :cache_records => :cache_none" do
+describe GFF3, "GFF3 API (NoCache) with :cache_components => :cache_none, :cache_records => :cache_none" do
   before :all do 
     # initialize
-    gffdb = Bio::GFFbrowser::GFFdb.new(TESTGFF1, :cache_components => :cache_none, :cache_records => :cache_none)
-    @gff = gffdb.assembler
+    gff3 = Bio::GFFbrowser::GFF3.new(TESTGFF1, :cache_components => :cache_none, :cache_records => :cache_none)
+    @gff = gff3.assembler
   end
 
   iterators_should_be_implemented
 end
 
-describe GFFdb, "GFF3 API (InMemory) with external FASTA" do
+describe GFF3, "GFF3 API (InMemory) with external FASTA" do
   before :all do 
-    gffdb = Bio::GFFbrowser::GFFdb.new(TESTGFF1EXT, :fasta_filename => TESTGFF1FASTA)
-    @gff = gffdb.assembler
+    gff3 = Bio::GFFbrowser::GFF3.new(TESTGFF1EXT, :fasta_filename => TESTGFF1FASTA)
+    @gff = gff3.assembler
   end
 
   it "should have a sequence list" do 
@@ -89,10 +89,10 @@ describe GFFdb, "GFF3 API (InMemory) with external FASTA" do
   iterators_should_be_implemented
 end
 
-describe GFFdb, "GFF3 API (NoCache) with external FASTA" do
+describe GFF3, "GFF3 API (NoCache) with external FASTA" do
   before :all do 
-    gffdb = Bio::GFFbrowser::GFFdb.new(TESTGFF1EXT, :fasta_filename => TESTGFF1FASTA, :cache_components => :cache_none, :cache_records => :cache_none)
-    @gff = gffdb.assembler
+    gff3 = Bio::GFFbrowser::GFF3.new(TESTGFF1EXT, :fasta_filename => TESTGFF1FASTA, :cache_components => :cache_none, :cache_records => :cache_none)
+    @gff = gff3.assembler
   end
 
   iterators_should_be_implemented
