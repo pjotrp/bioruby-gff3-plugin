@@ -37,7 +37,7 @@ module Bio
       #
       # An array is returned, with appropriate fields 
       #
-      def parse_line_fast string, options
+      def parse_line_fast string, options = {}
         fs = string.split(/\t/)
         if fs.size != 9 
           error "Record should have 9 fields, but has #{fs.size} <#{string}>"
@@ -48,14 +48,14 @@ module Bio
         fs[GFF3_END]        = fs[GFF3_END].to_i
         fs[GFF3_SCORE]      = fs[GFF3_SCORE].to_f 
         fs[GFF3_PHASE]      = fs[GFF3_PHASE].to_i
-        fs[GFF3_ATTRIBUTES] = parse_attributes_fast(fs[GFF3_attributes],options)
+        fs[GFF3_ATTRIBUTES] = parse_attributes_fast(fs[GFF3_ATTRIBUTES],options)
         fs
       end
 
       def parse_attributes_fast attribstring, options = {}
         Hash[attribstring.split(/;/).map { | a |
           a.split(/=/,2)
-        }.flatten]
+        }]
       end
     
     end
