@@ -131,7 +131,7 @@ Bio::Log::CLI.logger('stderr')
 options = OpenStruct.new()
 
 # ---- Default options
-options[:parser] = :parser_bioruby
+options.parser = :parser_bioruby
 
 opts = OptionParser.new() { |opts|
   opts.on_tail("-h", "--help", "Show help and examples") {

@@ -6,7 +6,6 @@
 # License::    The Ruby License
 #
 
-
 module Bio
   module GFFbrowser
 
@@ -28,7 +27,7 @@ module Bio
         # the relevant lists/tables
         def store_record rec
             return if rec.comment # skip GFF comments
-            id = Record::formatID(rec)
+            id = Helpers::Record::formatID(rec)
             @count_ids.add(id)
             @count_seqnames.add(rec.seqname)
 
