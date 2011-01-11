@@ -1,5 +1,5 @@
 #
-# = bio/db/gff/gfffileiterator.rb - Fetch records from a file
+# = bio/db/gff/gfffileiterator.rb - Fetch records from a GFF3 file
 #
 # Copyright::  Copyright (C) 2010
 #              Pjotr Prins <pjotr.prins@thebird.nl>

@@ -1,16 +1,16 @@
 #
-# = bio/db/gff/gffdb.rb - GFF database class
+# = bio/db/gff/gff3.rb - GFF database class
 #
 # Copyright::  Copyright (C) 2010
 #              Pjotr Prins <pjotr.prins@thebird.nl>
 # License::    The Ruby License
 
-# Create db from a GFF file
+# Create a GFF3 file parser
 
 
 module Bio
   module GFFbrowser
-    class GFFdb
+    class GFF3
       attr_reader :assembler
 
       include Digest
@@ -27,7 +27,7 @@ module Bio
           end
       end
 
-    end # GFFdb
+    end # GFF3
   end # GFFbrowser
 end # Bio
 
