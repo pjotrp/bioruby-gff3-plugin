@@ -11,6 +11,8 @@ module Bio
 
     class GFF3
 
+      # FileRecord inherits from the BioRuby Record, but
+      # adds the file seek position.
       class FileRecord < Record
         attr_accessor :io_seek
         def initialize io_seek, buf
