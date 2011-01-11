@@ -7,6 +7,8 @@
 
 # Create a GFF3 file parser
 
+require 'bio/db/gff/digest/gffinmemory'
+require 'bio/db/gff/digest/gffnocache'
 
 module Bio
   module GFFbrowser

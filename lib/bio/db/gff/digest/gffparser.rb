@@ -6,6 +6,7 @@
 # License::    The Ruby License
 #
 
+
 module Bio
   module GFFbrowser
     module Digest

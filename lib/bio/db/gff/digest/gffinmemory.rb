@@ -7,6 +7,8 @@
 #
 # Fetch information from a GFF file
 
+require 'bio/db/gff/digest/gffparser'
+
 module Bio
   module GFFbrowser
 

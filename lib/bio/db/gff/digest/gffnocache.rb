@@ -8,6 +8,8 @@
 # Fetch information from a GFF file without using RAM - also check
 # out the caching edition, which uses limited amounts of RAM
 
+require 'bio/db/gff/digest/gffparser'
+
 module Bio
   module GFFbrowser
 
