@@ -1,5 +1,5 @@
 #
-# = bio/db/gff/gffparser.rb - Parsing logic for GFF3 file
+# = bio/db/gff/digest/gffparser.rb - Fully digesting parsing logic for GFF3 file
 #
 # Copyright::  Copyright (C) 2010
 #              Pjotr Prins <pjotr.prins@thebird.nl>
@@ -9,8 +9,13 @@
 
 module Bio
   module GFFbrowser
+
+    # The fully Digesting parser consumes all records and
+    # links them together in (in-memory) lists
     module Digest
 
+      # Both in-memory and no-cache fully digest parsers
+      # share this Parser module.
       module Parser
 
         include Bio::GFFbrowser::Helpers
