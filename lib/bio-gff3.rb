@@ -12,4 +12,5 @@ require 'bio-logger'
 
 Bio::Log::LoggerPlus.new('bio-gff3')
 
+require 'bio/db/gff/gfflogger'
 require 'bio/db/gff/gffdb'
