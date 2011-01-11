@@ -14,6 +14,7 @@ include Bio::GFFbrowser
 describe FastLineParser, "GFF3 Fast line parser" do
 
   it "should parse attributes" do 
+    parse_attributes_fast("id=1").should == { "id"=>"1" }
   end
 end
 

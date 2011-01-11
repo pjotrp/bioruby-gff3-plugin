@@ -52,7 +52,7 @@ module Bio
         fs
       end
 
-      def parse_attributes_fast attribstring, options
+      def parse_attributes_fast attribstring, options = {}
         Hash[attribstring.split(/;/).map { | a |
           a.split(/=/,2)
         }.flatten]
