@@ -12,14 +12,12 @@ USAGE = <<EOM
 
     gff3-fetch [options] type [filename.fa] filename.gff3
 
-  Where (NYI == Not Yet Implemented):
-
-    --translate     : output as amino acid sequence 
-    --validate      : validate GFF3 file by translating
-    --fix           : check 3-frame translation and fix, if possible 
-    --fix-wormbase  : fix 3-frame translation on ORFs named 'gene1'
-    --no-assemble   : output each record as a sequence -- NYI
-    --add-phase     : output records using phase (useful w. no-assemble CDS to AA) --NYI
+    --translate      : output as amino acid sequence 
+    --validate       : validate GFF3 file by translating
+    --fix            : check 3-frame translation and fix, if possible 
+    --fix-wormbase   : fix 3-frame translation on ORFs named 'gene1'
+    --no-assemble    : output each record as a sequence 
+    --add-phase      : output records using phase (useful w. no-assemble CDS to AA) --NYI
   
   type is any valid type in the GFF3 definition. For example:
 
@@ -31,14 +29,16 @@ USAGE = <<EOM
 
   and the following performance options:
 
-    --cache full     : load all in RAM (fast)
-    --cache none     : do not load anything in memory (slow)
-		--parser bioruby : use BioRuby GFF3 parser
+		--parser bioruby : use BioRuby GFF3 parser (slow)
     --parser line    : use GFF3 line parser -- in preparation
     --parser block   : use GFF3 block parser (optimistic) -- NYI
+    --cache full     : load all in RAM (fast, default)
+    --cache none     : do not load anything in memory (slow)
     --cache lru      : use LRU cache (limit RAM use, fast) -- NYI
     --max-cpus num   : use num threads -- NYI
     --emboss         : use EMBOSS translation (fast) -- NYI
+
+  Where (NYI == Not Yet Implemented):
 
   Multiple GFF3 files can be used. With external FASTA files, always the last
   one before the GFF3 filename is matched.
@@ -129,12 +129,27 @@ end
 Bio::Log::CLI.logger('stderr')
 
 options = OpenStruct.new()
+
+# ---- Default options
+options[:parser] = :parser_bioruby
+
 opts = OptionParser.new() { |opts|
   opts.on_tail("-h", "--help", "Show help and examples") {
     print(opts)
     print USAGE
     exit()
   }
+
+  opts.on("--parser [bioruby,line]", String, "Parser (default bioruby)") do |cache|
+    case cache.downcase
+      when 'bioruby'
+        options.parser = :parser_bioruby
+      when 'line'
+        options.parser = :parser_line
+      else
+        raise 'Unknown --parser option'
+    end
+  end
 
   opts.on("--cache [none,full]", String, "Caching (default full)") do |cache|
     case cache.downcase
@@ -203,12 +218,13 @@ ARGV.each do | fn |
   end
 
   opts = {}
-  opts[:validate] = options.validate
+  opts[:validate]         = options.validate
+  opts[:parser]           = options.parser
   opts[:cache_components] = options.cache
   opts[:cache_records]    = options.cache
-  opts[:fasta_filename] = fastafn if fastafn
-  opts[:fix_wormbase] = options.fix_wormbase
-  opts[:fix] = options.fix
+  opts[:fasta_filename]   = fastafn if fastafn
+  opts[:fix_wormbase]     = options.fix_wormbase
+  opts[:fix]              = options.fix
   gffdb = Bio::GFFbrowser::GFFdb.new(fn,opts)
   gff = gffdb.assembler
   writer = Bio::GFFbrowser::FastaWriter.new(options.translate, options.validate)
