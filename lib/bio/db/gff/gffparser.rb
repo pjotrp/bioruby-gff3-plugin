@@ -13,10 +13,13 @@ module Bio
       module Parser
 
         include Bio::GFFbrowser::Helpers
+        include Bio::GFFbrowser::Helpers::Validate
         include Bio::GFFbrowser::Helpers::Error
         include Gff3Component
         include Gff3Features
 
+        # Takes a parsed record +rec+ and stores items in 
+        # the relevant lists/tables
         def store_record rec
             return if rec.comment # skip GFF comments
             id = Record::formatID(rec)
@@ -44,23 +47,6 @@ module Bio
                   @unrecognized_features[rec.feature_type] = true
                 end
             end
-        end
-
-        def validate_mrnas 
-          return if not @options[:validate]
-          # validate gene/container/component seqname is shared
-          @mrnalist.validate_seqname
-          @mrnalist.validate_shared_parent
-        end
-
-        def validate_cdss 
-          return if not @options[:validate]
-          @cdslist.validate_seqname
-          # validate CDS sections do not overlap
-          @cdslist.validate_nonoverlapping
-          # validate sections share the parent
-          @cdslist.validate_shared_parent
-          # display unhandled features
         end
 
         def show_unrecognized_features 

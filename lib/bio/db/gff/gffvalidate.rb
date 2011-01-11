@@ -4,6 +4,25 @@ module Bio
 
     module Helpers
 
+      module Validate
+        def validate_mrnas 
+          return if not @options[:validate]
+          # validate gene/container/component seqname is shared
+          @mrnalist.validate_seqname
+          @mrnalist.validate_shared_parent
+        end
+
+        def validate_cdss 
+          return if not @options[:validate]
+          @cdslist.validate_seqname
+          # validate CDS sections do not overlap
+          @cdslist.validate_nonoverlapping
+          # validate sections share the parent
+          @cdslist.validate_shared_parent
+          # display unhandled features
+        end
+      end # Validate
+
       # Helper class for counting IDs
       class Counter < Hash
         def add id
