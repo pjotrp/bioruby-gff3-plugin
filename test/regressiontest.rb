@@ -19,7 +19,7 @@ module RegressionTest
 	#  file exist in the regrssion directory - so you can execute a diff.
 	#
 	#  Example:
-	#    TegressionTest.test `#{cfrubybin} --help`,'cfruby_helptext',$test_create
+	#    RegressionTest.test `#{cfrubybin} --help`,'cfruby_helptext',$test_create
 
 	def RegressionTest.test text, filename, testdir, create = @@test_create
 		fn = testdir+'/'+filename+'.rtest'
