@@ -22,7 +22,14 @@ module Bio
         def initialize filename, options
           @options = options
           # Invoke the BioRuby in memory parser
-          @gff = Bio::GFF::GFF3.new(File.read(filename))
+          @gff = case @options[:parser]
+            when :bioruby then
+              Bio::GFF::GFF3.new(File.read(filename))
+            when :line then
+              Bio::GFFbrowser::GFF3ParseFile.new(filename)
+            else
+              raise 'Unknown parser'+@options.to_s
+          end
         end
 
         # Digest mRNA from the GFFdb and store in Hash

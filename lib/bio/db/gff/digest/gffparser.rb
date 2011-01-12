@@ -26,32 +26,32 @@ module Bio
         # Takes a parsed record +rec+ and stores items in 
         # the relevant lists/tables
         def store_record rec
-            return if rec.comment # skip GFF comments
-            id = Helpers::Record::formatID(rec)
-            @count_ids.add(id)
-            @count_seqnames.add(rec.seqname)
+          return if rec.comment # skip GFF comments
+          id = Helpers::Record::formatID(rec)
+          @count_ids.add(id)
+          @count_seqnames.add(rec.seqname)
 
-            is_component = COMPONENT_TYPES.include?(rec.feature_type)
-            if is_component
-              # check for container ID
-              warn("Container <#{rec.feature_type}> has no ID, so using sequence name instead",id) if rec.id == nil
-              @componentlist[id] = rec
-              info "Added #{rec.feature_type} with component ID #{id}"
-            end 
-            case rec.feature_type
-              when 'gene' || 'SO:0000704'
-                @orflist.add(id,rec)
-              when 'mRNA' || 'SO:0000234'
-                @mrnalist.add(id,rec)
-              when 'CDS'  || 'SO:0000316'
-                @cdslist.add(id,rec)
-              when 'exon' || 'SO:0000147'
-                @exonlist.add(id,rec)
-              else
-                if !is_component and !IGNORE_FEATURES.include?(rec.feature_type)
-                  @unrecognized_features[rec.feature_type] = true
-                end
-            end
+          is_component = COMPONENT_TYPES.include?(rec.feature_type)
+          if is_component
+            # check for container ID
+            warn("Container <#{rec.feature_type}> has no ID, so using sequence name instead",id) if rec.id == nil
+            @componentlist[id] = rec
+            info "Added #{rec.feature_type} with component ID #{id}"
+          end 
+          case rec.feature_type
+            when 'gene' || 'SO:0000704'
+              @orflist.add(id,rec)
+            when 'mRNA' || 'SO:0000234'
+              @mrnalist.add(id,rec)
+            when 'CDS'  || 'SO:0000316'
+              @cdslist.add(id,rec)
+            when 'exon' || 'SO:0000147'
+              @exonlist.add(id,rec)
+            else
+              if !is_component and !IGNORE_FEATURES.include?(rec.feature_type)
+                @unrecognized_features[rec.feature_type] = true
+              end
+          end
         end
 
         def show_unrecognized_features 

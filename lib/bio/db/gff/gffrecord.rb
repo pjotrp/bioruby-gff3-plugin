@@ -11,6 +11,10 @@ module Bio
         @fields = fields
       end
 
+      def comment
+        false
+      end
+
       def seqid
         @fields[GFF3_SEQID]
       end
@@ -43,6 +47,7 @@ module Bio
         @fields[GFF3_TYPE]
       end
 
+      alias feature_type :feature
       def source
         @fields[GFF3_SOURCE]
       end
@@ -51,9 +56,15 @@ module Bio
         @fields[GFF3_ATTRIBUTES]
       end
 
+      def get_attribute name
+        attributes[name]
+      end 
+
       def id
         attributes['ID']
       end
+
+      alias entry_id :id
     end
   end
 end

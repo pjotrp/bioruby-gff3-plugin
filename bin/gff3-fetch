@@ -131,7 +131,7 @@ Bio::Log::CLI.logger('stderr')
 options = OpenStruct.new()
 
 # ---- Default options
-options.parser = :parser_bioruby
+options.parser = :bioruby
 
 opts = OptionParser.new() { |opts|
   opts.on_tail("-h", "--help", "Show help and examples") {
@@ -140,12 +140,12 @@ opts = OptionParser.new() { |opts|
     exit()
   }
 
-  opts.on("--parser [bioruby,line]", String, "Parser (default bioruby)") do |cache|
-    case cache.downcase
+  opts.on("--parser [bioruby,line]", String, "Parser (default bioruby)") do |p|
+    case p.downcase
       when 'bioruby'
-        options.parser = :parser_bioruby
+        options.parser = :bioruby
       when 'line'
-        options.parser = :parser_line
+        options.parser = :line
       else
         raise 'Unknown --parser option'
     end
@@ -164,13 +164,16 @@ opts = OptionParser.new() { |opts|
     end
   end
 
+  opts.on("--no-assemble", "output sequences without assembling") do |b|
+    options.no_assemble = true
+  end
+
   opts.on("--translate", "output as amino acid sequence") do |b|
     options.translate = b
   end
 
   opts.on("--validate", "validate GFF3 file by translating") do |v|
     options.validate = v
-    $stop_on_error = true  # replace global in near future
   end
 
   opts.on("--fix", "Fix frame errors in the GFF3 definition") do |v|
