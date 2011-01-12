@@ -6,7 +6,7 @@ if File.directory? bio_logger_path
 	$stderr.print "bio-logger loaded directly\n"
 else
   require "rubygems"
-  gem "bio-logger", ">= 0.6.0"
+  gem "bio-logger"
 end
 require 'bio-logger'
 

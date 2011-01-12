@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pjotr Prins"]
-  s.date = %q{2011-01-03}
+  s.date = %q{2011-01-12}
   s.default_executable = %q{gff3-fetch}
   s.description = %q{GFF3 (genome browser) information and digest mRNA and CDS sequences.
 Options for low memory use and caching of records.
@@ -31,20 +31,27 @@ Support for external FASTA files.
     "bin/gff3-fetch",
     "bio-gff3.gemspec",
     "lib/bio-gff3.rb",
-    "lib/bio/db/gff/gffassemble.rb",
-    "lib/bio/db/gff/gffdb.rb",
-    "lib/bio/db/gff/gfffasta.rb",
-    "lib/bio/db/gff/gfffileiterator.rb",
-    "lib/bio/db/gff/gffinmemory.rb",
-    "lib/bio/db/gff/gffnocache.rb",
-    "lib/bio/db/gff/gffparser.rb",
+    "lib/bio/db/gff/digest/gffinmemory.rb",
+    "lib/bio/db/gff/digest/gffnocache.rb",
+    "lib/bio/db/gff/digest/gffparser.rb",
+    "lib/bio/db/gff/file/gfffasta.rb",
+    "lib/bio/db/gff/file/gfffileiterator.rb",
+    "lib/bio/db/gff/gff3.rb",
+    "lib/bio/db/gff/gff3parserec.rb",
+    "lib/bio/db/gff/gffcomponent.rb",
+    "lib/bio/db/gff/gffrecord.rb",
+    "lib/bio/db/gff/gffsection.rb",
+    "lib/bio/db/gff/gffsequence.rb",
+    "lib/bio/db/gff/gffvalidate.rb",
     "lib/bio/output/gfffastawriter.rb",
+    "lib/bio/output/gfflogger.rb",
     "lib/bio/system/lruhash.rb",
     "spec/gff3_assemble2_spec.rb",
     "spec/gff3_assemble3_spec.rb",
     "spec/gff3_assemble_spec.rb",
     "spec/gff3_fileiterator_spec.rb",
     "spec/gffdb_spec.rb",
+    "spec/gffparserec.rb",
     "test/data/gff/MhA1_Contig1133.fa",
     "test/data/gff/MhA1_Contig1133.gff3",
     "test/data/gff/MhA1_Contig125.fa",
@@ -54,7 +61,10 @@ Support for external FASTA files.
     "test/data/gff/test-ext-fasta.fa",
     "test/data/gff/test-ext-fasta.gff3",
     "test/data/gff/test.gff3",
+    "test/data/regression/test_ext_gff3.rtest",
+    "test/data/regression/test_gff3.rtest",
     "test/helper.rb",
+    "test/regressiontest.rb",
     "test/test_bio-gff3.rb"
   ]
   s.homepage = %q{http://github.com/pjotrp/bioruby-gff3}
@@ -68,7 +78,9 @@ Support for external FASTA files.
     "spec/gff3_assemble_spec.rb",
     "spec/gff3_fileiterator_spec.rb",
     "spec/gffdb_spec.rb",
+    "spec/gffparserec.rb",
     "test/helper.rb",
+    "test/regressiontest.rb",
     "test/test_bio-gff3.rb"
   ]
 
@@ -84,6 +96,10 @@ Support for external FASTA files.
       s.add_development_dependency(%q<rcov>, [">= 0"])
       s.add_development_dependency(%q<bio>, [">= 1.3.1"])
       s.add_development_dependency(%q<rspec>, [">= 2.0.0"])
+      s.add_runtime_dependency(%q<bio>, [">= 1.4.1"])
+      s.add_runtime_dependency(%q<log4r>, ["> 1.1.6"])
+      s.add_runtime_dependency(%q<bio-logger>, [">= 0.6.1"])
+      s.add_development_dependency(%q<rspec>, ["> 2.0"])
     else
       s.add_dependency(%q<bio>, [">= 1.3.1"])
       s.add_dependency(%q<shoulda>, [">= 0"])
@@ -92,6 +108,10 @@ Support for external FASTA files.
       s.add_dependency(%q<rcov>, [">= 0"])
       s.add_dependency(%q<bio>, [">= 1.3.1"])
       s.add_dependency(%q<rspec>, [">= 2.0.0"])
+      s.add_dependency(%q<bio>, [">= 1.4.1"])
+      s.add_dependency(%q<log4r>, ["> 1.1.6"])
+      s.add_dependency(%q<bio-logger>, [">= 0.6.1"])
+      s.add_dependency(%q<rspec>, ["> 2.0"])
     end
   else
     s.add_dependency(%q<bio>, [">= 1.3.1"])
@@ -101,6 +121,10 @@ Support for external FASTA files.
     s.add_dependency(%q<rcov>, [">= 0"])
     s.add_dependency(%q<bio>, [">= 1.3.1"])
     s.add_dependency(%q<rspec>, [">= 2.0.0"])
+    s.add_dependency(%q<bio>, [">= 1.4.1"])
+    s.add_dependency(%q<log4r>, ["> 1.1.6"])
+    s.add_dependency(%q<bio-logger>, [">= 0.6.1"])
+    s.add_dependency(%q<rspec>, ["> 2.0"])
   end
 end
 
