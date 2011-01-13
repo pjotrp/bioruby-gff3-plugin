@@ -54,7 +54,13 @@ describe GFF3, "GFF3 API (InMemory) with everything in memory" do
 end
 
 describe GFF3, "GFF3 API with :cache_components => 1000, :cache_records => :cache_none" do
-  # iterators_should_be_implemented
+  before :all do 
+    # initialize
+    gff3 = Bio::GFFbrowser::GFF3.new(TESTGFF1, :cache_components => :cache_none, :cache_records => :cache_lru)
+    @gff = gff3.assembler
+  end
+
+  iterators_should_be_implemented
 end
 
 describe GFF3, "GFF3 API with :cache_components => 1000, :cache_records => 1000" do

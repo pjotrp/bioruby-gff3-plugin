@@ -1,4 +1,4 @@
- INFO bio-gff3: ---- Digest DB and store data in mRNA Hash (NoCache) <>
+ INFO bio-gff3: ---- Digest DB and store data in mRNA Hash (LruCache) <>
  INFO bio-gff3: Added transcript with component ID Transcript:trans-1 <>
  INFO bio-gff3: Adding exon <Transcript:trans-1> <>
  INFO bio-gff3: Adding exon <Transcript:trans-1> <>
@@ -31,8 +31,6 @@
  INFO bio-gff3: Adding mRNA <Misc:thing2> <>
  INFO bio-gff3: Adding CDS <Misc:thing3> <>
  INFO bio-gff3: Added contig with component ID test01 <>
- INFO bio-gff3: Added gene with component ID gene01 <>
- INFO bio-gff3: Adding gene <gene01> <>
  INFO bio-gff3: Adding mRNA <mrna01short> <>
  INFO bio-gff3: Adding mRNA <mrna01> <>
  INFO bio-gff3: Adding mRNA <mrna01a> <>
@@ -43,18 +41,16 @@
  INFO bio-gff3: Adding CDS <cds1> <>
  INFO bio-gff3: Adding CDS <cds1> <>
  INFO bio-gff3: Adding CDS <cds2> <>
- INFO bio-gff3: find_component: Matched (long search) column 0 and location <Transcript:trans-1>
- WARN bio-gff3: No sequence information for <Transcript:trans-1>
  INFO bio-gff3: find_component: Matched (long search) column 0 and location <Clone:AL12345.2>
  WARN bio-gff3: No sequence information for <mRNA:trans-8>
  INFO bio-gff3: find_component: Matched (long search) column 0 and location <Clone:ABC123>
- WARN bio-gff3: No sequence information for <Misc:thing3>
+ WARN bio-gff3: No sequence information for <Misc:thing2>
  INFO bio-gff3: find_component: Matched seqname <test01>
->cds_short Sequence:test01_1:400 (3:14)
+>mrna01short Sequence:test01_1:400 (3:14)
 GAAGATTTGTAT
  INFO bio-gff3: find_component: Matched seqname <test01>
->cds1 Sequence:test01_1:400 (164:190, 192:200)
-TGGCGACTATCGGTCGAAGTTAAGACATTCATGGGC
+>mrna01 Sequence:test01_1:400 (101:230)
+TATTTGCCACCTAGAAGCGCAACATGCCCAGCTTCACACACCATAGCGAACACGCCGCCCCGGTGGCGACTATCGGTCGAAGTTAAGACAATTCATGGGCGAAACGAGATAATGGGTACTGCACCCCTC
  INFO bio-gff3: find_component: Matched seqname <test01>
->cds2 Sequence:test01_1:400 (192:200)
-TTCATGGGC
+>mrna01a Sequence:test01_1:400 (101:280)
+TATTTGCCACCTAGAAGCGCAACATGCCCAGCTTCACACACCATAGCGAACACGCCGCCCCGGTGGCGACTATCGGTCGAAGTTAAGACAATTCATGGGCGAAACGAGATAATGGGTACTGCACCCCTCGTCCTGTAGAGACGTCACAGCCAACGTGCCTTCTTATCTTGATACATTAGT

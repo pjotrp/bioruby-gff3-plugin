@@ -20,7 +20,12 @@ class Gff3Test < Test::Unit::TestCase
 
   def test_nocache
     assert_equal(true,single_run("mRNA --cache none #{DAT}/gff/test-ext-fasta.fa #{DAT}/gff/test-ext-fasta.gff3",this_method+'_ext_gff3'))
-    assert_equal(true,single_run("CDS #{DAT}/gff/test.gff3",this_method+'_gff3'))
+    assert_equal(true,single_run("CDS --cache none #{DAT}/gff/test.gff3",this_method+'_gff3'))
+  end
+
+  def test_lrucache
+    assert_equal(true,single_run("mRNA --cache lru #{DAT}/gff/test-ext-fasta.fa #{DAT}/gff/test-ext-fasta.gff3",this_method+'_ext_gff3'))
+    assert_equal(true,single_run("CDS --cache lru #{DAT}/gff/test.gff3",this_method+'_gff3'))
   end
 
   private

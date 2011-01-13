@@ -1,4 +1,4 @@
- INFO bio-gff3: ---- Digest DB and store data in mRNA Hash (NoCache) <>
+ INFO bio-gff3: ---- Digest DB and store data in mRNA Hash (LruCache) <>
  INFO bio-gff3: Added transcript with component ID Transcript:trans-1 <>
  INFO bio-gff3: Adding exon <Transcript:trans-1> <>
  INFO bio-gff3: Adding exon <Transcript:trans-1> <>
