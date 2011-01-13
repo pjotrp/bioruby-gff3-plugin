@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{bio-gff3}
-  s.version = "0.8.4"
+  s.version = "0.8.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pjotr Prins"]
-  s.date = %q{2011-01-12}
+  s.date = %q{2011-01-13}
   s.default_executable = %q{gff3-fetch}
   s.description = %q{GFF3 (genome browser) information and digest mRNA and CDS sequences.
 Options for low memory use and caching of records.
@@ -37,6 +37,8 @@ Support for external FASTA files.
     "lib/bio/db/gff/file/gfffasta.rb",
     "lib/bio/db/gff/file/gfffileiterator.rb",
     "lib/bio/db/gff/gff3.rb",
+    "lib/bio/db/gff/gff3fasta.rb",
+    "lib/bio/db/gff/gff3parsefile.rb",
     "lib/bio/db/gff/gff3parserec.rb",
     "lib/bio/db/gff/gffcomponent.rb",
     "lib/bio/db/gff/gffrecord.rb",
@@ -63,6 +65,8 @@ Support for external FASTA files.
     "test/data/gff/test.gff3",
     "test/data/regression/test_ext_gff3.rtest",
     "test/data/regression/test_gff3.rtest",
+    "test/data/regression/test_nocache_ext_gff3.rtest",
+    "test/data/regression/test_nocache_gff3.rtest",
     "test/helper.rb",
     "test/regressiontest.rb",
     "test/test_bio-gff3.rb"
@@ -90,6 +94,7 @@ Support for external FASTA files.
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<bio>, [">= 1.3.1"])
+      s.add_runtime_dependency(%q<bio-logger>, [">= 0"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
@@ -102,6 +107,7 @@ Support for external FASTA files.
       s.add_development_dependency(%q<rspec>, ["> 2.0"])
     else
       s.add_dependency(%q<bio>, [">= 1.3.1"])
+      s.add_dependency(%q<bio-logger>, [">= 0"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
@@ -115,6 +121,7 @@ Support for external FASTA files.
     end
   else
     s.add_dependency(%q<bio>, [">= 1.3.1"])
+    s.add_dependency(%q<bio-logger>, [">= 0"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
