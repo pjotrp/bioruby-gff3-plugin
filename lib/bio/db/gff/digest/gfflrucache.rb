@@ -10,13 +10,14 @@
 # which uses limited amounts of RAM
 
 require 'bio/db/gff/digest/gffparser'
+require 'bio/system/lruhash'
 
 module Bio
   module GFFbrowser
 
     module Digest
 
-      module NoCacheHelpers 
+      module LruCacheHelpers 
 
         # Module to fetch a line from GFF3 file and returns a parsed 
         # record
@@ -40,6 +41,7 @@ module Bio
             @fh = fh
             @h = {}
             @parser = parser
+            @lru = LRUHash.new 1000
           end
 
           def []= id, rec
@@ -68,21 +70,21 @@ module Bio
             self[id] = [] if self[id] == nil
             self[id] << rec.io_seek
           end
-          # validation is switched off for NoCache
+          # validation is switched off for LruCache
           def validate_seqname
           end
-          # validation is switched off for NoCache
+          # validation is switched off for LruCache
           def validate_nonoverlapping
           end
-          # validation is switched off for NoCache
+          # validation is switched off for LruCache
           def validate_shared_parent
           end
         end
       end
 
-      class NoCache
+      class LruCache
         include Parser
-        include NoCacheHelpers
+        include LruCacheHelpers
         include Gff3Sequence
 
         def initialize filename, options
@@ -94,7 +96,7 @@ module Bio
         # parse the whole file once and store all seek locations, 
         # rather than the records themselves
         def parse
-          info "---- Digest DB and store data in mRNA Hash (NoCache)"
+          info "---- Digest DB and store data in mRNA Hash (LruCache)"
           @count_ids          = Counter.new   # Count ids
           @count_seqnames     = Counter.new   # Count seqnames
           @componentlist      = SeekRecList.new(@iter.fh,@options[:parser]) # Store containers, like genes, contigs

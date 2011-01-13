@@ -36,7 +36,17 @@ Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
   test.pattern = 'test/**/test_*.rb'
   test.verbose = true
+  Kernel.system('rspec spec/*.rb')
 end
+
+#require 'spec/rake/spectask'
+#Spec::Rake::SpecTask.new(:spec) do |t|
+#  t.spec_files = Dir.glob('spec/**/*_spec.rb')
+#  t.spec_opts << '--format specdoc'
+#  t.warning = true
+#  t.rcov = true
+#end
+
 
 require 'rcov/rcovtask'
 Rcov::RcovTask.new do |test|

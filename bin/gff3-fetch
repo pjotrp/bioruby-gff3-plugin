@@ -238,6 +238,9 @@ ARGV.each do | fn |
   opts[:phase]            = options.phase
   opts[:debug]            = options.debug
 
+  include Bio::GFFbrowser::Helpers::Error
+  debug $:.to_s
+  debug opts.to_s
   gff3 = Bio::GFFbrowser::GFF3.new(fn,opts)
 
   gff = gff3.assembler
