@@ -7,7 +7,9 @@
 #
 # Fetch information from a GFF file without using RAM - using a least 
 # recently used cache 'LRU' - also check out the caching edition, 
-# which uses limited amounts of RAM
+# which uses limited amounts of RAM.
+#
+# In effect it is NoCache with parser recs cached in the LRU hash
 
 require 'bio/db/gff/digest/gffparser'
 require 'bio/system/lruhash'
@@ -34,14 +36,30 @@ module Bio
           end
         end
 
+        module LruRec
+          # Fetch a record using fh and file seek position,
+          # utilising the LRU cache
+          def fetch(fh,fpos,parser)
+            return nil if fh==nil or fpos==nil
+            rec = @lru[fpos]
+            if rec==nil
+              rec = SeekRec::fetch(fh,fpos,parser)
+              @lru[fpos] = rec
+            end
+            rec
+          end
+        end
+
         # Helper class which gives Hash-like access to the 
         # no-cache GFF3 file
         class SeekRecList 
-          def initialize fh, parser
+          include LruRec
+
+          def initialize fh, parser, lru
             @fh = fh
             @h = {}
             @parser = parser
-            @lru = LRUHash.new 1000
+            @lru = lru
           end
 
           def []= id, rec
@@ -52,7 +70,7 @@ module Bio
 
           def [](id)
             fpos = @h[id]
-            SeekRec::fetch(@fh,fpos,@parser)
+            fetch(@fh,fpos,@parser)
           end
 
           def each 
@@ -86,11 +104,13 @@ module Bio
         include Parser
         include LruCacheHelpers
         include Gff3Sequence
+        include LruRec
 
         def initialize filename, options
           @filename = filename
           @options = options
           @iter = Bio::GFF::GFF3::FileIterator.new(@filename, options[:parser])
+          @lru = LRUHash.new 10000
         end
 
         # parse the whole file once and store all seek locations, 
@@ -99,7 +119,7 @@ module Bio
           info "---- Digest DB and store data in mRNA Hash (LruCache)"
           @count_ids          = Counter.new   # Count ids
           @count_seqnames     = Counter.new   # Count seqnames
-          @componentlist      = SeekRecList.new(@iter.fh,@options[:parser]) # Store containers, like genes, contigs
+          @componentlist      = SeekRecList.new(@iter.fh,@options[:parser],@lru) # Store containers, like genes, contigs
           @orflist            = SeekLinkedRecs.new   # Store linked gene records
           @mrnalist           = SeekLinkedRecs.new   # Store linked mRNA records
           @cdslist            = SeekLinkedRecs.new
@@ -125,7 +145,7 @@ module Bio
           list.each do | id, io_seeklist |
             recs = []
             io_seeklist.each do | fpos |
-              recs << SeekRec::fetch(fh,fpos,@options[:parser])
+              recs << fetch(fh,fpos,@options[:parser])
             end
             seqid = recs[0].seqname
             component = find_component(recs[0])
