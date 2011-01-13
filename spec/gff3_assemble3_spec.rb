@@ -27,7 +27,7 @@ describe GFF3, "Assemble CDS (extra checks)" do
       @componentlist[id] = component
       @cdslist[id] = reclist
     end
-    name = "cds:MhA1_Contig1040.frz3.gene"
+    name = "cds:MhA1_Contig1040.frz3.gene29"
     recs = @cdslist[name]
     component = @componentlist[name]
     ntseq = @gff.assemble(@contigsequence,component.start,recs,:raw=>true)

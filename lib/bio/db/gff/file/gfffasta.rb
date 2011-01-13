@@ -33,7 +33,7 @@ module Bio
             header = line
             seqs   = []
           else
-            seqs << line
+            seqs << line.gsub(/\s+/,'')
           end
         end
         add(header,seqs)
