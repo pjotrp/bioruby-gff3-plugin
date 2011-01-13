@@ -14,7 +14,7 @@ TEST2='test/data/gff/standard.gff3'
 describe Bio::GFF::GFF3::FileIterator, "iterates a GFF3 file" do
 
   it "should parse a file and yield records" do 
-    iter = Bio::GFF::GFF3::FileIterator.new(TEST1)
+    iter = Bio::GFF::GFF3::FileIterator.new(TEST1,:line)
     iter.each_rec do | id, rec |
       # p [id, rec, rec.io_seek]
       rec.io_seek.should == 51
@@ -23,7 +23,7 @@ describe Bio::GFF::GFF3::FileIterator, "iterates a GFF3 file" do
   end
 
   it "should handle embedded FASTA records" do
-    iter = Bio::GFF::GFF3::FileIterator.new(TEST1)
+    iter = Bio::GFF::GFF3::FileIterator.new(TEST1,:line)
     last = nil
     iter.each_rec do | id, rec |
       # p [id, rec]

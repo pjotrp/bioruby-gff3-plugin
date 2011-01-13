@@ -30,7 +30,7 @@ USAGE = <<EOM
   and the following performance options:
 
 		--parser bioruby : use BioRuby GFF3 parser (slow)
-    --parser line    : use GFF3 line parser -- in preparation
+    --parser line    : use GFF3 line parser (faster, default)
     --parser block   : use GFF3 block parser (optimistic) -- NYI
     --cache full     : load all in RAM (fast, default)
     --cache none     : do not load anything in memory (slow)
@@ -132,7 +132,7 @@ Bio::Log::CLI.trace('info')
 options = OpenStruct.new()
 
 # ---- Default options
-options.parser = :bioruby
+options.parser = :line
 
 opts = OptionParser.new() { |opts|
   opts.on_tail("-h", "--help", "Show help and examples") {
@@ -141,7 +141,7 @@ opts = OptionParser.new() { |opts|
     exit()
   }
 
-  opts.on("--parser [bioruby,line]", String, "Parser (default bioruby)") do |p|
+  opts.on("--parser [bioruby,line]", String, "Parser (default line)") do |p|
     case p.downcase
       when 'bioruby'
         options.parser = :bioruby

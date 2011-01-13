@@ -20,6 +20,7 @@ module Bio
 
       # Initialize a GFF parser
       def initialize filename, options = {}
+        options[:parser] = :line if options[:parser] == nil
         cache_recs    = options[:cache_records]
         @assembler = 
           case cache_recs

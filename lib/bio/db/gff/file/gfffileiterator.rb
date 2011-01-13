@@ -37,7 +37,7 @@ module Bio
         attr_accessor :fh
         attr_reader :fasta_io_seek
 
-        def initialize filename, parser = :bioruby
+        def initialize filename, parser 
           @fh = File.open(filename)
           @parser = parser
         end
