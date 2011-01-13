@@ -49,11 +49,11 @@
  INFO bio-gff3: Adding CDS <cds1> <>
  INFO bio-gff3: Adding CDS <cds2> <>
  INFO bio-gff3: find_component: Matched (long search) column 0 and location <Transcript:trans-1>
-ERROR bio-gff3: No sequence information for <Transcript:trans-1>
+ WARN bio-gff3: No sequence information for <Transcript:trans-1>
  INFO bio-gff3: find_component: Matched (long search) column 0 and location <Clone:AL12345.2>
-ERROR bio-gff3: No sequence information for <mRNA:trans-8>
+ WARN bio-gff3: No sequence information for <mRNA:trans-8>
  INFO bio-gff3: find_component: Matched (long search) column 0 and location <Clone:ABC123>
-ERROR bio-gff3: No sequence information for <Misc:thing3>
+ WARN bio-gff3: No sequence information for <Misc:thing3>
  INFO bio-gff3: find_component: Matched seqname <test01>
 >cds_short Sequence:test01_1:400 (3:14)
 GAAGATTTGTAT
