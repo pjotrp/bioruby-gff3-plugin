@@ -63,7 +63,13 @@ module Bio
           list.each do | id, recs |
             seqid = recs[0].seqname
             component = find_component(recs[0])
-            yield id, recs, component
+            if @options[:no_assemble]
+              recs.each do | rec |
+                yield id, [rec], component
+              end
+            else
+              yield id, recs, component
+            end
           end
         end
         

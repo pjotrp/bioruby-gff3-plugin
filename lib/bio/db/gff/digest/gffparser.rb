@@ -134,21 +134,13 @@ module Bio
               sequence = @sequencelist[component.seqname]
               # p sequence
               if sequence
-                if @options[:no_assemble]
-                  reclist.each do | rec | 
-                    seq = assemble(sequence,component.start,[rec],:codonize=>true)
-                    yield description(id,component,[rec]), seq
-              
-                  end
-                else
-                  seq = assemble(sequence,component.start,reclist,:codonize=>true)
-                  if seq.size % 3 != 0
-                    p reclist # leave this in
-                    # raise "CDS size #{seq.size} is not a multiple of 3! <#{seq}>"
-                    warn "CDS size is not a multiple of 3",id
-                  end
-                  yield description(id,component,reclist), seq
+                seq = assemble(sequence,component.start,reclist,@options.merge(:codonize=>true))
+                if seq.size % 3 != 0
+                  p reclist # leave this in
+                  # raise "CDS size #{seq.size} is not a multiple of 3! <#{seq}>"
+                  warn "CDS size is not a multiple of 3",id
                 end
+                yield description(id,component,reclist), seq
               else 
                 error "No sequence information for",id
               end

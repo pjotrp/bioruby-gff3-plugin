@@ -17,7 +17,7 @@ USAGE = <<EOM
     --fix            : check 3-frame translation and fix, if possible 
     --fix-wormbase   : fix 3-frame translation on ORFs named 'gene1'
     --no-assemble    : output each record as a sequence 
-    --add-phase      : output records using phase (useful w. no-assemble CDS to AA) --NYI
+    --phase          : output records using phase (useful w. no-assemble CDS to AA) 
   
   type is any valid type in the GFF3 definition. For example:
 
@@ -55,7 +55,7 @@ USAGE = <<EOM
 
     Find CDS records from external FASTA file, adding phase and translate to protein sequence
 
-      gff3-fetch --no-assemble --add-phase --translate CDS test/data/gff/MhA1_Contig1133.fa test/data/gff/MhA1_Contig1133.gff3
+      gff3-fetch --no-assemble --phase --translate CDS test/data/gff/MhA1_Contig1133.fa test/data/gff/MhA1_Contig1133.gff3
 
     Find mRNA from external FASTA file, without loading everything in RAM
 
@@ -168,6 +168,10 @@ opts = OptionParser.new() { |opts|
     options.no_assemble = true
   end
 
+  opts.on("--phase", "adjust for phase (useful for CDS --no-assemble --translate)") do |b|
+    options.phase = true
+  end
+
   opts.on("--translate", "output as amino acid sequence") do |b|
     options.translate = b
   end
@@ -202,6 +206,7 @@ opts = OptionParser.new() { |opts|
 
   opts.on("--debug", "Show debug messages") do |v|
     Bio::Log::CLI.trace('debug')
+    options.debug = true
   end
 
  }
@@ -229,6 +234,8 @@ ARGV.each do | fn |
   opts[:fix_wormbase]     = options.fix_wormbase
   opts[:fix]              = options.fix
   opts[:no_assemble]      = options.no_assemble
+  opts[:phase]            = options.phase
+  opts[:debug]            = options.debug
 
   gff3 = Bio::GFFbrowser::GFF3.new(fn,opts)
 

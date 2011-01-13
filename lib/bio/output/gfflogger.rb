@@ -7,6 +7,11 @@ module Bio
       module Error
         include Bio::Log
 
+        def debug str, id=''
+          log = LoggerPlus['bio-gff3']
+          log.debug str+" <#{id}>"
+        end
+
         def info str, id=''
           log = LoggerPlus['bio-gff3']
           log.info str+" <#{id}>"

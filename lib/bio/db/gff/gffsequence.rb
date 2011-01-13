@@ -12,7 +12,12 @@ module Bio
 
     module Helpers
 
+
       module Gff3Sequence
+
+        include Bio::GFFbrowser::Helpers::Error
+
+
         # Patch a sequence together from a Sequence string and an array
         # of records. Note that rec positions are 1-based coordinates, relative 
         # to the landmark given in column 1 - in this case the sequence as it
@@ -33,7 +38,7 @@ module Bio
           # default to nil, if not passed in
           do_debug = options[:debug]
           do_phase = options[:phase]
-          do_fix        = options[:fix]
+          do_fix   = options[:fix]
           # default to true, if not passed in
           do_reverse = (options[:reverse] == false ? false : true)
           do_trim    = (options[:trim] == false ? false : true)
@@ -56,13 +61,13 @@ module Bio
           orf_frame = startpos - 1
           orf_frameshift = orf_frame % 3
           sectionlist = sectionlist.reverse if orf_reverse
-          if do_debug
+          # if do_debug
             debug options.to_s
             debug [:reverse,do_reverse].to_s
             debug [:complement,do_complement].to_s
             debug [:trim,do_trim].to_s
             debug [:orf_reverse, orf_reverse, rec0.strand].to_s
-          end
+          # end
 
           if sequence.kind_of?(Bio::FastaFormat)
             # BioRuby conversion
