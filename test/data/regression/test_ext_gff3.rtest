@@ -10,7 +10,6 @@
  INFO bio-gff3: Adding exon <Transcript:trans-2> <>
  INFO bio-gff3: Adding exon <Transcript:trans-2> <>
  INFO bio-gff3: Adding exon <Transcript:trans-2> <>
- WARN bio-gff3: Record with unknown ID.	.	.	.	.	.	.	.	.
  WARN bio-gff3: Container <Component> has no ID, so using sequence name instead <Contig2 1 2000>
  INFO bio-gff3: Added Component with component ID Contig2 1 2000 <>
  WARN bio-gff3: Container <Component> has no ID, so using sequence name instead <Contig2 2001 5000>
@@ -21,20 +20,16 @@
  INFO bio-gff3: Added Component with component ID Contig2 2001 37450 <>
  INFO bio-gff3: Added transcript with component ID Transcript:trans-3 <>
  INFO bio-gff3: Added transcript with component ID Transcript:trans-4 <>
- WARN bio-gff3: Record with unknown ID.	.	.	.	.	.	.	.	.
- WARN bio-gff3: Record with unknown ID.	.	.	.	.	.	.	.	.
  INFO bio-gff3: Added Component with component ID Clone:AL12345.2 <>
  INFO bio-gff3: Adding mRNA <mRNA:trans-8> <>
  INFO bio-gff3: Adding CDS <mRNA:trans-8> <>
  INFO bio-gff3: Adding CDS <mRNA:trans-8> <>
  INFO bio-gff3: Adding CDS <mRNA:trans-8> <>
- WARN bio-gff3: Record with unknown ID.	.	.	.	.	.	.	.	.
  INFO bio-gff3: Added Component with component ID Clone:ABC123 <>
  INFO bio-gff3: Added gene with component ID Misc:thing1 <>
  INFO bio-gff3: Adding gene <Misc:thing1> <>
  INFO bio-gff3: Adding mRNA <Misc:thing2> <>
  INFO bio-gff3: Adding CDS <Misc:thing3> <>
- WARN bio-gff3: Record with unknown ID.	.	.	.	.	.	.	.	.
  INFO bio-gff3: Added contig with component ID test01 <>
  INFO bio-gff3: Adding mRNA <mrna01short> <>
  INFO bio-gff3: Adding mRNA <mrna01> <>
