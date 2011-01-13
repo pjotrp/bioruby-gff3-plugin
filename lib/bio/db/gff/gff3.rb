@@ -9,6 +9,7 @@
 
 require 'bio/db/gff/digest/gffinmemory'
 require 'bio/db/gff/digest/gffnocache'
+require 'bio/db/gff/digest/gfflrucache'
 
 module Bio
   module GFFbrowser
@@ -24,6 +25,8 @@ module Bio
           case cache_recs
             when :cache_none 
               NoCache.new(filename, options)
+            when :cache_lru
+              LruCache.new(filename, options)
             else
               InMemory.new(filename, options)  # default 
           end

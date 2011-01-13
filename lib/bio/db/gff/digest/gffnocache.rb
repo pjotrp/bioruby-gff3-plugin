@@ -21,19 +21,24 @@ module Bio
         # record
         module SeekRec
           # Fetch a record using fh and file seek position
-          def SeekRec::fetch(fh,fpos)
+          def SeekRec::fetch(fh,fpos,parser)
             return nil if fh==nil or fpos==nil
             fh.seek(fpos)
-            GFF::GFF3::FileRecord.new(fpos, fh.gets)
+            if parser == :bioruby 
+              GFF::GFF3::BioRubyFileRecord.new(fpos, fh.gets)
+            else
+              GFF::GFF3::FastParserFileRecord.new(fpos, fh.gets)
+            end
           end
         end
 
         # Helper class which gives Hash-like access to the 
         # no-cache GFF3 file
         class SeekRecList 
-          def initialize fh
+          def initialize fh, parser
             @fh = fh
             @h = {}
+            @parser = parser
           end
 
           def []= id, rec
@@ -44,7 +49,7 @@ module Bio
 
           def [](id)
             fpos = @h[id]
-            SeekRec::fetch(@fh,fpos)
+            SeekRec::fetch(@fh,fpos,@parser)
           end
 
           def each 
@@ -82,7 +87,7 @@ module Bio
         def initialize filename, options
           @filename = filename
           @options = options
-          @iter = Bio::GFF::GFF3::FileIterator.new(@filename)
+          @iter = Bio::GFF::GFF3::FileIterator.new(@filename, options[:parser])
         end
 
         # parse the whole file once and store all seek locations, 
@@ -91,7 +96,7 @@ module Bio
           info "---- Digest DB and store data in mRNA Hash (NoCache)"
           @count_ids          = Counter.new   # Count ids
           @count_seqnames     = Counter.new   # Count seqnames
-          @componentlist      = SeekRecList.new(@iter.fh) # Store containers, like genes, contigs
+          @componentlist      = SeekRecList.new(@iter.fh,@options[:parser]) # Store containers, like genes, contigs
           @orflist            = SeekLinkedRecs.new   # Store linked gene records
           @mrnalist           = SeekLinkedRecs.new   # Store linked mRNA records
           @cdslist            = SeekLinkedRecs.new
@@ -117,11 +122,17 @@ module Bio
           list.each do | id, io_seeklist |
             recs = []
             io_seeklist.each do | fpos |
-              recs << SeekRec::fetch(fh,fpos)
+              recs << SeekRec::fetch(fh,fpos,@options[:parser])
             end
             seqid = recs[0].seqname
             component = find_component(recs[0])
-            yield id, recs, component
+            if @options[:no_assemble]
+              recs.each do | rec |
+                yield id, [rec], component
+              end
+            else
+              yield id, recs, component
+            end
           end
         end
         

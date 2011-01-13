@@ -13,11 +13,21 @@ module Bio
 
       # FileRecord inherits from the BioRuby Record, but
       # adds the file seek position.
-      class FileRecord < Record
+      class BioRubyFileRecord < Record
         attr_accessor :io_seek
         def initialize io_seek, buf
           @io_seek = io_seek
           super(buf)
+        end
+      end
+
+      class FastParserFileRecord < GFFbrowser::FastLineRecord
+        attr_accessor :io_seek
+
+        include Bio::GFFbrowser::FastLineParser 
+        def initialize io_seek, buf
+          @io_seek = io_seek
+          super(parse_line_fast(buf))
         end
       end
 
@@ -27,8 +37,9 @@ module Bio
         attr_accessor :fh
         attr_reader :fasta_io_seek
 
-        def initialize filename
+        def initialize filename, parser = :bioruby
           @fh = File.open(filename)
+          @parser = parser
         end
 
         # Iterate over every record in the file, yielding the record ID and
@@ -42,7 +53,14 @@ module Bio
               break
             end
             if line.size != 0 and line !~ /^#/
-              rec = FileRecord.new(fpos, line)
+              rec = case @parser
+                      when :bioruby
+                        BioRubyFileRecord.new(fpos, line)
+                      when :line
+                        FastParserFileRecord.new(fpos, line)
+                      else
+                        raise 'Unknown parser'
+                    end
               lastpos = @fh.tell
               id = rec.id
               yield id, rec

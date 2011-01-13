@@ -34,7 +34,7 @@ USAGE = <<EOM
     --parser block   : use GFF3 block parser (optimistic) -- NYI
     --cache full     : load all in RAM (fast, default)
     --cache none     : do not load anything in memory (slow)
-    --cache lru      : use LRU cache (limit RAM use, fast) -- NYI
+    --cache lru      : use least recently used cache (limit RAM use, fast) -- NYI
     --max-cpus num   : use num threads -- NYI
     --emboss         : use EMBOSS translation (fast) -- NYI
 
@@ -152,12 +152,12 @@ opts = OptionParser.new() { |opts|
     end
   end
 
-  opts.on("--cache [none,full]", String, "Caching (default full)") do |cache|
+  opts.on("--cache [full,lru,none]", String, "Caching (default full)") do |cache|
     case cache.downcase
       when 'none'
         options.cache = :cache_none
-      # when 'lru'
-      #   options.cache = :cache_lru
+      when 'lru'
+        options.cache = :cache_lru
       when 'full'
         options.cache = :cache_full
       else
