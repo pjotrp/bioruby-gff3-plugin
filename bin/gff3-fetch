@@ -127,6 +127,7 @@ if ARGV.size == 0
 end
 
 Bio::Log::CLI.logger('stderr')
+Bio::Log::CLI.trace('info')
 
 options = OpenStruct.new()
 

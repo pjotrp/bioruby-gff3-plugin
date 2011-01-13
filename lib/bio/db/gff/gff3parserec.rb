@@ -9,8 +9,6 @@
 module Bio
   module GFFbrowser
 
-    include Helpers::Error
-
     GFF3_SEQID      = 0
     GFF3_SOURCE     = 1
     GFF3_TYPE       = 2
@@ -25,6 +23,8 @@ module Bio
     # to parse a GFF3 line (record).
     #
     module FastLineParser
+
+      include Helpers::Error
 
       # Returns a (partial) record, assuming it is a valid GFF3
       # format, no validation takes place, other than field counting (!)

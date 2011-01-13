@@ -24,7 +24,8 @@ module Bio
 
         def error str, id=''
           log = LoggerPlus['bio-gff3']
-          log.error str+" <#{id}>"
+          log.error_(str+" <#{id}>",:act => FailOnError.new)
+
         end
       end
     end

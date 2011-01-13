@@ -15,7 +15,7 @@ GFF3FILE="test/data/gff/MhA1_Contig1133.gff3"
 
 describe GFF3, "Assemble CDS" do
   before :all do 
-    GFF3 = Bio::GFFbrowser::GFF3.new(GFF3FILE, :fasta_filename => FASTAFILE)
+    GFF3 = Bio::GFFbrowser::GFF3.new(GFF3FILE, :parser => :line, :fasta_filename => FASTAFILE)
     @gff = GFF3.assembler
     @gff.parse
     @contigsequence = @gff.sequencelist["MhA1_Contig1133"]

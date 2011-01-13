@@ -25,10 +25,8 @@ module Bio
           @gff = case @options[:parser]
             when :bioruby then
               Bio::GFF::GFF3.new(File.read(filename))
-            when :line then
+            else # line parser
               Bio::GFFbrowser::GFF3ParseFile.new(filename)
-            else
-              raise 'Unknown parser'+@options.to_s
           end
         end
 

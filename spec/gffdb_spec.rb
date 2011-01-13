@@ -78,7 +78,7 @@ end
 
 describe GFF3, "GFF3 API (InMemory) with external FASTA" do
   before :all do 
-    gff3 = Bio::GFFbrowser::GFF3.new(TESTGFF1EXT, :fasta_filename => TESTGFF1FASTA)
+    gff3 = Bio::GFFbrowser::GFF3.new(TESTGFF1EXT, :parser => :line, :fasta_filename => TESTGFF1FASTA)
     @gff = gff3.assembler
   end
 
