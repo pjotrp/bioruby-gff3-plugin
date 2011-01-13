@@ -228,9 +228,9 @@ ARGV.each do | fn |
   opts[:fasta_filename]   = fastafn if fastafn
   opts[:fix_wormbase]     = options.fix_wormbase
   opts[:fix]              = options.fix
+  opts[:no_assemble]      = options.no_assemble
 
   gff3 = Bio::GFFbrowser::GFF3.new(fn,opts)
-
 
   gff = gff3.assembler
   writer = Bio::GFFbrowser::FastaWriter.new(options.translate, options.validate)
