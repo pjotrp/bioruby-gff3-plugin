@@ -82,6 +82,8 @@ USAGE = <<EOM
 
 time gff3-fetch cds m_hapla.WS217.dna.fa m_hapla.WS217.gff3 2> /dev/null > test.fa 
 
+  Digesting parser:
+
   Cache              real     user     sys  gff3 version
   ------------------------------------------------------------
   full,bioruby       12m41    12m28    0m09 (0.8.0)
@@ -91,6 +93,12 @@ time gff3-fetch cds m_hapla.WS217.dna.fa m_hapla.WS217.gff3 2> /dev/null > test.
   lru,bioruby       533m     510m     22m47 (0.8.5)
   lru,line          305m     281m     22m30 (0.8.5)
   ----------------------------------------------------
+
+  Block parser:
+
+  Cache              real     user     sys  gff3 version
+  ------------------------------------------------------------
+  ------------------------------------------------------------
 
 where
 
@@ -143,12 +151,14 @@ opts = OptionParser.new() { |opts|
     exit()
   }
 
-  opts.on("--parser [bioruby,line]", String, "Parser (default line)") do |p|
+  opts.on("--parser [bioruby,line,block]", String, "Parser (default line)") do |p|
     case p.downcase
       when 'bioruby'
         options.parser = :bioruby
       when 'line'
         options.parser = :line
+      when 'block'
+        options.parser = :block
       else
         raise 'Unknown --parser option'
     end

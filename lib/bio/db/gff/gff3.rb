@@ -10,6 +10,7 @@
 require 'bio/db/gff/digest/gffinmemory'
 require 'bio/db/gff/digest/gffnocache'
 require 'bio/db/gff/digest/gfflrucache'
+require 'bio/db/gff/block/gffblockparser'
 
 module Bio
   module GFFbrowser
@@ -23,13 +24,17 @@ module Bio
         options[:parser] = :line if options[:parser] == nil
         cache_recs    = options[:cache_records]
         @assembler = 
-          case cache_recs
-            when :cache_none 
-              NoCache.new(filename, options)
-            when :cache_lru
-              LruCache.new(filename, options)
-            else
-              InMemory.new(filename, options)  # default 
+          if options[:parser] == :block
+            GffBlockParser.new(filename, options)
+          else 
+            case cache_recs
+              when :cache_none 
+                NoCache.new(filename, options)
+              when :cache_lru
+                LruCache.new(filename, options)
+              else
+                InMemory.new(filename, options)  # default 
+            end
           end
       end
 
