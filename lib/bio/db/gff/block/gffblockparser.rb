@@ -8,16 +8,19 @@ module Bio
       # organised into blocks. All relevant information is 
       # resolved a block at a time.
       class GffBlockParser
+        include FastLineParser 
+
         def initialize filename, options
           info "Starting block parser"
           @filename = filename
           @options = options
-          @iter = Bio::GFF::GFF3::FileIterator.new(@filename, options[:parser])
+          @iter = Bio::GFF::GFF3::FileIterator.new(@filename)
         end
 
         def parse
           @sequencelist = []
-          @iter.each_rec do | id, rec |
+          @iter.each_rec do | fpos, line |
+            rec = FastLineRecord.new(parse_line_fast(line))
             p rec
           end
           @iter.each_sequence do | id, bioseq |

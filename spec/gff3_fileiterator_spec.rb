@@ -13,12 +13,11 @@ TEST2='test/data/gff/standard.gff3'
 
 describe Bio::GFF::GFF3::FileIterator, "iterates a GFF3 file" do
 
-  func = lambda { | fpos, line | 
-         Bio::GFF::GFF3::FastParserFileRecord.new(fpos, line) }
+
   it "should parse a file and yield records" do 
     iter = Bio::GFF::GFF3::FileIterator.new(TEST1)
-    iter.each_rec(func) do | id, rec |
-      # p [id, rec, rec.io_seek]
+    iter.each_rec do | fpos, line |
+      rec = Bio::GFF::GFF3::FastParserFileRecord.new(fpos, line)
       rec.io_seek.should == 51
       break
     end
@@ -27,8 +26,8 @@ describe Bio::GFF::GFF3::FileIterator, "iterates a GFF3 file" do
   it "should handle embedded FASTA records" do
     iter = Bio::GFF::GFF3::FileIterator.new(TEST1)
     last = nil
-    iter.each_rec(func) do | id, rec |
-      # p [id, rec]
+    iter.each_rec do | fpos, line |
+      rec = Bio::GFF::GFF3::FastParserFileRecord.new(fpos, line)
       last = rec
     end
     last.io_seek.should == 3342

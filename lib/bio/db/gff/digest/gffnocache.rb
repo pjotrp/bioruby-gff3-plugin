@@ -103,8 +103,8 @@ module Bio
           @exonlist           = SeekLinkedRecs.new
           @sequencelist       = {}
           @unrecognized_features = {}
-          @iter.each_rec(lambda { |fpos, line|
-            case @options[:parser]
+          @iter.each_rec do |fpos, line|
+            rec = case @options[:parser]
               when :bioruby
                 Bio::GFF::GFF3::BioRubyFileRecord.new(fpos, line)
               when :line
@@ -112,7 +112,6 @@ module Bio
               else
                 raise 'Unknown parser'
             end
-          }) do | id, rec |
             store_record(rec)
           end
           @iter.each_sequence do | id, bioseq |

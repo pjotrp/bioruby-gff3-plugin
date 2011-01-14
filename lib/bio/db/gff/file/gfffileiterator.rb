@@ -41,9 +41,9 @@ module Bio
           @fh = File.open(filename)
         end
 
-        # Iterate over every record in the file, yielding the record ID and
-        # (File)Record, which includes the io_seek position in the file
-        def each_rec(store_line_func)
+        # Iterate over every record in the file, yielding the seekpos
+        # and line containing the record
+        def each_rec
           fpos = 0
           @fh.each_line do | line |
             line = line.strip
@@ -52,10 +52,8 @@ module Bio
               break
             end
             if line.size != 0 and line !~ /^#/
-              rec = store_line_func.call(fpos, line)
               lastpos = @fh.tell
-              id = rec.id
-              yield id, rec
+              yield fpos, line
               @fh.seek(lastpos) # reset filepos, just in case it changed
             end
             fpos = @fh.tell
