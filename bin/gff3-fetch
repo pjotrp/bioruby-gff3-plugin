@@ -25,13 +25,13 @@ USAGE = <<EOM
     CDS              : assemble CDS 
     exon             : list all exons
     gene|ORF         : list gene ORFs 
-    other            : use any type from GFF3 definition, e.g. 'Terminate' -- NYI
+    other            : use any type from GFF3 definition, e.g. 'Terminate'
 
   and the following performance options:
 
 		--parser bioruby : use BioRuby GFF3 parser (slow)
     --parser line    : use GFF3 line parser (faster, default)
-    --parser block   : use GFF3 block parser (optimistic) -- NYI
+    --block          : parse GFF3 by block (optimistic) -- NYI
     --cache full     : load all in RAM (fast, default)
     --cache none     : do not load anything in memory (slow)
     --cache lru      : use least recently used cache (limit RAM use, fast) -- NYI
@@ -88,8 +88,11 @@ time gff3-fetch cds m_hapla.WS217.dna.fa m_hapla.WS217.gff3 2> /dev/null > test.
   ------------------------------------------------------------
   full,bioruby       12m41    12m28    0m09 (0.8.0)
   full,line          12m13    12m06    0m07 (0.8.5)
+  full,line          11m51    11m43    0m07 (0.8.6) 'lazy' rec
+
   none,bioruby      504m     477m     26m50 (0.8.0)
   none,line         297m     267m     28m36 (0.8.5)
+
   lru,bioruby       533m     510m     22m47 (0.8.5)
   lru,line          305m     281m     22m30 (0.8.5)
   ----------------------------------------------------
@@ -151,14 +154,12 @@ opts = OptionParser.new() { |opts|
     exit()
   }
 
-  opts.on("--parser [bioruby,line,block]", String, "Parser (default line)") do |p|
+  opts.on("--parser [bioruby,line]", String, "Parser (default line)") do |p|
     case p.downcase
       when 'bioruby'
         options.parser = :bioruby
       when 'line'
         options.parser = :line
-      when 'block'
-        options.parser = :block
       else
         raise 'Unknown --parser option'
     end
@@ -175,6 +176,10 @@ opts = OptionParser.new() { |opts|
       else
         raise 'Unknown --cache option'
     end
+  end
+
+  opts.on("--block", "Parse by block") do |b|
+    options.block = true
   end
 
   opts.on("--no-assemble", "output sequences without assembling") do |b|
@@ -241,6 +246,7 @@ ARGV.each do | fn |
   opts = {}
   opts[:validate]         = options.validate
   opts[:parser]           = options.parser
+  opts[:block]            = options.block
   opts[:cache_components] = options.cache
   opts[:cache_records]    = options.cache
   opts[:fasta_filename]   = fastafn if fastafn
@@ -280,7 +286,9 @@ ARGV.each do | fn |
             writer.put(id,seq)
           end
     else
-      raise "Unknown action on type <#{gfftype}>"
+          gff.each_seq(gfftype.downcase) do | id, seq |
+            writer.put(id,seq)
+          end
   end
   fastafn = nil
 end

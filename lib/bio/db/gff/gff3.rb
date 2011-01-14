@@ -18,13 +18,14 @@ module Bio
       attr_reader :assembler
 
       include Digest
+      include Block
 
       # Initialize a GFF parser
       def initialize filename, options = {}
         options[:parser] = :line if options[:parser] == nil
         cache_recs    = options[:cache_records]
         @assembler = 
-          if options[:parser] == :block
+          if options[:block]
             GffBlockParser.new(filename, options)
           else 
             case cache_recs

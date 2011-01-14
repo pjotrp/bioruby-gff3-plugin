@@ -37,14 +37,13 @@ module Bio
         attr_accessor :fh
         attr_reader :fasta_io_seek
 
-        def initialize filename, parser 
+        def initialize filename
           @fh = File.open(filename)
-          @parser = parser
         end
 
         # Iterate over every record in the file, yielding the record ID and
         # (File)Record, which includes the io_seek position in the file
-        def each_rec()
+        def each_rec(store_line_func)
           fpos = 0
           @fh.each_line do | line |
             line = line.strip
@@ -53,14 +52,7 @@ module Bio
               break
             end
             if line.size != 0 and line !~ /^#/
-              rec = case @parser
-                      when :bioruby
-                        BioRubyFileRecord.new(fpos, line)
-                      when :line
-                        FastParserFileRecord.new(fpos, line)
-                      else
-                        raise 'Unknown parser'
-                    end
+              rec = store_line_func.call(fpos, line)
               lastpos = @fh.tell
               id = rec.id
               yield id, rec

@@ -142,7 +142,7 @@ module Bio
         def initialize filename, options
           @filename = filename
           @options = options
-          @iter = Bio::GFF::GFF3::FileIterator.new(@filename, options[:parser])
+          @iter = Bio::GFF::GFF3::FileIterator.new(@filename)
           @lru = LruTracker.new
         end
 
@@ -159,7 +159,16 @@ module Bio
           @exonlist           = SeekLinkedRecs.new
           @sequencelist       = {}
           @unrecognized_features = {}
-          @iter.each_rec do | id, rec |
+          @iter.each_rec(lambda { |fpos, line|
+            case @options[:parser]
+              when :bioruby
+                Bio::GFF::GFF3::BioRubyFileRecord.new(fpos, line)
+              when :line
+                Bio::GFF::GFF3::FastParserFileRecord.new(fpos, line)
+              else
+                raise 'Unknown parser'
+            end
+          }) do | id, rec |
             store_record(rec)
           end
           @iter.each_sequence do | id, bioseq |
