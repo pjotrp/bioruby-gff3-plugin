@@ -43,6 +43,9 @@
  INFO bio-gff3: Adding CDS <cds1> <>
  INFO bio-gff3: Adding CDS <cds1> <>
  INFO bio-gff3: Adding CDS <cds2> <>
+ INFO bio-gff3: Cache calls After reading files  = 0 <>
+ INFO bio-gff3: Cache hits After reading files   = 0 <>
+ INFO bio-gff3: Cache misses After reading files = 0 <>
  INFO bio-gff3: find_component: Matched (long search) column 0 and location <Transcript:trans-1>
  WARN bio-gff3: No sequence information for <Transcript:trans-1>
  INFO bio-gff3: find_component: Matched (long search) column 0 and location <Clone:AL12345.2>
@@ -58,3 +61,6 @@ TGGCGACTATCGGTCGAAGTTAAGACATTCATGGGC
  INFO bio-gff3: find_component: Matched seqname <test01>
 >cds2 Sequence:test01_1:400 (192:200)
 TTCATGGGC
+ INFO bio-gff3: Cache calls After iterating  = 76 <>
+ INFO bio-gff3: Cache hits After iterating   = 52 <>
+ INFO bio-gff3: Cache misses After iterating = 24 <>

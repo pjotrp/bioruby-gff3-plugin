@@ -1,3 +1,5 @@
+require 'bio/db/gff/gff3parserec'
+
 module Bio
   module GFFbrowser
     
@@ -7,6 +9,9 @@ module Bio
 
     # Using the fast line parser
     class FastLineRecord < Record
+
+      include FastLineParser
+
       def initialize fields
         @fields = fields
       end
@@ -22,21 +27,21 @@ module Bio
       alias seqname :seqid
 
       def phase
-        @fields[GFF3_PHASE]
+        @phase_ ||= @fields[GFF3_PHASE].to_i
       end
 
       alias frame :phase
 
       def start
-        @fields[GFF3_START]
+        @start_ ||= @fields[GFF3_START].to_i
       end
 
       def end
-        @fields[GFF3_END]
+        @end_ ||= @fields[GFF3_END].to_i
       end
 
       def score
-        @fields[GFF3_SCORE]
+        @score_ ||= @fields[GFF3_SCORE].to_f
       end
 
       def strand
@@ -44,7 +49,7 @@ module Bio
       end
 
       def feature
-        @fields[GFF3_TYPE]
+        @feature_ ||= @fields[GFF3_TYPE]
       end
 
       alias feature_type :feature
@@ -53,7 +58,7 @@ module Bio
       end
 
       def attributes 
-        @fields[GFF3_ATTRIBUTES]
+        @attributes_ ||= parse_attributes_fast(@fields[GFF3_ATTRIBUTES])
       end
 
       def get_attribute name
@@ -61,7 +66,7 @@ module Bio
       end 
 
       def id
-        attributes['ID']
+        @id_ ||= attributes['ID']
       end
 
       alias entry_id :id

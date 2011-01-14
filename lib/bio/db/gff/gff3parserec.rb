@@ -44,11 +44,6 @@ module Bio
           return nil
         end
 
-        fs[GFF3_START]      = fs[GFF3_START].to_i
-        fs[GFF3_END]        = fs[GFF3_END].to_i
-        fs[GFF3_SCORE]      = fs[GFF3_SCORE].to_f 
-        fs[GFF3_PHASE]      = fs[GFF3_PHASE].to_i
-        fs[GFF3_ATTRIBUTES] = parse_attributes_fast(fs[GFF3_ATTRIBUTES],options)
         fs
       end
 
