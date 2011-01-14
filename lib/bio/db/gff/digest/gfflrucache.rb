@@ -106,7 +106,7 @@ module Bio
         attr_reader :cache
 
         def initialize 
-          @cache = LRUHash.new 1000
+          @cache = LRUHash.new 50000
           @hits = 0
           @misses = 0
           @calls = 0

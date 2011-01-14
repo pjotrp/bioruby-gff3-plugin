@@ -21,7 +21,7 @@ module Bio
       end
 
       def seqid
-        @fields[GFF3_SEQID]
+        @seqid_ ||= @fields[GFF3_SEQID]
       end
 
       alias seqname :seqid

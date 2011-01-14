@@ -94,7 +94,8 @@ time gff3-fetch cds m_hapla.WS217.dna.fa m_hapla.WS217.gff3 2> /dev/null > test.
   none,line         297m     267m     28m36 (0.8.5)
 
   lru,bioruby       533m     510m     22m47 (0.8.5)
-  lru,line          305m     281m     22m30 (0.8.5)
+  lru,line          305m     281m     22m30 (0.8.5) 10000 
+                    353m     326m     26m44 (0.8.5) 1000
   ----------------------------------------------------
 
   Block parser:

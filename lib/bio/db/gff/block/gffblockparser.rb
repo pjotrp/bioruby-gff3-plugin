@@ -18,14 +18,36 @@ module Bio
         end
 
         def parse
-          @sequencelist = []
+          @inseqidlist = {}
+          @sequencelist = {}
+          seqid = nil
+          block = []
           @iter.each_rec do | fpos, line |
             rec = FastLineRecord.new(parse_line_fast(line))
-            p rec
+            if seqid != rec.seqid 
+              # starting a new block
+              if @inseqidlist[rec.seqid]
+                # whoah, not a well formed GFF3 file, we need
+                # to drop
+                error "GFF3 file not sorted, falling back to line parser"
+                raise "ERROR, bailing out"
+              end
+              parse_block(block) if seqid
+              block = []
+              seqid = rec.seqid
+              @inseqidlist[seqid] = true
+            end
+            block.push rec
           end
+          parse_block(block)
           @iter.each_sequence do | id, bioseq |
             @sequencelist[id] = bioseq.to_s
           end
+        end
+
+        def parse_block recs
+              p "-------------"
+              p recs
         end
    
         def each_seq(gfftype) 
