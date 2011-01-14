@@ -61,13 +61,13 @@ module Bio
           orf_frame = startpos - 1
           orf_frameshift = orf_frame % 3
           sectionlist = sectionlist.reverse if orf_reverse
-          # if do_debug
+          if do_debug
             debug options.to_s
             debug [:reverse,do_reverse].to_s
             debug [:complement,do_complement].to_s
             debug [:trim,do_trim].to_s
             debug [:orf_reverse, orf_reverse, rec0.strand].to_s
-          # end
+          end
 
           if sequence.kind_of?(Bio::FastaFormat)
             # BioRuby conversion
@@ -80,18 +80,12 @@ module Bio
             if do_reverse and orf_reverse
               s = s.reverse 
             end
-            # Correct for phase. Unfortunately the use of phase is ambiguous.
-            # Here we check whether rec.start is in line with orf_frame. If it
-            # is, we correct for phase. Otherwise it is ignored.
             if do_phase and rec.phase
               phase = rec.phase.to_i
-              # if ((rec.start-startpos) % 3 == 0) 
               s = s[phase..-1]
-              # end
             end
             s
           }
-          # p seq
           seq = seq.join
           if do_complement and do_reverse and orf_reverse
             ntseq = Bio::Sequence::NA.new(seq)

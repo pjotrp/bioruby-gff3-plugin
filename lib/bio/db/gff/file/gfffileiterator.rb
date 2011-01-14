@@ -44,6 +44,7 @@ module Bio
         # Iterate over every record in the file, yielding the seekpos
         # and line containing the record
         def each_rec
+          @fh.seek(0)
           fpos = 0
           @fh.each_line do | line |
             line = line.strip
