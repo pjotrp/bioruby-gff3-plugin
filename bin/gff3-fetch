@@ -82,12 +82,14 @@ USAGE = <<EOM
 
 time gff3-fetch cds m_hapla.WS217.dna.fa m_hapla.WS217.gff3 2> /dev/null > test.fa 
 
-  Cache              real     user     sys
+  Cache              real     user     sys  gff3 version
   ------------------------------------------------------------
   full,bioruby       12m41    12m28    0m09 (0.8.0)
   full,line          12m13    12m06    0m07 (0.8.5)
-  none,bioruby      504m39   477m49   26m50 (0.8.0)
-  lru,bioruby        ?
+  none,bioruby      504m     477m     26m50 (0.8.0)
+  none,line         297m     267m     28m36 (0.8.5)
+  lru,bioruby       533m     510m     22m47 (0.8.5)
+  lru,line          305m     281m     22m30 (0.8.5)
   ----------------------------------------------------
 
 where

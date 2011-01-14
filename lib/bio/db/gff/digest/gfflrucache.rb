@@ -100,6 +100,39 @@ module Bio
         end
       end
 
+      class LruTracker
+        include Helpers::Error
+        attr_accessor :hits, :misses, :calls
+        attr_reader :cache
+
+        def initialize 
+          @cache = LRUHash.new 1000
+          @hits = 0
+          @misses = 0
+          @calls = 0
+        end
+ 
+        def [](name)
+          @calls += 1
+          item = @cache[name]
+          if @cache[name] == nil
+            @misses += 1
+          else
+            @hits += 1
+          end
+          item
+        end
+
+        def []=(name,item)
+          @cache[name] = item
+        end
+        def display msg
+          info "Cache calls #{msg}  = #{@calls}" 
+          info "Cache hits #{msg}   = #{@hits}" 
+          info "Cache misses #{msg} = #{@misses}" 
+        end
+      end
+
       class LruCache
         include Parser
         include LruCacheHelpers
@@ -110,7 +143,7 @@ module Bio
           @filename = filename
           @options = options
           @iter = Bio::GFF::GFF3::FileIterator.new(@filename, options[:parser])
-          @lru = LRUHash.new 10000
+          @lru = LruTracker.new
         end
 
         # parse the whole file once and store all seek locations, 
@@ -137,6 +170,7 @@ module Bio
           show_unrecognized_features
           @genelist      = @count_ids.keys 
           read_fasta
+          @lru.display('After reading files')
         end
 
         def each_item list
@@ -157,6 +191,7 @@ module Bio
               yield id, recs, component
             end
           end
+          @lru.display('After iterating')
         end
         
       end
