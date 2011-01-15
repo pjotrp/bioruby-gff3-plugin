@@ -15,7 +15,7 @@ module Bio
 
       module Gff3Sequence
 
-        include Bio::GFFbrowser::Helpers::Error
+        include Bio::GFFbrowser::Helpers::Logger
 
 
         # Patch a sequence together from a Sequence string and an array

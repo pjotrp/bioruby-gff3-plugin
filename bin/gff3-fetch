@@ -88,15 +88,17 @@ time gff3-fetch cds m_hapla.WS217.dna.fa m_hapla.WS217.gff3 2> /dev/null > test.
   ------------------------------------------------------------
   full,bioruby       12m41    12m28    0m09 (0.8.0)
   full,line          12m13    12m06    0m07 (0.8.5)
-  full,line          11m51    11m43    0m07 (0.8.6) 'lazy' rec
+  full,line,lazy     11m51    11m43    0m07 (0.8.6)
 
   none,bioruby      504m     477m     26m50 (0.8.0)
   none,line         297m     267m     28m36 (0.8.5)
 
   lru,bioruby       533m     510m     22m47 (0.8.5)
-  lru,line          305m     281m     22m30 (0.8.5) 10000 
-                    353m     326m     26m44 (0.8.5) 1000
-  ----------------------------------------------------
+  lru,line          353m     326m     26m44 (0.8.5)  1K
+  lru,line          305m     281m     22m30 (0.8.5) 10K
+  lru,line,lazy     182m     161m     21m10 (0.8.6) 10K
+  lru,line,lazy      75m      75m      0m17 (0.8.6) 50K
+  ------------------------------------------------------------
 
   Block parser:
 
@@ -257,9 +259,10 @@ ARGV.each do | fn |
   opts[:phase]            = options.phase
   opts[:debug]            = options.debug
 
-  include Bio::GFFbrowser::Helpers::Error
+  include Bio::GFFbrowser::Helpers::Logger
   debug $:.to_s
   debug opts.to_s
+  log_sys_info("BaseLine")
   gff3 = Bio::GFFbrowser::GFF3.new(fn,opts)
 
   gff = gff3.assembler
@@ -291,6 +294,7 @@ ARGV.each do | fn |
             writer.put(id,seq)
           end
   end
+  log_sys_info("Done")
   fastafn = nil
 end
 

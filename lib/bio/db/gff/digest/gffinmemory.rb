@@ -54,7 +54,9 @@ module Bio
           validate_cdss 
           show_unrecognized_features 
           @genelist      = @count_ids.keys 
+          log_sys_info("After reading GFF")
           read_fasta
+          log_sys_info("After reading FASTA")
         end
 
         def each_item list

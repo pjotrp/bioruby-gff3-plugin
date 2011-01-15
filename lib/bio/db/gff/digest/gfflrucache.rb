@@ -82,7 +82,7 @@ module Bio
 
         # List of ids
         class SeekLinkedRecs < Hash
-          include Helpers::Error
+          include Helpers::Logger
           def add id, rec
             info "Adding #{rec.feature_type} <#{id}>"
             self[id] = [] if self[id] == nil
@@ -101,7 +101,7 @@ module Bio
       end
 
       class LruTracker
-        include Helpers::Error
+        include Helpers::Logger
         attr_accessor :hits, :misses, :calls
         attr_reader :cache
 

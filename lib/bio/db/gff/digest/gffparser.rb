@@ -19,7 +19,7 @@ module Bio
 
         include Bio::GFFbrowser::Helpers
         include Bio::GFFbrowser::Helpers::Validate
-        include Bio::GFFbrowser::Helpers::Error
+        include Bio::GFFbrowser::Helpers::Logger
         include Gff3Component
         include Gff3Features
 

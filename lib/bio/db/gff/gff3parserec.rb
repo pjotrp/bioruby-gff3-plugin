@@ -24,7 +24,7 @@ module Bio
     #
     module FastLineParser
 
-      include Helpers::Error
+      include Helpers::Logger
 
       # Returns a (partial) record, assuming it is a valid GFF3
       # format, no validation takes place, other than field counting (!)

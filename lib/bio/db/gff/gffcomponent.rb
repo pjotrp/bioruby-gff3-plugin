@@ -13,7 +13,7 @@ module Bio
     module Helpers
 
       module Record
-        include Error
+        include Logger
         # Format a record ID by, first, getting the ID attribute. If that fails
         # the seqname is used with the start/stop positions.
         def Record::formatID rec  
@@ -33,7 +33,7 @@ module Bio
 
       module Gff3Component
 
-        include Error
+        include Logger
 
         COMPONENT_TYPES = %w{
           gene SO:0000704 contig transcript Component region

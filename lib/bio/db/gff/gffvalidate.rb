@@ -33,7 +33,7 @@ module Bio
 
       # Helper class for storing linked records based on a shared ID
       class LinkedRecs < Hash
-        include Error
+        include Logger
         def add id, rec
           info "Adding #{rec.feature_type} <#{id}>"
           self[id] = [] if self[id] == nil
