@@ -1,3 +1,4 @@
+ INFO bio-gff3: Memory used BaseLine RAM 10M, VMEM 14M
  INFO bio-gff3: ---- Digest DB and store data in mRNA Hash (LruCache) <>
  INFO bio-gff3: Added transcript with component ID Transcript:trans-1 <>
  INFO bio-gff3: Adding exon <Transcript:trans-1> <>
@@ -64,3 +65,4 @@ TTCATGGGC
  INFO bio-gff3: Cache calls After iterating  = 76 <>
  INFO bio-gff3: Cache hits After iterating   = 52 <>
  INFO bio-gff3: Cache misses After iterating = 24 <>
+ INFO bio-gff3: Memory used Done RAM 10M, VMEM 14M

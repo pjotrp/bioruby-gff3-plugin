@@ -1,3 +1,4 @@
+ INFO bio-gff3: Memory used BaseLine RAM 10M, VMEM 14M
  INFO bio-gff3: ---- Digest DB and store data in mRNA Hash <>
  INFO bio-gff3: Added transcript with component ID Transcript:trans-1 <>
  INFO bio-gff3: Adding exon <Transcript:trans-1> <>
@@ -41,6 +42,8 @@
  INFO bio-gff3: Adding CDS <cds1> <>
  INFO bio-gff3: Adding CDS <cds1> <>
  INFO bio-gff3: Adding CDS <cds2> <>
+ INFO bio-gff3: Memory used After reading GFF RAM 10M, VMEM 14M
+ INFO bio-gff3: Memory used After reading FASTA RAM 10M, VMEM 14M
  INFO bio-gff3: find_component: Matched (long search) column 0 and location <Clone:AL12345.2>
  WARN bio-gff3: No sequence information for <mRNA:trans-8>
  INFO bio-gff3: find_component: Matched (long search) column 0 and location <Clone:ABC123>
@@ -54,3 +57,4 @@ TATTTGCCACCTAGAAGCGCAACATGCCCAGCTTCACACACCATAGCGAACACGCCGCCCCGGTGGCGACTATCGGTCGA
  INFO bio-gff3: find_component: Matched seqname <test01>
 >mrna01a Sequence:test01_1:400 (101:280)
 TATTTGCCACCTAGAAGCGCAACATGCCCAGCTTCACACACCATAGCGAACACGCCGCCCCGGTGGCGACTATCGGTCGAAGTTAAGACAATTCATGGGCGAAACGAGATAATGGGTACTGCACCCCTCGTCCTGTAGAGACGTCACAGCCAACGTGCCTTCTTATCTTGATACATTAGT
+ INFO bio-gff3: Memory used Done RAM 10M, VMEM 14M
