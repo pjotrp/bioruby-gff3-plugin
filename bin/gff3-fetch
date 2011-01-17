@@ -74,9 +74,15 @@ USAGE = <<EOM
 
       gff3-fetch mRNA test/data/gff/test.gff3 --trace ERROR
 
+    Fine tuning outpt - show messages matching regex 
+
+      gff3-fetch mRNA test/data/gff/test.gff3 --trace '=msg =~ /component/'
+
     Fine tuning output - write log messages to file.log
 
       gff3-fetch mRNA test/data/gff/test.gff3 --trace ERROR --logger file.log
+
+For more information on output, see the bioruby-logger plugin.
 
 == Performance
 
@@ -84,11 +90,11 @@ time gff3-fetch cds m_hapla.WS217.dna.fa m_hapla.WS217.gff3 2> /dev/null > test.
 
   Digesting parser:
 
-  Cache              real     user     sys  gff3 version
+  Cache              real     user     sys  version     RAM
   ------------------------------------------------------------
   full,bioruby       12m41    12m28    0m09 (0.8.0)
   full,line          12m13    12m06    0m07 (0.8.5)
-  full,line,lazy     11m51    11m43    0m07 (0.8.6)     6,565M
+  full,line,lazy     11m51    11m43    0m07 (0.8.6)     6,600M
 
   none,bioruby      504m     477m     26m50 (0.8.0)
   none,line         297m     267m     28m36 (0.8.5)       
@@ -98,13 +104,14 @@ time gff3-fetch cds m_hapla.WS217.dna.fa m_hapla.WS217.gff3 2> /dev/null > test.
   lru,line          353m     326m     26m44 (0.8.5)  1K
   lru,line          305m     281m     22m30 (0.8.5) 10K
   lru,line,lazy     182m     161m     21m10 (0.8.6) 10K
-  lru,line,lazy      75m      75m      0m17 (0.8.6) 50K   731M
+  lru,line,lazy      75m      75m      0m17 (0.8.6) 50K   730M
   ------------------------------------------------------------
 
   Block parser:
 
   Cache              real     user     sys  gff3 version
   ------------------------------------------------------------
+  in preparation
   ------------------------------------------------------------
 
 where
