@@ -18,7 +18,7 @@ module Bio
           if s == '##FASTA'
             break
           end
-          next if s.length == 0 or s[0] == '#'
+          next if s.length == 0 or s ~= /^#/
           @records.push FastLineRecord.new(parse_line_fast(s))
         end
         fasta = Bio::GFF::FastaReader.new(fh)
