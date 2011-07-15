@@ -162,7 +162,8 @@ time gff3-fetch cds m_hapla.WS217.dna.fa m_hapla.WS217.gff3 2> /dev/null > test.
 
   Cache              real     user     sys  gff3 version
   ------------------------------------------------------------
-  in preparation
+  in preparation see also biolib/HPC:
+    https://github.com/pjotrp/biolib_hpc/tree/master/modules/gff3
   ------------------------------------------------------------
 
 where
