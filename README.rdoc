@@ -5,10 +5,10 @@ including assembled mRNA, protein and CDS sequences.
 
 Features:
 
-# Take GFF3 (genome browser) information of any type, and assemble sequences, e.g. mRNA and CDS
-# Options for low memory use and caching of records
-# Support for external FASTA input files
-# Use of multi-cores (NYI)
+* Take GFF3 (genome browser) information of any type, and assemble sequences, e.g. mRNA and CDS
+* Options for low memory use and caching of records
+* Support for external FASTA input files
+* Use of multi-cores (NYI)
 
 Currently the output is a FASTA file.
 
