@@ -13,9 +13,9 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "bio-gff3"
-  gem.homepage = "http://github.com/pjotrp/bioruby-gff3-plugin"
+  gem.homepage = "https://github.com/pjotrp/bioruby-gff3-plugin"
   gem.license = "MIT"
-  gem.summary = %Q{BioRuby GFF3 plugin for big data}
+  gem.summary = %Q{GFF3 parser for big data}
   gem.description = %Q{GFF3 (genome browser) information and digest mRNA and CDS sequences.
 Options for low memory use and caching of records.
 Support for external FASTA files.

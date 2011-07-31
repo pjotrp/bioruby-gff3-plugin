@@ -5,18 +5,17 @@
 
 Gem::Specification.new do |s|
   s.name = %q{bio-gff3}
-  s.version = "0.8.6"
+  s.version = "0.8.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Pjotr Prins"]
-  s.date = %q{2011-01-17}
-  s.default_executable = %q{gff3-fetch}
+  s.authors = [%q{Pjotr Prins}]
+  s.date = %q{2011-07-31}
   s.description = %q{GFF3 (genome browser) information and digest mRNA and CDS sequences.
 Options for low memory use and caching of records.
 Support for external FASTA files.
 }
   s.email = %q{pjotr.prins@thebird.nl}
-  s.executables = ["gff3-fetch"]
+  s.executables = [%q{gff3-fetch}]
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.rdoc"
@@ -75,11 +74,11 @@ Support for external FASTA files.
     "test/regressiontest.rb",
     "test/test_bio-gff3.rb"
   ]
-  s.homepage = %q{http://github.com/pjotrp/bioruby-gff3}
-  s.licenses = ["MIT"]
-  s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.7}
-  s.summary = %q{BioRuby GFF3 plugin for big data}
+  s.homepage = %q{https://github.com/pjotrp/bioruby-gff3-plugin}
+  s.licenses = [%q{MIT}]
+  s.require_paths = [%q{lib}]
+  s.rubygems_version = %q{1.8.6}
+  s.summary = %q{GFF3 parser for big data}
   s.test_files = [
     "spec/gff3_assemble2_spec.rb",
     "spec/gff3_assemble3_spec.rb",
@@ -93,7 +92,6 @@ Support for external FASTA files.
   ]
 
   if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
