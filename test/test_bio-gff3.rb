@@ -1,3 +1,7 @@
+# To recreate the regression files:
+#
+#   ruby -Itest test/test_bio-gff3.rb --create
+
 $: << '.'
 do_create = if ARGV[0] == '-c' or ARGV[0] == '--create'
               ARGV.shift
@@ -38,5 +42,7 @@ end
 def single_run opts, name
   cmd = "#{BIN} --logger stdout #{opts}"
   # p cmd
-  RegressionTest.test `#{cmd}`,name,"#{DAT}/regression"
+  text = `#{cmd}`.split(/\n/).delete_if { | s | s =~ /Memory/ }.join("\n")
+
+  RegressionTest.test text,name,"#{DAT}/regression"
 end

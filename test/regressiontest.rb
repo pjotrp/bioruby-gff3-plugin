@@ -16,7 +16,7 @@ module RegressionTest
 	#  in test/regression with +filename+. When +create+ is +true+ the file
 	#  will be created/overwritten. Otherwise it is tested against returning
 	#  whether it has equal or not. When a test fails both test file and new
-	#  file exist in the regrssion directory - so you can execute a diff.
+	#  file exist in the regression directory - so you can execute a diff.
 	#
 	#  Example:
 	#    RegressionTest.test `#{cfrubybin} --help`,'cfruby_helptext',$test_create

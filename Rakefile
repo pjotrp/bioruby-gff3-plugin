@@ -30,13 +30,13 @@ Support for external FASTA files.
 end
 Jeweler::RubygemsDotOrgTasks.new
 
-# require 'rake/testtask'
-# Rake::TestTask.new(:test) do |test|
-#   test.libs << 'lib' << 'test'
-#   test.pattern = 'test/**/test_*.rb'
-#   test.verbose = true
-#   Kernel.system('rspec spec/*.rb')
-# end
+require 'rake/testtask'
+Rake::TestTask.new(:test) do |test|
+  test.libs << 'lib' << 'test'
+  test.pattern = 'test/**/test_*.rb'
+  test.verbose = true
+  Kernel.system('rspec spec/*.rb')
+end
 
 #require 'spec/rake/spectask'
 #Spec::Rake::SpecTask.new(:spec) do |t|
