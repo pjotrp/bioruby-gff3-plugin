@@ -1,5 +1,9 @@
 bio-gff3 is listed at http://biogems.info
 
+{<img
+src="https://secure.travis-ci.org/pjotrp/bioruby-gff3-plugin.png"
+/>}[http://travis-ci.org/pjotrp]
+
 = bio-gff3
 
 GFF3 parser, aimed at parsing big data GFF3 to return sequences of any type, 
