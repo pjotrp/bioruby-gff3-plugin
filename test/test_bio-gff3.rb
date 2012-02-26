@@ -12,11 +12,12 @@ require 'regressiontest'
 
 RegressionTest.create(do_create)
 
+rootpath = File.join(File.dirname(__FILE__),'..')
+DAT = rootpath + '/test/data'
+BIN = rootpath + '/bin/gff3-fetch'
+
 class Gff3Test < Test::Unit::TestCase
 
-  rootpath = File.join(File.dirname(__FILE__),'..')
-  BIN = rootpath + '/bin/gff3-fetch'
-  DAT = rootpath + '/test/data'
   def test_cache
     assert_equal(true,single_run("mRNA #{DAT}/gff/test-ext-fasta.fa #{DAT}/gff/test-ext-fasta.gff3",'test_ext_gff3'))
     assert_equal(true,single_run("CDS #{DAT}/gff/test.gff3",'test_gff3'))
