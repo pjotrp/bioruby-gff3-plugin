@@ -41,8 +41,9 @@ class Gff3Test < Test::Unit::TestCase
 end
 
 def single_run opts, name
-  cmd = "#{BIN} --logger stdout #{opts}"
-  # p cmd
+  bin = File.expand_path(BIN)
+  cmd = "#{bin} --logger stdout #{opts}"
+  p cmd
   text = `#{cmd}`.split(/\n/).delete_if { | s | s =~ /Memory/ }.join("\n")
 
   RegressionTest.test text,name,"#{DAT}/regression"
