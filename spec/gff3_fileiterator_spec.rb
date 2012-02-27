@@ -31,12 +31,11 @@ describe Bio::GFF::GFF3::FileIterator, "iterates a GFF3 file" do
       last = rec
     end
     last.io_seek.should == 3342
-    firstid = 'unknown'
+    firstid = []
     iter.each_sequence do | id, seq |
-      # p [id, seq]
-      firstid = id
+      firstid << id
     end
-    firstid.should == "test02"
+    firstid.should == ['test01','test02']
   end
 
 end
