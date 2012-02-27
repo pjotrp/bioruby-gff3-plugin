@@ -2,7 +2,7 @@ bio-gff3 is listed at http://biogems.info
 
 {<img
 src="https://secure.travis-ci.org/pjotrp/bioruby-gff3-plugin.png"
-/>}[http://travis-ci.org/pjotrp]
+/>}[http://travis-ci.org/#!/pjotrp/bioruby-gff3-plugin]
 
 = bio-gff3
 
