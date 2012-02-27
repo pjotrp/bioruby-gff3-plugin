@@ -35,7 +35,7 @@ describe Bio::GFF::GFF3::FileIterator, "iterates a GFF3 file" do
     iter.each_sequence do | id, seq |
       firstid << id
     end
-    firstid.should == ['test01','test02']
+    firstid.sort.should == ['test01','test02']
   end
 
 end
