@@ -43,8 +43,9 @@ end
 def single_run opts, name
   bin = File.expand_path(BIN)
   cmd = "#{bin} --logger stdout #{opts}"
-  p cmd
+  print "Skipping", cmd
   # text = `#{cmd}`.split(/\n/).delete_if { | s | s =~ /Memory/ }.join("\n")
 
   # RegressionTest.test text,name,"#{DAT}/regression"
+  true
 end
