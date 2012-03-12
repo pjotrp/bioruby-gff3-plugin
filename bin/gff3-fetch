@@ -1,4 +1,4 @@
-#! /usr/bin/ruby
+#! /usr/bin/env ruby
 #
 # Author:: Pjotr Prins
 # Copyright:: August 2010
