@@ -61,13 +61,9 @@ For a write-up see http://thebird.nl/bioruby/BioRuby_GFF3.html
 
 -------------------------------------------------------------------------------
 
-== Copyright
+= Command line usage (CLI)
 
-Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl> 
-
-
-
-  Fetch and assemble GFF3 types (e.g. ORF, mRNA, CDS) + print in FASTA format. 
+  Fetch and assemble GFF3 types (ORF, mRNA, CDS) + print in FASTA format. 
 
     gff3-fetch [options] type [filename.fa] filename.gff3
 
@@ -100,10 +96,10 @@ Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl>
   Where (NYI == Not Yet Implemented):
 
   Multiple GFF3 files can be used. With external FASTA files, always the last
-  one before the GFF3 filename is matched.
+  one before the GFF3 filename is matched. Make sure the FASTA file
+  comes before the GFF3 file on the command line.
 
-  Note that above switches are only partially implemented at this stage. Full
-  feature support is projected Feb. 2011.
+  Note that above switches are only partially implemented at this stage.
 
   Examples:
 
@@ -133,7 +129,7 @@ Copyright (C) 2010,2011 Pjotr Prins <pjotr.prins@thebird.nl>
 
       gff3-fetch mRNA test/data/gff/test.gff3 --trace ERROR
 
-    Fine tuning output - show messages matching regex 
+    Fine tuning outpt - show messages matching regex 
 
       gff3-fetch mRNA test/data/gff/test.gff3 --trace '=msg =~ /component/'
 
@@ -170,8 +166,7 @@ time gff3-fetch cds m_hapla.WS217.dna.fa m_hapla.WS217.gff3 2> /dev/null > test.
 
   Cache              real     user     sys  gff3 version
   ------------------------------------------------------------
-  in preparation see also biolib/HPC:
-    https://github.com/pjotrp/biolib_hpc/tree/master/modules/gff3
+  in preparation
   ------------------------------------------------------------
 
 where
@@ -194,5 +189,5 @@ on an 8 CPU, 2.6 GHz (6MB cache), 16 GB RAM machine.
 
 == Copyright
 
-Copyright (C) 2010-2012 Pjotr Prins <pjotr.prins@thebird.nl> 
+Copyright (C) 2010-2012 Pjotr Prins <pjotr.prins@thebird.nl>
 

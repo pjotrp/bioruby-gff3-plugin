@@ -56,7 +56,7 @@ module Bio
 
         def show_unrecognized_features 
           @unrecognized_features.keys.each do | k |
-            warn "Feature has no match",k if k
+            warn "Unknown feature is ignored",k if k
           end
         end
 
@@ -131,6 +131,7 @@ module Bio
         def each_CDS_seq
           each_CDS do | id, reclist, component |
             if component
+              p id,reclist,component
               sequence = @sequencelist[component.seqname]
               # p sequence
               if sequence

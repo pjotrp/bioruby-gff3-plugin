@@ -83,7 +83,7 @@ module Bio
 
         # Ignore the following features (case sensitive?)
         IGNORE_FEATURES = Gff3Component::COMPONENT_TYPES + Set.new(%w{
-          transposon Match similarity UTR
+          transposon Match similarity UTR hsp Peptide match
           TF_binding_site intronSO:0000188 polyA_sequence SO:0000610
           polyA_site SO:0000553
           five_prime_UTR SO:0000204 three_prime_UTR SO:0000205

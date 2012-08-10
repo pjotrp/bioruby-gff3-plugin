@@ -69,23 +69,22 @@ module Bio
    
         def each_seq(gfftype) 
           parse(gfftype) { | id, seq | yield id,seq }
-
         end
 
         def each_gene_seq
           each_seq('gene') { | id, seq | yield id,seq }
         end
+
         def each_mRNA_seq
           each_seq('mrna') { | id, seq | yield id,seq }
-
         end
+
         def each_exon_seq
           each_seq('exon') { | id, seq | yield id,seq }
-
         end
+
         def each_CDS_seq
           each_seq('cds') { | id, seq | yield id,seq }
-
         end
       end
     end
