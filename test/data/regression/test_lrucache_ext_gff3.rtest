@@ -44,19 +44,19 @@
  INFO bio-gff3: Cache calls After reading files  = 0 <>
  INFO bio-gff3: Cache hits After reading files   = 0 <>
  INFO bio-gff3: Cache misses After reading files = 0 <>
+ INFO bio-gff3: find_component: Matched (long search) column 0 and location <Clone:AL12345.2>
+ WARN bio-gff3: No sequence information for <mRNA:trans-8>
  INFO bio-gff3: find_component: Matched (long search) column 0 and location <Clone:ABC123>
  WARN bio-gff3: No sequence information for <Misc:thing2>
- INFO bio-gff3: find_component: Matched seqname <test01>
->mrna01a Sequence:test01_1:400 (101:280)
-TATTTGCCACCTAGAAGCGCAACATGCCCAGCTTCACACACCATAGCGAACACGCCGCCCCGGTGGCGACTATCGGTCGAAGTTAAGACAATTCATGGGCGAAACGAGATAATGGGTACTGCACCCCTCGTCCTGTAGAGACGTCACAGCCAACGTGCCTTCTTATCTTGATACATTAGT
  INFO bio-gff3: find_component: Matched seqname <test01>
 >mrna01short Sequence:test01_1:400 (3:14)
 GAAGATTTGTAT
  INFO bio-gff3: find_component: Matched seqname <test01>
 >mrna01 Sequence:test01_1:400 (101:230)
 TATTTGCCACCTAGAAGCGCAACATGCCCAGCTTCACACACCATAGCGAACACGCCGCCCCGGTGGCGACTATCGGTCGAAGTTAAGACAATTCATGGGCGAAACGAGATAATGGGTACTGCACCCCTC
- INFO bio-gff3: find_component: Matched (long search) column 0 and location <Clone:AL12345.2>
- WARN bio-gff3: No sequence information for <mRNA:trans-8>
- INFO bio-gff3: Cache calls After iterating  = 48 <>
- INFO bio-gff3: Cache hits After iterating   = 31 <>
+ INFO bio-gff3: find_component: Matched seqname <test01>
+>mrna01a Sequence:test01_1:400 (101:280)
+TATTTGCCACCTAGAAGCGCAACATGCCCAGCTTCACACACCATAGCGAACACGCCGCCCCGGTGGCGACTATCGGTCGAAGTTAAGACAATTCATGGGCGAAACGAGATAATGGGTACTGCACCCCTCGTCCTGTAGAGACGTCACAGCCAACGTGCCTTCTTATCTTGATACATTAGT
+ INFO bio-gff3: Cache calls After iterating  = 54 <>
+ INFO bio-gff3: Cache hits After iterating   = 37 <>
  INFO bio-gff3: Cache misses After iterating = 17 <>

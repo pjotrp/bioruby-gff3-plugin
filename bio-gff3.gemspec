@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "bio-gff3"
-  s.version = "0.8.8"
+  s.version = "0.8.9"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pjotr Prins"]
-  s.date = "2012-02-24"
+  s.date = "2012-08-10"
   s.description = "GFF3 (genome browser) information and digest mRNA and CDS sequences.\nOptions for low memory use and caching of records.\nSupport for external FASTA files.\n"
   s.email = "pjotr.prins@thebird.nl"
   s.executables = ["gff3-fetch"]
@@ -57,6 +57,8 @@ Gem::Specification.new do |s|
     "test/data/gff/MhA1_Contig1133.gff3",
     "test/data/gff/MhA1_Contig125.fa",
     "test/data/gff/MhA1_Contig125.gff3",
+    "test/data/gff/m_hapla.WS232.annotations.part.gff3",
+    "test/data/gff/m_hapla.WS232.genomic.part.fa",
     "test/data/gff/standard.gff3",
     "test/data/gff/test-cds.gff3",
     "test/data/gff/test-ext-fasta.fa",
@@ -77,17 +79,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.10"
   s.summary = "GFF3 parser for big data"
-  s.test_files = [
-    "spec/gff3_assemble2_spec.rb",
-    "spec/gff3_assemble3_spec.rb",
-    "spec/gff3_assemble_spec.rb",
-    "spec/gff3_fileiterator_spec.rb",
-    "spec/gffdb_spec.rb",
-    "spec/gffparserec.rb",
-    "test/helper.rb",
-    "test/regressiontest.rb",
-    "test/test_bio-gff3.rb"
-  ]
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
@@ -96,29 +87,26 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<bio>, [">= 1.3.1"])
       s.add_runtime_dependency(%q<log4r>, ["> 1.1.6"])
       s.add_runtime_dependency(%q<bio-logger>, ["> 0.8.0"])
-      s.add_development_dependency(%q<rake>, [">= 0"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
-      s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
-      s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
+      s.add_development_dependency(%q<bundler>, ["~> 1.1.5"])
+      s.add_development_dependency(%q<jeweler>, ["~> 1.8.3"])
       s.add_development_dependency(%q<rspec>, [">= 2.3.0"])
     else
       s.add_dependency(%q<bio>, [">= 1.3.1"])
       s.add_dependency(%q<log4r>, ["> 1.1.6"])
       s.add_dependency(%q<bio-logger>, ["> 0.8.0"])
-      s.add_dependency(%q<rake>, [">= 0"])
       s.add_dependency(%q<shoulda>, [">= 0"])
-      s.add_dependency(%q<bundler>, ["~> 1.0.0"])
-      s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
+      s.add_dependency(%q<bundler>, ["~> 1.1.5"])
+      s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
       s.add_dependency(%q<rspec>, [">= 2.3.0"])
     end
   else
     s.add_dependency(%q<bio>, [">= 1.3.1"])
     s.add_dependency(%q<log4r>, ["> 1.1.6"])
     s.add_dependency(%q<bio-logger>, ["> 0.8.0"])
-    s.add_dependency(%q<rake>, [">= 0"])
     s.add_dependency(%q<shoulda>, [">= 0"])
-    s.add_dependency(%q<bundler>, ["~> 1.0.0"])
-    s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
+    s.add_dependency(%q<bundler>, ["~> 1.1.5"])
+    s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
     s.add_dependency(%q<rspec>, [">= 2.3.0"])
   end
 end

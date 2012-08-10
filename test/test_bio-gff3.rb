@@ -9,8 +9,9 @@ do_create = if ARGV[0] == '-c' or ARGV[0] == '--create'
   
 require 'test/unit'
 require 'regressiontest'
+require 'regressiontest2'
 
-RegressionTest.create(do_create)
+RegressionTest2.create(do_create)
 
 rootpath = File.join(File.dirname(__FILE__),'..')
 DAT = rootpath + '/test/data'
@@ -33,19 +34,32 @@ class Gff3Test < Test::Unit::TestCase
     assert_equal(true,single_run("CDS --cache lru #{DAT}/gff/test.gff3",this_method+'_gff3'))
   end
 
+  def test_latest_wormbase
+    opts = "CDS #{DAT}/gff/m_hapla.WS232.genomic.part.fa #{DAT}/gff/m_hapla.WS232.annotations.part.gff3"
+    arg1 = this_method + '_ext_gff3'
+
+    bin = File.expand_path(BIN)
+    cmd = "#{bin} --logger stdout #{opts}"
+    assert_equal(true,RegressionTest::CliExec::exec(cmd,arg1))
+  end
+
   private
-   def this_method
-     caller[0] =~ /`([^']*)'/ and $1
-   end
+
+  def this_method
+    caller[0] =~ /`([^']*)'/ and $1
+  end
 
 end
 
 def single_run opts, name
   bin = File.expand_path(BIN)
   cmd = "#{bin} --logger stdout #{opts}"
-  print "Skipping", cmd
-  # text = `#{cmd}`.split(/\n/).delete_if { | s | s =~ /Memory/ }.join("\n")
+  if false
+    print "Skipping ", cmd, "!\n"
+  else
+    text = `#{cmd}`.split(/\n/).delete_if { | s | s =~ /Memory/ }.join("\n")
 
-  # RegressionTest.test text,name,"#{DAT}/regression"
+    RegressionTest2.test text,name,"#{DAT}/regression"
+  end
   true
 end

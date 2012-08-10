@@ -131,7 +131,7 @@ module Bio
         def each_CDS_seq
           each_CDS do | id, reclist, component |
             if component
-              p id,reclist,component
+              # p id,reclist,component
               sequence = @sequencelist[component.seqname]
               # p sequence
               if sequence

@@ -6,9 +6,9 @@
 # Copyright:: July 2007
 # License:: Ruby License
 
-module RegressionTest
+module RegressionTest2
 
-	def RegressionTest.create b
+	def RegressionTest2.create b
 		@@test_create = b
 	end
 	
@@ -19,9 +19,9 @@ module RegressionTest
 	#  file exist in the regression directory - so you can execute a diff.
 	#
 	#  Example:
-	#    RegressionTest.test `#{cfrubybin} --help`,'cfruby_helptext',$test_create
+	#    RegressionTest2.test `#{cfrubybin} --help`,'cfruby_helptext',$test_create
 
-	def RegressionTest.test text, filename, testdir, create = @@test_create
+	def RegressionTest2.test text, filename, testdir, create = @@test_create
 		fn = testdir+'/'+filename+'.rtest'
 		fntest = fn+'.new'
 		
