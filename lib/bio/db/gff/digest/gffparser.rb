@@ -36,7 +36,8 @@ module Bio
             # check for container ID
             warn("Container <#{rec.feature_type}> has no ID, so using sequence name instead",id) if rec.id == nil
             @componentlist[id] = rec
-            info "Added #{rec.feature_type} with component ID #{id}"
+            info "Added feature <#{rec.feature_type}> with component ID",id
+            # $stderr.print rec
           end 
           case rec.feature_type
             when 'gene' || 'SO:0000704'

@@ -35,7 +35,8 @@ module Bio
       class LinkedRecs < Hash
         include Logger
         def add id, rec
-          info "Adding #{rec.feature_type} <#{id}>"
+          info "Adding #{rec.feature_type} (validate)",id
+          raise "ID should not be empty" if id == nil or id == ""
           self[id] = [] if self[id] == nil
           self[id] << rec
         end

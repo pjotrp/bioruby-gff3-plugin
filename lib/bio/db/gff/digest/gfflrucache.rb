@@ -84,7 +84,8 @@ module Bio
         class SeekLinkedRecs < Hash
           include Helpers::Logger
           def add id, rec
-            info "Adding #{rec.feature_type} <#{id}>"
+            info "Adding #{rec.feature_type} (lru)",id
+            raise "ID should not be empty" if id == nil or id == ""
             self[id] = [] if self[id] == nil
             self[id] << rec.io_seek
           end

@@ -124,7 +124,7 @@ module Bio
           if @options[:validate]
             ntseq = Bio::Sequence::NA.new(seq)
             aaseq = ntseq.translate
-            raise 'Validate translation problem '+rec0.id+"\n"+seq if aaseq.count('*') > 1
+            raise "Validate translation problem #{rec0.id}\n#{seq}" if aaseq.count('*') > 1
           end
 
           retval = seq

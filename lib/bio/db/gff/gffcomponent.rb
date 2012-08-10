@@ -38,7 +38,7 @@ module Bio
         include Logger
 
         COMPONENT_TYPES = Set.new(%w{
-          gene SO:0000704 contig transcript Component region
+          gene SO:0000704 contig transcript Component region mRNA
         })
  
         # Walk the component list to find a matching component/container for a
@@ -75,7 +75,8 @@ module Bio
               return component
             end
           end
-          warn "Could not find container/component for",Record::formatID(rec)
+          $stderr.print @componentlist
+          raise "Could not find <#{search}> container/component for #{Record::formatID(rec)}"
         end
       end
 
