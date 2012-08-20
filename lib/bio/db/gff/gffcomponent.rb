@@ -38,7 +38,7 @@ module Bio
         include Logger
 
         COMPONENT_TYPES = Set.new(%w{
-          gene SO:0000704 contig transcript Component region mRNA
+          gene SO:0000704 contig transcript Component region
         })
  
         # Walk the component list to find a matching component/container for a
