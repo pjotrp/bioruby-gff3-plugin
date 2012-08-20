@@ -42,7 +42,7 @@ class Gff3Test < Test::Unit::TestCase
 
     bin = File.expand_path(BIN)
     cmd = "#{bin} --logger stdout #{opts}"
-    assert_equal(true,RegressionTest::CliExec::exec(cmd,arg1))
+    assert_equal(true,RegressionTest::CliExec::exec(cmd,arg1,:ignore => 'Memory used'))
   end
 
   private

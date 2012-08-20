@@ -1,4 +1,3 @@
- INFO bio-gff3: Memory used BaseLine RAM 24M, VMEM 73M
  INFO bio-gff3: ---- Digest DB and store data in mRNA Hash <>
  WARN bio-gff3: Container <Contig> has no ID, so using sequence name instead <MhA1_Contig0 1 237641>
  INFO bio-gff3: Added feature <Contig> with component ID <MhA1_Contig0 1 237641>
@@ -7176,8 +7175,6 @@
  INFO bio-gff3: Adding CDS (validate) <MhA1_Contig18 86152 86382>
  INFO bio-gff3: Adding CDS (validate) <MhA1_Contig18 86669 86825>
  INFO bio-gff3: Adding CDS (validate) <MhA1_Contig18 87441 87496>
- INFO bio-gff3: Memory used After reading GFF RAM 25M, VMEM 73M
- INFO bio-gff3: Memory used After reading FASTA RAM 26M, VMEM 74M
  INFO bio-gff3: find_component: Matched column 0 and location <MhA1_Contig0 1 237641>
 >MhA1_Contig0 4027 4090 Sequence:MhA1_Contig0_1:237641 (4027:4090)
 ATGTATAATGGTGACTCTGATTTACAATTAGAACGAATTAATGTCTATTACAACGAGGCTAGC
@@ -7886,4 +7883,3 @@ ATGAAACAAGGAGAAAAAAGGAAAAGCAATAATAATATTATTTTTTCTGCAACTGAGCATTCTGCTAATACATCACTAAA
  WARN bio-gff3: No sequence information for <MhA1_Contig18 86669 86825>
  INFO bio-gff3: find_component: Matched column 0 and location <MhA1_Contig18 1 90699>
  WARN bio-gff3: No sequence information for <MhA1_Contig18 87441 87496>
- INFO bio-gff3: Memory used Done RAM 25M, VMEM 74M
