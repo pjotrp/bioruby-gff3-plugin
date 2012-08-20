@@ -21,7 +21,8 @@ Currently the output is a FASTA file.
 You can use this plugin in two ways. First as a standalone program,
 second as a plugin library to BioRuby.
 
-Note: a really fast GFF3 parser is in the works at https://github.com/pjotrp/biolib_hpc/tree/master/modules/gff3
+Note: a really fast GFF3 parser, and way more flexible, is in the
+works. See https://github.com/mamarjan/gff3-pltools.
 
 == Install and run gff3-fetch
 
@@ -176,6 +177,9 @@ where
 
 ruby 1.9.2p136 (2010-12-25 revision 30365) [x86_64-linux]
 on an 8 CPU, 2.6 GHz (6MB cache), 16 GB RAM machine. 
+
+Note: the new parser by Marjan is magnitudes faster, and way more
+flexible. See https://github.com/mamarjan/gff3-pltools
 
 == Cite
 
