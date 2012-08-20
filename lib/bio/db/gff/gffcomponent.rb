@@ -38,8 +38,8 @@ module Bio
         include Logger
 
         COMPONENT_TYPES = Set.new(%w{
-          gene SO:0000704 contig transcript Component region
-        })
+          gene SO:0000704 contig transcript component region
+        }.map { |s| s.upcase })
  
         # Walk the component list to find a matching component/container for a
         # record. First use the parent ID. If that is missing go by sequence
@@ -89,7 +89,7 @@ module Bio
           polyA_site SO:0000553
           five_prime_UTR SO:0000204 three_prime_UTR SO:0000205
           exon SO:0000147
-        })
+        }.map { |s| s.upcase })
       end
 
     end

@@ -31,7 +31,7 @@ module Bio
           @count_ids.add(id)
           @count_seqnames.add(rec.seqname)
 
-          is_component = COMPONENT_TYPES.include?(rec.feature_type)
+          is_component = COMPONENT_TYPES.include?(rec.feature_type.upcase)
           if is_component
             # check for container ID
             warn("Container <#{rec.feature_type}> has no ID, so using sequence name instead",id) if rec.id == nil
