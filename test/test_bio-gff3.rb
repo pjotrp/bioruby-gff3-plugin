@@ -6,6 +6,8 @@ $: << '.'
 do_create = if ARGV[0] == '-c' or ARGV[0] == '--create'
               ARGV.shift
             end
+
+$:.unshift "../regressiontest/lib"  # override gem location, when available
   
 require 'test/unit'
 require 'regressiontest'
