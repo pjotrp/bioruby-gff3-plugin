@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "bio-gff3"
-  s.version = "0.8.9"
+  s.version = "0.9.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pjotr Prins"]
-  s.date = "2012-08-10"
+  s.date = "2012-08-20"
   s.description = "GFF3 (genome browser) information and digest mRNA and CDS sequences.\nOptions for low memory use and caching of records.\nSupport for external FASTA files.\n"
   s.email = "pjotr.prins@thebird.nl"
   s.executables = ["gff3-fetch"]
@@ -66,12 +66,14 @@ Gem::Specification.new do |s|
     "test/data/gff/test.gff3",
     "test/data/regression/test_ext_gff3.rtest",
     "test/data/regression/test_gff3.rtest",
+    "test/data/regression/test_latest_wormbase_ext_gff3.ref",
+    "test/data/regression/test_latest_wormbase_ext_gff3.rtest",
     "test/data/regression/test_lrucache_ext_gff3.rtest",
     "test/data/regression/test_lrucache_gff3.rtest",
     "test/data/regression/test_nocache_ext_gff3.rtest",
     "test/data/regression/test_nocache_gff3.rtest",
     "test/helper.rb",
-    "test/regressiontest.rb",
+    "test/regressiontest2.rb",
     "test/test_bio-gff3.rb"
   ]
   s.homepage = "https://github.com/pjotrp/bioruby-gff3-plugin"
@@ -90,7 +92,8 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.1.5"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.8.3"])
-      s.add_development_dependency(%q<rspec>, [">= 2.3.0"])
+      s.add_development_dependency(%q<rspec>, [">= 2.10.0"])
+      s.add_development_dependency(%q<regressiontest>, [">= 0"])
     else
       s.add_dependency(%q<bio>, [">= 1.3.1"])
       s.add_dependency(%q<log4r>, ["> 1.1.6"])
@@ -98,7 +101,8 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<bundler>, ["~> 1.1.5"])
       s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
-      s.add_dependency(%q<rspec>, [">= 2.3.0"])
+      s.add_dependency(%q<rspec>, [">= 2.10.0"])
+      s.add_dependency(%q<regressiontest>, [">= 0"])
     end
   else
     s.add_dependency(%q<bio>, [">= 1.3.1"])
@@ -107,7 +111,8 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<bundler>, ["~> 1.1.5"])
     s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
-    s.add_dependency(%q<rspec>, [">= 2.3.0"])
+    s.add_dependency(%q<rspec>, [">= 2.10.0"])
+    s.add_dependency(%q<regressiontest>, [">= 0"])
   end
 end
 
